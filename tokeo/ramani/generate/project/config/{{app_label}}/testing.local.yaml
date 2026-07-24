@@ -1,0 +1,17 @@
+### <p><strong>The {{ app_name }} Testing Configuration Secrets</strong></p>
+### - Secrets will be merged into Application Configuration.<br/>
+### - This files should not be checked into source repos.
+---
+
+
+
+{% if feature_dramatiq == "Y" %}
+dramatiq:
+  ### connection settings for rabbitmw
+  rabbitmq:
+    ### connection url to rabbitmq server
+    url: amqp://guest:guest@localhost:5672/
+
+
+
+{% endif -%}

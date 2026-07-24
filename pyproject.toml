@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=77.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tokeo-ramani"
+dynamic = ["version"]
+description = "Ramani - contains project blueprints for the tokeo framework."
+readme = "README.md"
+authors = [
+    {name = "Tom Freudenberg", email = "th.freudenberg@gmail.com"}
+]
+license = "Apache-2.0"
+license-files = ["LICENSE.txt", "NOTICE.md"]
+urls = {"Homepage" = "https://github.com/tokeo/ramani"}
+requires-python = ">=3.10"
+dependencies = [
+    "tokeo >= 1.3.0, < 2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pip-tools>=7.0.0",
+    "build>=1.0.0",
+    "setuptools>=77.0.0",
+    "wheel>=0.40.0",
+    "twine>=6.0.0",
+    "pyink>=25.0.0",
+    "flake8>=7.0.0",
+]
+
+[tool.setuptools]
+packages = {find = {namespaces = true, include = ["tokeo", "tokeo.*"], exclude = ["ez_setup", "tests*"]}}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"tokeo.ramani" = ["generate/**/*", "generate/**/.*/*", "generate/**/.*", "generate/**/.*/.*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "tokeo.ramani.get_version"}
