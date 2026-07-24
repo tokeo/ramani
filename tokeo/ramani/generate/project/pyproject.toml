@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=75.0.0", "wheel"]
+requires = ["setuptools>=77.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -11,6 +11,7 @@ authors = [
     {name = "{{ creator_name }}", email = "{{ creator_email }}"}
 ]
 {% if project_license == "Proprietary" %}# {% endif %}license = "{{ project_license }}"
+{% if project_license == "Proprietary" %}# {% endif %}license-files = ["LICENSE.txt"]
 urls = {"Homepage" = "{{ project_url }}"}
 requires-python = ">=3.10"  # Adjust based on your needs
 dependencies = [
@@ -80,12 +81,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pip-tools>=7.0.0",
+    "build>=1.0.0",
+    "setuptools>=77.0.0",
+    "wheel>=0.40.0",
+    "twine>=6.0.0",
     "pytest>=8.5.0",
     "pytest-cov>=6.0.0",
     "coverage>=7.10.0",
-    "twine>=6.0.0",
-    "setuptools>=75.0.0",
-    "wheel>=0.40.0",
     "pyink>=25.0.0",
     "flake8>=7.0.0",
     "pdoc3>=0.11.0",
@@ -107,7 +109,14 @@ packages = {find = {include = ["{{ app_label }}", "{{ app_label }}.*"], exclude 
 include-package-data = true
 
 [tool.setuptools.package-data]
-"{{ app_label }}" = ["**/*.md", "templates/*", "templates/**/*", "templates/**/.*", "**/*.proto"]
+"{{ app_label }}" = ["**/*.md"]
+{% if feature_ai == "Y" and feature_ai_akili == "Y" %}
+"{{ app_label }}.core.akili" = ["**/LICENSE.*", "**/NOTICE.*"]
+{% endif -%}
+{% if feature_grpc == "Y" %}
+"{{ app_label }}.core.grpc" = ["**/*.proto"]
+{% endif -%}
+"{{ app_label }}.templates" = ["**/*", "**/.*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "{{ app_label }}.core.version.get_version"}

@@ -1,0 +1,6 @@
+Copyright {{ app_copyright }}
+Author {{ creator_name }} <{{ creator_email }}>
+
+---
+
+ATTENTION! YOU NEED TO ADD THE CORRECT LICENSE FILE CONTENT
