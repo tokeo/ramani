@@ -8,7 +8,7 @@
 ###
 ### Settings for the PDoc Python documentation generator and server
 pdoc:
-  ### modules to render (str | list), app and test as default
+  ### modules to render (str | list), app, test and tokeo as default
   modules: null
   ### render content into output directory
   output_dir: html
@@ -18,7 +18,30 @@ pdoc:
   port: 9999
   ### relative filepath or absolute URL to a favicon
   favicon: public/favicon.ico
-  ### module or absolute path to the mako templates
+  ### add html lang tag
+  lang: 'en'
+  ### suffix shown in the html <title>
+  title: "{{ app_name }} API"
+  ### sidebar brand label; null falls back to "🚀 <app label>"
+  brand: null
+  ### jinja2 template packages to customise (see the CUSTOMIZE.md there).
   templates:
     - {{ app_label }}.templates.pdoc.html
     - tokeo.templates.pdoc.html
+  ### packages or directories holding external markdown snippets
+  docstrings:
+    - {{ app_label }}.templates.pdoc.docstrings
+    - tokeo.templates.pdoc.docstrings
+  ### render the yaml configuration
+  show_config: true
+  ### how many levels of the class hierarchy above a documented class to
+  ### list. pdoc itself only exposes the direct bases; 0 disables the list.
+  ancestors_max_depth: 2
+  ### glob patterns that trigger a re-generate
+  watch_includes: '*.py, *.yaml, *.yml, *.md'
+  ### glob patterns never to react to. `.*` covers hidden scratch files
+  watch_excludes: '.*'
+  ### seconds between two checks of the change flag
+  watch_interval: 1.0
+  ### seconds of quiet required before restarting
+  watch_settle: 1.5
