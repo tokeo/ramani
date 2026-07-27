@@ -16,40 +16,40 @@ variables:
     prompt: "App Label"
     validate: "^[a-z][a-z0-9_]+$"
     case: "lower"
-    default: "spiral"
+    default: "inspire"
 
   - name: app_name
     prompt: "App Name"
-    default: "Spiral"
+    default: "Inspire"
 
   - name: app_class_name
     prompt: "App Class Name"
     validate: "^[A-Z][a-zA-Z0-9]+$"
-    default: "Spiral"
+    default: "Inspire"
 
   - name: app_description
     prompt: "App Description"
-    default: "Spiral is easily crafted with Tokeo and is the example app!"
+    default: "Inspire is easily crafted with Tokeo for scaleable services."
 
   - name: app_copyright
     prompt: "App copyright hint"
-    default: "©2026 Tokeo project"
+    default: "©2026 ACME Inc."
 
   - name: creator_name
     prompt: "Creator Name"
-    default: "Tom Freudenberg"
+    default: "John Doe"
 
   - name: creator_email
     prompt: "Creator Email"
-    default: "th.freudenberg@gmail.com"
+    default: "john.doe@example.com"
 
   - name: project_url
     prompt: "Project URL"
-    default: "https://github.com/tokeo/spiral/"
+    default: "https://github.com/johndoe/inspire/"
 
   - name: project_license
     prompt: "Project license (select from https://spdx.org/licenses/)"
-    default: "MIT"
+    default: "Proprietary"
 
   - name: feature_python_strict
     prompt: "Use python strict for Errors than Warnings [(Y)es/(N)o]"
@@ -68,7 +68,7 @@ variables:
           - '^(.*)/config/{{app_label}}/([^/]*)/vault.yaml$'
 
   - name: feature_ai
-    prompt: "Enable ai [(Y)es/(N)o]"
+    prompt: "Enable ai (must agree to Fundi licese) [(Y)es/(N)o]"
     validate: "^[YN]$"
     case: "upper"
     default: "Y"
