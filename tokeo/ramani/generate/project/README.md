@@ -294,16 +294,28 @@ Keep your project healthy with these practices:
 
 ## 📄 Licensing
 
-The generated project sources are yours. Use them freely and license them however you like. This scaffold imposes no attribution requirement and no license of its own on your code.
+This generated project sources are yours. Use them freely and license them however you like. This scaffold imposes no attribution requirement and no license of its own on your code.
 
+That covers the code you take from here. It does not extend to the third-party packages a project installs — those keep their own licenses.
+
+{% if feature_ai == "Y" %}
+### Fundi
+
+```fundi``` is the agentic framework that powers the tokeo ai features: agents, tools, governors, sandboxing and audit. It is a dependency, not part of these sources, and it is **not** open source but fair source and source available. It is released under the *Tokeo-Fundi Source-Available License 1.0*.
+
+Zero-cost use is tied to fair conditions in that license, among them a revenue threshold and a headcount threshold for your organisation. Organisations that exceed the numbers need a commercial Enterprise License from the licensor before using or operating it. The license also restricts using its source code as training data for machine-learning systems. The complete and authoritative terms are in ```LICENSE.md``` of the tokeo-fundi distribution. Read them before use.
+
+{% if feature_ai_akili == "Y" %}
 ### Akili
 
-The only exception is ```tokeo.core.akili```. It is meant as a demonstration and is not intended for delivery. It ships so you can experiment and learn, and it can be removed without side effects.
+There is an exception among the sources in ```{{ app_label }}.core.akili``` module. It is meant as a demonstration and is not intended for delivery. It ships so you can experiment and learn, and it can be removed without side effects.
 
-If you still have reasons to keep ```akili``` in your own project, its files must remain under the Apache License, Version 2.0. Make sure to comply with that license. Keep the file headers and the ```LICENSE``` copy in the ```akili``` directory.
+If you really have reasons to keep ```akili``` in your own project, its files must remain under the Apache License, Version 2.0. Make sure to comply with that license. Keep the file headers and the ```LICENSE.txt``` copy in the ```akili``` directory.
 
-To put it another way: the purpose of ```akili``` is lab work. Use it to understand LLMs, to learn how to build one yourself, and how to equip it with tools. It is there to give you the idea and the know-how to reach your own goals efficiently. For that reason ```akili``` normally does not belong in your delivered project.
+To put it another way: the purpose of ```akili``` is lab work. Use it to understand LLMs, to learn how to build one yourself, and how to equip it with tools. It is there to give you the idea and the know-how to reach your own goals efficiently. For that reason ```akili``` normally does not belong in your delivered project and this README.
 
+{% endif -%}
+{% endif -%}
 <br/>
 
 ## 🤝 Need Help?

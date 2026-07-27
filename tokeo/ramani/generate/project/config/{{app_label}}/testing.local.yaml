@@ -1,5 +1,6 @@
-### <p><strong>The {{ app_name }} Testing Configuration Secrets</strong></p>
-### - Secrets will be merged into Application Configuration.<br/>
+### **The {{ app_name }} Testing Configuration Secrets**
+###
+### - Secrets will be merged into Application Configuration.
 ### - This files should not be checked into source repos.
 ---
 

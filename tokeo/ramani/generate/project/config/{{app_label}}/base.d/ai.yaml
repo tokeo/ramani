@@ -1,10 +1,15 @@
-### {{ app_name }} AI / Fundi configuration
+### **The {{ app_name }} AI Configuration Settings**
 ###
-### Sections below: tools, guards/transformers/conductors, sandboxes, agents,
-### profiles. Every entry uses the uniform item form ("type" + "options"); a
-### list value is a named group. For the full model (the governor pipeline, the
-### sandbox chain, budget resolution, deny) see the ai config reference that
-### ships with tokeo: tokeo/core/ai/config/CONFIG.md.
+### - Settings will be merged into Application Configuration.
+---
+
+
+
+### ### Fundi AI configuration
+###
+### Settings for defining tools, guards, transformers, conductors, sandboxes,
+### agents, profiles etc. For the full ai config reference look at the documentation
+### ships with module ```tokeo.core.ai.config```
 ai:
   ### app-wide loop budgets (nearest wins: call arg > agent option > this base)
   # max_steps: 0            # max tool rounds per request (0 = unlimited)

@@ -1,4 +1,5 @@
-### <p><strong>The {{ app_name }} Smtp Production Configuration Settings</strong></p>
+### **The {{ app_name }} Smtp Production Configuration Settings**
+###
 ### - Settings will be merged into Application Configuration.
 ---
 

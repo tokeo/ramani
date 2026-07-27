@@ -1,7 +1,6 @@
-### **The {{ app_name }} Production Configuration Settings**
+### **The {{ app_name }} Staging Configuration Settings**
 ###
 ### - Settings will be merged into Application Configuration.
 ---
-
 
 
