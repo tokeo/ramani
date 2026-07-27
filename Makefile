@@ -55,6 +55,11 @@ dev:
 	pip install -e .
 	pip install -e .[dev]
 
+# check for files
+ifndef sources
+sources=tokeo
+endif
+
 fmt:
 	@if [ "0${VIRTUAL_ENV}"${no_venv} == "0" ]; then echo "No venv activated! Add no_venv=1 to enforce make."; exit 1; fi
 	# align with https://google.github.io/styleguide/pyguide.html

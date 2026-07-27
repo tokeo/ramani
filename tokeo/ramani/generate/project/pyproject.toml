@@ -34,7 +34,7 @@ dependencies = [
     "diskcache",
 {% endif -%}
 {% if feature_dramatiq == "Y" %}
-    "dramatiq",
+    "dramatiq>=2.0.0",
     "dramatiq[rabbitmq]",
     "pika",
 {% endif -%}
@@ -90,15 +90,9 @@ dev = [
     "coverage>=7.10.0",
     "pyink>=25.0.0",
     "flake8>=7.0.0",
-    "pdoc>=15.0.0",
-    "markdown>=3.7",
-{% if feature_dramatiq == "Y" or  feature_nicegui == "Y" %}
     "watchdog",
-{% endif -%}
 {% if feature_dramatiq == "Y" %}
     "dramatiq[watch]",
-    "watchdog_gevent",
-    "gevent",
 {% endif -%}
 ]
 

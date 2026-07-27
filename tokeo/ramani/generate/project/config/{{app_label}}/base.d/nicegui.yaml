@@ -63,6 +63,10 @@ nicegui:
   hotload_includes: '*.py'
   ### file mask(s) to explecitely exclude
   hotload_excludes: '.*, .py[cod], .sw.*, ~*'
+  ### seconds between two checks of the change flag
+  hotload_interval: 2.0
+  ### seconds of quiet required before restarting
+  hotload_settle: 1.5
   ### logging level for uvicorn server
   logging_level: warning
   ### optional but preceeding keyword arguments, passed to nicegui.run / uvicorn.run

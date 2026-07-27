@@ -43,6 +43,6 @@ pdoc:
   ### glob patterns never to react to. `.*` covers hidden scratch files
   watch_excludes: '.*'
   ### seconds between two checks of the change flag
-  watch_interval: 1.0
+  watch_interval: 2.0
   ### seconds of quiet required before restarting
   watch_settle: 1.5
