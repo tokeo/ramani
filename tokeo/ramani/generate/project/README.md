@@ -326,6 +326,8 @@ The optional ```tokeo-fundi``` is the agentic framework that powers the tokeo ai
 
 However, to keep the tokeo project healthy, actively developed, and sustainable, this license introduces a fair-use threshold. Businesses with highly successful commercial operations (across the whole group: more than EUR 2,000,000 in fiscal year global gross revenue excluding VAT, or more than 50 FTEs) are required to purchase a commercial Enterprise License. The license also restricts using its source code as training data for machine-learning systems. Read the complete and authoritative terms in ```LICENSE.md``` of the [tokeo-fundi](https://github.com/tokeo/fundi/) distribution.
 
+Only installing ```tokeo-fundi```, also as a dependency of something else, is always free and carries no conditions. The limits apply only once you actually run it, through its commands or from your own code.
+
 From Tokeo's author — I believe this is a fair balance: those who achieve significant economic success using this software should contribute back to the developers making it possible.
 
 {% if feature_ai_akili == "Y" %}
