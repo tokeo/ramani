@@ -11,6 +11,11 @@
 ### agents, profiles etc. For the full ai config reference look at the documentation
 ### ships with module ```tokeo.core.ai.config```
 ai:
+  ### tokeo-fundi is source-available, not open source. set this to true once
+  ### you have read LICENSE.md of the tokeo-fundi distribution. that confirms
+  ### you know the terms and silences the notice logged at every start
+  license_acknowledged: false
+
   ### app-wide loop budgets (nearest wins: call arg > agent option > this base)
   # max_steps: 0            # max tool rounds per request (0 = unlimited)
   # max_loops: 3            # consecutive rounds without a successful call
