@@ -46,7 +46,7 @@ smtpd:
         # max_processings: 4
         ### maximum simultaneous connections; beyond this new ones get 421
         ### and are closed (null = unlimited)
-        # max_connections: 0
+        # max_connections: null
         ### fork N worker processes sharing the port via SO_REUSEPORT for
         ### multi-core scaling (null or 0 = a single process)
         # pre_fork: null
@@ -54,8 +54,10 @@ smtpd:
         ### --- timeouts & buffers ---
         ### seconds to wait for a complete command/data line before aborting
         # io_cmd_timeout: 30
-        ### maximum bytes per line until a LF is expected (1 MiB). This is the
-        ### max line length in BYTES, not a character count
+        ### maximum seconds of a whole session (1 to 86400)
+        # io_session_timeout: 3600
+        ### maximum bytes per line until a LF is expected (1 MiB); a longer
+        ### line is answered by 554 and closes the connection
         # io_buffer_max_size: 1048576
         ### hard message size limit in bytes; null = no limit. A handler may
         ### instead enforce a dynamic cap in on_message_data_receiving_event
@@ -66,6 +68,12 @@ smtpd:
         ### CRLF_ENSURE normalises a bare LF to CRLF; CRLF_LEAVE keeps the
         ### line ending as received; CRLF_STRICT rejects a bare LF with 500
         # crlf_mode: CRLF_ENSURE
+        ### bare CR/LF in DATA (SMTP smuggling): CRLF_DATA_MODERATE |
+        ### CRLF_DATA_STRICT | CRLF_DATA_STRICT_CLOSE | CRLF_DATA_UNSAFE
+        # crlf_data_mode: CRLF_DATA_MODERATE
+        ### unusual whitespace in commands: WHITESPACE_MODERATE |
+        ### WHITESPACE_STRICT | WHITESPACE_UNSAFE
+        # whitespace_mode: WHITESPACE_MODERATE
 
         ### --- message spool ---
         ### null keeps the whole message in RAM. A directory plus the start
@@ -82,8 +90,11 @@ smtpd:
         ### AUTH_FORBIDDEN | AUTH_OPTIONAL | AUTH_REQUIRED. The credential check
         ### lives entirely in your handler's on_auth_event
         # auth_mode: AUTH_FORBIDDEN
+        ### authorization ids trusted to send AUTH= on MAIL FROM
+        # trusted_relay_auth_ids: []
         ### --- encryption (STARTTLS) ---
-        ### TLS_FORBIDDEN | TLS_OPTIONAL | TLS_WHEN_AUTH | TLS_REQUIRED.
+        ### TLS_FORBIDDEN | TLS_OPTIONAL | TLS_WHEN_AUTH | TLS_REQUIRED |
+        ### TLS_IMMEDIATE (implicit TLS, e.g. port 465).
         ### without a configured certificate a self-signed test certificate
         ### is generated in memory (fine for the example, replace for real use)
         encrypt_mode: TLS_OPTIONAL
@@ -99,15 +110,23 @@ smtpd:
         ### macOS/BSD; on Windows use tls_cert_path/tls_key_path)
         # tls_cert: null
         # tls_key: null
+        ### OpenSSL cipher string (null = TLS_CIPHERS_ADVANCED_PLUS)
+        # tls_ciphers: null
+        ### lowest TLS version
+        # tls_methods: TLSv1_2
 
         ### --- PROXY verb (behind a load balancer / TLS terminator) ---
-        ### accept a PROXY v1/v2 header before the SMTP greeting; the real
+        ### accept a PROXY v1 header before the SMTP greeting; the real
         ### client address is then available via ctx.server.proxy
         # proxy_extension: false
+        ### seconds to wait for the PROXY header
+        # io_proxy_cmd_timeout: 5
 
         ### --- extensions & lookups ---
         ### advertise 8BITMIME and SMTPUTF8 (internationalized email)
         # internationalization_extensions: false
+        ### advertise PIPELINING
+        # pipelining_extension: false
         ### reverse-resolve the client and local IP into ctx.server.remote_host
         ### and ctx.server.local_host (adds a DNS lookup per connection)
-        # do_dns_reverse_lookup: false
+        # do_dns_reverse_lookup: true
