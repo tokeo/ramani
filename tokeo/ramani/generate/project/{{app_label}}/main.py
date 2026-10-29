@@ -15,8 +15,8 @@ import tokeo.core.utils.strict  # noqa: F401
 from cement import App, TestApp
 from cement.utils import fs
 from cement.core.exc import CaughtSignal
-from tokeo.core.exc import TokeoError
-from .core.exc import {{ app_class_name }}Error
+from tokeo.core.exc import TokeoBaseException
+from .core.exc import {{ app_class_name }}BaseException
 from .controllers.base import BaseController
 {% if feature_dramatiq == "Y" %}
 from .controllers.emit import EmitController
@@ -203,8 +203,9 @@ def main():
     ### Raises
 
     - **AssertionError**: When an assertion fails during application execution
-    - **{{ app_class_name }}Error**: When a {{ app_class_name }}-specific
-        error occurs
+    - **{{ app_class_name }}BaseException**: When a {{ app_class_name }}-specific
+        error occurs and is not handled
+    - **TokeoBaseException**: When a tokeo specific error occurs and is not handled
     - **CaughtSignal**: When a signal (e.g., SIGINT, SIGTERM) is caught
 
     """
@@ -214,7 +215,7 @@ def main():
         with app:
             app.run()
 
-    except (TokeoError, {{ app_class_name }}Error, AssertionError) as e:
+    except ({{ app_class_name }}BaseException, TokeoBaseException, AssertionError) as e:
         # a clean message for any error from setup or run; app is already bound,
         # so the application logger is used when it is available
         if app and app.log and app.log.error:
