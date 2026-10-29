@@ -7,7 +7,7 @@ welcome. Please read this page before you open one.
 
 ## How this project is licensed
 
-Ramani is released under the **Apache License, Version 2.0**, see
+Ramani is released under the Apache License, Version 2.0, see
 ```LICENSE.txt``` and ```NOTICE.md```. That will not change.
 
 Contributions are covered by Section 5 of that license. Unless you state
@@ -32,27 +32,27 @@ you make there.
 
 ## What we accept
 
-**Keep the human in the loop.** We use AI as an exoskeleton, not a replacement.
-Purely AI-generated issues or pull requests are not accepted. If AI helped you
-write code or text, that is fine. You must have read it, understood it, and be
-able to explain and defend it.
+Keep the human in the loop. We use AI as an exoskeleton that strengthens the
+people who work on ramani. Purely AI-generated issues or pull requests are not
+accepted. If AI helped you write code or text, that is fine. You must have read
+it, understood it, and be able to explain and defend it.
 
-**Small and focused beats large and sweeping.** One concern per pull request.
+Small and focused beats large and sweeping. One concern per pull request.
 A change to the blueprints should say in the description which generator
 features it affects, and which answers to the prompts it was tested with.
 
-**Tests belong to the change.** New behaviour comes with tests. Changed
+Tests belong to the change. New behaviour comes with tests. Changed
 behaviour comes with changed tests. Tests must run without any external service.
 
-**Generate before you submit.** A change to the blueprints is only done when a
+Generate before you submit. A change to the blueprints is only done when a
 project generated from them runs. Generate at least once with all features
 enabled and once with the minimum set, and say so in the description.
 
-**Mind the placeholders.** Scaffold files are rendered with Jinja at generation
+Mind the placeholders. Scaffold files are rendered with Jinja at generation
 time. Template syntax in a scaffolded file is replaced, so files that must keep
 their own template syntax have to stay out of the render path.
 
-**Documentation belongs to the change.** A new or changed feature belongs in
+Documentation belongs to the change. A new or changed feature belongs in
 the generated project's ```README.md``` as well, behind the matching feature
 condition, and in this project's ```README.md``` where it is user facing.
 

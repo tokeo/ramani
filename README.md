@@ -16,7 +16,7 @@ Ramani carries no framework logic of its own. It is essentially a template paylo
 
 <br/>
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Adding the templates to Tokeo
 
@@ -25,7 +25,7 @@ Ramani carries no framework logic of its own. It is essentially a template paylo
 pip install tokeo-ramani
 ```
 
-After the install, the ```generate``` templates are available to the ```tokeo``` CLI. No extension to load. No path to register.
+After the install, the ```generate``` templates are available to the ```tokeo``` CLI. There is no extension to load and no path to register.
 
 ### Creating a New Project
 
@@ -38,38 +38,38 @@ tokeo generate project your_app
 
 <br/>
 
-## 🌿 Features to enable
+## Features to enable
 
 The ```project``` blueprint is driven by interactive prompts. The same template produces anything from a minimal CLI up to a full event-driven backend:
 
-- **Dramatiq** background task processing for efficient, decoupled workloads (paired with RabbitMQ)
-- **gRPC** service that exposes your tasks and workflows to external callers
-- **APScheduler** cron service for timed job execution
-- **Automate** Fabric-based local and remote task automation, configured in YAML with CLI overrides
-- **smtpd** mail-receiving service that turns SMTP messages into events, with optional auto-generated TLS certificates
-- **NiceGUI** web interface to visualize data and interact with your application
-- **DiskCache** disk-based caching for frequently accessed data, reducing load times
-- **PocketBase** zero-config SQLite backend providing REST API and authentication
-- **Vault** keeps credentials encrypted inside your YAML (```!vault:<profile>``` tags) and decrypts them transparently at the leaf, so consumer code never changes and plaintext never lands in the config
-- **AI branch** a provider-agnostic AI runtime with typed contracts, profiles and agents as plain configuration, where every tool call passes a guard pipeline (validate, policy, audit) and leaves a full trace. Needs [tokeo-fundi](https://github.com/tokeo/fundi), with optional WASM and Docker sandboxes for tool execution
+- Dramatiq: background task processing for efficient, decoupled workloads (paired with RabbitMQ)
+- gRPC: service that exposes your tasks and workflows to external callers
+- APScheduler: cron service for timed job execution
+- Automate: Fabric-based local and remote task automation, configured in YAML with CLI overrides
+- smtpd: mail-receiving service that turns SMTP messages into events, with optional auto-generated TLS certificates
+- NiceGUI: web interface to visualize data and interact with your application
+- DiskCache: disk-based caching for frequently accessed data, reducing load times
+- PocketBase: zero-config SQLite backend providing REST API and authentication
+- Vault: credentials stay encrypted inside your YAML (```!vault:<profile>``` tags) and decrypts them transparently at the leaf, so consumer code never changes and plaintext never lands in the config
+- AI branch: a provider-agnostic AI runtime with typed contracts, profiles and agents as plain configuration, where every tool call passes a guard pipeline (validate, policy, audit) and leaves a full trace. Needs [tokeo-fundi](https://github.com/tokeo/fundi), with optional WASM and Docker sandboxes for tool execution
 
-Answer a feature with *no* and the generated project does not contain it. Neither its code nor its dependencies.
+Answer a feature with *no* and the generated project contains neither its code nor its dependencies.
 
-### akili, the train-first micro LLM demo
+### akili
 
 When you generate a project with the AI feature, you may also add ```akili```. It is a small, teachable language model that plans calendar tool calls:
 
-- **A few hundred thousand parameters, ~2.5 MB.** Byte-level tokenizer, NumPy-only inference in tens of milliseconds, no GPU and no service.
-- **Train first, no shipped weights.** ```python -m your_app.core.akili.train``` creates the model on your machine. CPU is fine.
-- **The language is data.** Every word and sentence pattern lives in ```AKILI-LEX.yaml```. Teaching the model new language means editing a file and retraining.
-- **Grammar-constrained planning.** A byte-level automaton makes malformed plans impossible.
-- **Taught, not just documented.** ```AKILI-LLM.md``` explains training, the anatomy of the weights, and constrained decoding.
+- A few hundred thousand parameters and a few megabytes, with a byte-level tokenizer and NumPy-only inference in tens of milliseconds, without GPU or service.
+- No weights are shipped: ```python -m your_app.core.akili.train``` trains the model on your machine (a CPU is enough).
+- Every word and sentence pattern lives in ```AKILI-LEX.yaml```. Teaching the model new language means editing that file and retraining.
+- A byte-level automaton constrains the planning, so the model cannot emit a malformed plan.
+- ```AKILI-LLM.md``` explains training, the anatomy of the weights and constrained decoding.
 
 The ```akili``` module is a self-contained demonstration only. It is not required by the generated application and can be removed without side effects.
 
 <br/>
 
-## 📊 Exploring the Generated Project
+## Trying the Generated Project
 
 Once created, your project exposes each selected feature through its own commands:
 
@@ -100,7 +100,7 @@ your_app ai ask "add 14 days to 2026-06-08" --profile akili --agent guarded
 
 <br/>
 
-## 📚 Generated Project Structure
+## Generated Project Structure
 
 Every ```project``` blueprint expands into a clean, modular layout:
 
@@ -119,7 +119,7 @@ Every ```project``` blueprint expands into a clean, modular layout:
 
 <br/>
 
-## 🔮 Next Steps
+## Next Steps
 
 The generated project is designed to grow with you. As you build, consider:
 
@@ -135,10 +135,10 @@ The generated project is designed to grow with you. As you build, consider:
 
 ## Tokeo packages
 
-- **Tokeo** is the event-driven CLI framework: the command surface, messaging, scheduling, automation, gRPC, web, vault, and the project generator.
-- **Ramani** ships all the project templates, including the AI branch and the akili lab that gets generated into your application.
-- **Fundi** (```tokeo-fundi```) is the source-available AI runtime when selected during your setup.
-- **Akili** is generated by ```tokeo generate``` from Ramani's template and placed into your application for demonstration purposes under ```your_app/core/akili/``` when selected during your setup.
+- Tokeo is the event-driven CLI framework: the command surface, messaging, scheduling, automation, gRPC, web, vault, and the project generator.
+- Ramani ships all the project templates, including the AI branch and the akili lab that gets generated into your application.
+- Fundi (```tokeo-fundi```) is the source-available AI runtime when selected during your setup.
+- Akili is generated by ```tokeo generate``` from Ramani's template and placed into your application for demonstration purposes under ```your_app/core/akili/``` when selected during your setup.
 
 <br/>
 
@@ -148,43 +148,43 @@ Ramani is published under the Apache License, Version 2.0. The project sources i
 
 That covers the code you take from here or a generated project. It does not extend to the third-party packages a project installs, those keep their own licenses.
 
-Tokeo's author believes in empowering the community while building a sustainable ecosystem. That's why Tokeo and its extensions use a dual-approach to licensing:
+Tokeo's author wants the community to use Tokeo freely and the project to stay sustainable. That's why Tokeo and its extensions use two licenses.
 
-**The Tokeo Core Framework (Apache 2.0)**
+### The Tokeo Core Framework (Apache 2.0)
 
-Tokeo's author transitioned the core Tokeo framework from its original MIT license to the **Apache 2.0 license**. This switch wasn't primarily about Tokeo itself. It was made to provide *you*, the implementer and the project, with absolute legal certainty. In addition, the Apache 2.0 license includes explicit patent grants and protection, giving your projects a legally safe and rock-solid foundation to build upon.
+Tokeo's author moved the core Tokeo framework from its original MIT license to the Apache 2.0 license. The switch was made for *you*, the implementer and the project, to give you legal certainty. The Apache 2.0 license also includes explicit patent grants and protection, a legally safe foundation for your projects.
 
-**The Tokeo Fundi Agent AI Extension (Source-Available License)**
+### The Tokeo Fundi Agent AI Extension (Source-Available License)
 
-Enabling the AI branch adds ```tokeo-fundi```, the agentic framework that powers the tokeo ai features: agents, tools, governors, sandboxing, audit and more. It is a dependency, not part of these templates, and it is **not** open source but fair source and source available released by the custom **Tokeo-Fundi Source-Available License 1.0**. Please don't let this scare you off! Tokeo's author is deeply committed to keeping software free for the community. If you are a hobbyist, a startup, or a small team, ```tokeo-fundi``` is **free of charge** for you to use in any personal, internal or commercial project.
+Enabling the AI branch adds ```tokeo-fundi```, the agentic framework that powers the tokeo ai features: agents, tools, governors, sandboxing, audit and more. It is a dependency and not part of these templates. It is released under the custom Tokeo-Fundi Source-Available License 1.0: fair source and source available, but not open source. Tokeo's author wants to keep software free for the community: if you are a hobbyist, a startup or a small team, ```tokeo-fundi``` is free of charge for you to use in any personal, internal or commercial project.
 
-However, to keep the tokeo project healthy, actively developed, and sustainable, this license introduces a fair-use threshold. Businesses with highly successful commercial operations (across the whole group: more than EUR 2,000,000 in fiscal year global gross revenue excluding VAT, or more than 50 FTEs) are required to purchase a commercial Enterprise License. The license also restricts using its source code as training data for machine-learning systems. Read the complete and authoritative terms in ```LICENSE.md``` of the [tokeo-fundi](https://github.com/tokeo/fundi/) distribution.
+To keep the tokeo project healthy, actively developed, and sustainable, the license introduces a fair-use threshold. Businesses with highly successful commercial operations (across the whole group: more than EUR 2,000,000 in fiscal year global gross revenue excluding VAT, or more than 50 FTEs) are required to purchase a commercial Enterprise License. The license also restricts using its source code as training data for machine-learning systems. Read the complete and authoritative terms in ```LICENSE.md``` of the [tokeo-fundi](https://github.com/tokeo/fundi/) distribution.
 
 Only installing ```tokeo-fundi```, also as a dependency of something else, is always free and carries no conditions. The limits apply only once you actually run it, through its commands or from your own code.
 
-From Tokeo's author — I believe this is a fair balance: those who achieve significant economic success using this software should contribute back to the developers making it possible.
+From Tokeo's author: I believe this is a fair balance. Those who achieve significant economic success using this software should contribute back to the developers making it possible.
 
-**The Tokeo Akili Demonstration LLM (Apache 2.0)**
+### The Tokeo Akili Demonstration LLM (Apache 2.0)
 
 There is an exception among the generated sources in the ```your_app.core.akili``` module. It is meant as a demonstration and is not intended for delivery. It ships so you can experiment and learn, and it can be removed without side effects.
 
 If you really have reasons to keep ```akili``` in your own project, its files must remain under the Apache License, Version 2.0. Make sure to comply with that license. Keep the file headers and the ```LICENSE.txt``` copy in the ```your_app/core/akili``` directory.
 
-To put it another way: the purpose of ```akili``` is lab work. Use it to understand LLMs, to learn how to build one yourself, and how to equip it with tools. It is there to give you the idea and the know-how to reach your own goals efficiently.
+The purpose of ```akili``` is lab work. Use it to understand LLMs, to learn how to build one yourself, and how to equip it with tools. It is there to give you the idea and the know-how to reach your own goals efficiently.
 
 <br/>
 <br/>
 
 ## A note on contributions
 
-We keep the human in the loop and use AI as an exoskeleton, not a replacement, the same conviction that shapes the runtime itself. Purely AI-generated issues or pull requests are not accepted.
+We keep the human in the loop and use AI as an exoskeleton, the same conviction that shapes the runtime itself. Purely AI-generated issues or pull requests are not accepted.
 
 Before you open a pull request, please read [CONTRIBUTING.md](CONTRIBUTING.md). It explains how contributions are licensed, what a change should bring with it, and what to run before you submit. Issues and ideas are just as welcome as code.
 
 <br/>
 <br/>
 
-**Checkout the example project at [Tokeo Spiral](https://github.com/tokeo/spiral)** and explore the main [Tokeo framework](https://github.com/tokeo/tokeo) for the full picture.
+Check out the example project at [Tokeo Spiral](https://github.com/tokeo/spiral) and explore the main [Tokeo framework](https://github.com/tokeo/tokeo) for the full picture.
 
 <br/>
 <br/>
