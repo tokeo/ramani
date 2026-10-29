@@ -22,30 +22,30 @@
 NumPy inference for the Spiral akili micro model.
 
 The application runs the trained weights (```weights.npz```, created by
-```python -m {{ app_label }}.core.akili.train```) with plain NumPy -- no torch, no
+```python -m {{ app_label }}.core.akili.train```) with plain NumPy: no torch, no
 server. This file is the *runtime*: it re-implements the same forward pass
 ```train.py``` defines in torch, then decodes a plan greedily and
 grammar-constrained. At every step the next byte must be legal plan DSL over
 the currently active tools, so the model can never emit a malformed plan or
 a tool outside the runtime injection (see ```dsl```).
 
-If ```numba <https://numba.pydata.org>```_ is installed, the hot attention loop
-is JIT-compiled automatically; without it the pure NumPy path runs the same
+If [numba](https://numba.pydata.org) is installed, the hot attention loop is
+JIT-compiled automatically; without it the pure NumPy path runs the same
 numbers (the model is matmul-dominated, so BLAS does the heavy lifting
 either way).
 
-### How a plan is decoded
+A plan is decoded in three steps:
 
 1. The request bytes plus the ```SEP``` token run through the net once; the
     keys and values of every layer are kept (the KV cache).
 2. The output logits rank all bytes; the ```Constrainer``` says which
-    characters are legal at this point of the plan grammar -- the best
+    characters are legal at this point of the plan grammar; the best
     legal one wins (greedy), so the result is deterministic.
 3. The chosen byte runs as a single-position forward against the cache,
     yielding the next logits; repeat until the grammar allows the end.
 
 The weights file carries its architecture as embedded metadata, read at
-load time -- the runtime adapts to whatever ```train.py``` exported, so the
+load time: the runtime adapts to whatever ```train.py``` exported, so the
 two can never disagree about dimensions.
 """
 
@@ -74,7 +74,7 @@ WEIGHTS = pathlib.Path(__file__).parent / 'weights.npz'
 # room reserved for the generated plan: the prompt is trimmed to leave at
 # least this many positions free, and the decoder may emit up to this many
 # characters. the longest plan the grammar can produce (a three-step
-# relative chain) is 65 chars, so this carries headroom for both -- and the
+# relative chain) is 65 chars, so this carries headroom for both, and the
 # same constant is used by train.py, so training, evaluation, and inference
 # all reserve identical room and can never disagree
 PLAN_BUDGET = 80
@@ -199,7 +199,7 @@ class AkiliModel:
     def _step(self, token, position, cache):
         # the cheap path: push a SINGLE new token through, reusing the cached
         # keys and values for all earlier positions. this is what makes
-        # decoding fast -- O(1) work per generated character instead of
+        # decoding fast: O(1) work per generated character instead of
         # re-running the whole sequence
         weights = self._weights
         config = self._config

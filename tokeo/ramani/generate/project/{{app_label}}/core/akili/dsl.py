@@ -32,7 +32,7 @@ outside the domain becomes ```<nomatch>```::
 
 This module has three jobs. ```render``` serializes a plan to that line,
 ```parse``` reads a line back into steps (validating as it goes), and the
-```Constrainer``` -- the important one -- is a byte-level grammar automaton:
+```Constrainer``` (the important one) is a byte-level grammar automaton:
 during decoding it answers, character by character, which next bytes are
 legal. The decoder may only emit accepted bytes, so the model can never
 produce a malformed plan, an unknown tool, or a tool the runtime did not
@@ -46,10 +46,10 @@ NOMATCH = '<nomatch>'
 
 # the closed domain akili is trained for: the calendar toolset, each tool
 # mapped to its ordered list of argument slots. this ordering is load-
-# bearing -- render writes slots in this order, parse checks the keys come
+# bearing: render writes slots in this order, parse checks the keys come
 # back in exactly this order, and the Constrainer fills them one by one in
 # this order. adding a tool here (and to the lexicon + the project's tool
-# classes) is how the language grows; the slot list IS the tool's schema
+# classes) is how the language grows; the slot list is the tool's schema
 DOMAIN = {
     'current': [],  # zero args: just "what day is it"
     'date_daydiff': ['start', 'end'],  # two dates in, a day count out
@@ -100,7 +100,7 @@ def parse(text):
     Each ```raise``` here is a guardrail: at training time it catches a
     malformed target, at inference time it would catch a plan the grammar
     somehow let through (it never should). The checks are deliberately
-    strict -- a plan is either exactly well-formed or rejected.
+    strict: a plan is either exactly well-formed or rejected.
 
     ### Args
 
@@ -122,7 +122,7 @@ def parse(text):
         return []
     plan = []
     for step in text.split(';'):
-        # every step must look like tool(...) -- an open paren and a
+        # every step must look like tool(...): an open paren and a
         # trailing close paren; a truncated step (no ')') fails here, which
         # is exactly how a too-short decoder budget would surface
         if '(' not in step or not step.endswith(')'):
@@ -142,7 +142,7 @@ def parse(text):
                     raise ValueError(f'malformed argument: {pair!r}')
                 arguments[key] = value
         # final check: the slots present, in order, must equal the tool's
-        # full schema -- no missing, extra, or reordered slots
+        # full schema, no missing, extra, or reordered slots
         if list(arguments.keys()) != DOMAIN[tool]:
             raise ValueError(f'arguments mismatch for {tool!r}')
         plan.append((tool, arguments))
@@ -156,7 +156,7 @@ class Constrainer:
     It holds the partial DSL line emitted so far and, on demand, reports the
     set of characters that may legally come next (or ```{'<eos>'}``` when the
     line is complete). The decoder consults it before every character and
-    picks the highest-scored *legal* one -- so the grammar, not luck, keeps
+    picks the highest-scored *legal* one, so the grammar, not luck, keeps
     the output well formed.
 
     The ```active``` set is the runtime tie-in: only tools the profile and
@@ -217,12 +217,12 @@ def _allowed(text, active):
     # the @k reference range
     step = text.rsplit(';', 1)[-1]
     step_index = text.count(';') + 1
-    # case 1: nothing typed yet -- the line may begin with any active tool
+    # case 1: nothing typed yet; the line may begin with any active tool
     # name or with the abstention sentinel <nomatch>
     if step == '' and text == '':
         chars, _ = _starts('', active + [NOMATCH])
         return chars
-    # case 2: the line is exactly <nomatch> -- complete, only EOS may follow
+    # case 2: the line is exactly <nomatch>, complete, only EOS may follow
     if text == NOMATCH:
         return {'<eos>'}
     # case 3: we are still spelling <nomatch> (only valid as the whole line,
@@ -231,20 +231,20 @@ def _allowed(text, active):
         chars, _ = _starts(step, [NOMATCH])
         if chars:
             return chars
-    # case 4: still inside a tool name (no '(' yet) -- offer the characters
+    # case 4: still inside a tool name (no '(' yet); offer the characters
     # that continue some active tool name, and '(' once the name is complete
     if '(' not in step:
         chars, complete = _starts(step, active)
         if complete:
             chars.add('(')
         return chars
-    # case 5: the step is closed with ')' -- decide whether to chain or end
+    # case 5: the step is closed with ')'; decide whether to chain or end
     if step.endswith(')'):
         return _after_close(text, step_index)
     # otherwise we are inside the argument list of a tool call
     tool, inner = step.split('(', 1)
     slots = DOMAIN.get(tool, [])
-    # case 6: a zero-argument tool (current) -- the only legal byte is ')'
+    # case 6: a zero-argument tool (current); the only legal byte is ')'
     # while empty, then it behaves as a closed step
     if not slots:
         return {')'} if inner == '' else _after_close(text, step_index)
@@ -258,7 +258,7 @@ def _allowed(text, active):
     current = pairs[-1]
     # split the current pair into key / '=' / value
     key, eq, value = current.partition('=')
-    # case 7: still spelling the slot name -- offer its remaining characters,
+    # case 7: still spelling the slot name; offer its remaining characters,
     # and '=' once the slot name is complete
     if not eq:
         chars, complete = _starts(key, [slot])
@@ -281,7 +281,7 @@ def _date_value(value, step_index, closers):
         # reference can only point at a result that already exists
         if len(value) == 1:
             return {str(k) for k in range(1, step_index)}
-        # @k is complete (k is a single digit here) -- only a closer follows
+        # @k is complete (k is a single digit here); only a closer follows
         return set(closers)
     digits = set('0123456789')
     # the fixed iso layout: four year digits, dash, two month, dash, two day
@@ -295,7 +295,7 @@ def _date_value(value, step_index, closers):
         if not value:
             chars = set(chars) | {'@'} if step_index > 1 else set(chars)
         return chars
-    # the date is full (10 chars) -- only a closer follows
+    # the date is full (10 chars); only a closer follows
     return set(closers)
 
 
@@ -303,7 +303,7 @@ def _int_value(value, closers):
     # a small signed integer (days/months/years). the digit cap below is a
     # real modelling choice: at most three digits means the grammar accepts
     # 0..999, enough for day shifts up to 365. raising it to four would let
-    # the model emit four-digit counts -- which it never learns, since the
+    # the model emit four-digit counts, which it never learns, since the
     # data caps counts well under 1000, so they would be pure noise
     digits = set('0123456789')
     # an empty value may start with a digit, or with '-' for a negative; a
@@ -324,7 +324,7 @@ def _after_close(text, step_index):
     # a closed step may chain into another (';') or end the line ('<eos>').
     # the cap of three steps is the deepest plan the model is taught:
     # resolve a date, shift it, consume the result. it must agree with two
-    # other places -- the renderers never build longer plans, and infer.py's
+    # other places: the renderers never build longer plans, and infer.py's
     # PLAN_BUDGET reserves room for the longest line. raising it to four
     # would require training four-step plans AND widening that budget
     return {';', '<eos>'} if step_index < 3 else {'<eos>'}

@@ -3,7 +3,7 @@ Example smtpd events handler for the {{ app_name }} application.
 
 Serves the mx-{{ app_label }} service from config/smtpd.yaml: accepts mail
 from tokeo@local to tokeo@local, reads the received message and looks for an
-url in the body text -- when one is found the count_words task is dispatched
+url in the body text; when one is found the count_words task is dispatched
 for it.
 """
 

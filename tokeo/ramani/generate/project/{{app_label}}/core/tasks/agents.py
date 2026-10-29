@@ -14,7 +14,7 @@ workers for complex tasks.
 - Calls app-specific business logic through the application context
 - Delegates complex processing to asynchronous workers
 
-### Usage
+### Example
 
 Define timer agents as simple Python functions:
 

@@ -1,7 +1,7 @@
 """
 Add-days tool for the {{ app_name }} ai agent.
 
-Shifts a date or timestring by a number of days -- forward or, with a
+Shifts a date or timestring by a number of days, forward or, with a
 negative number, backward. The grain is kept: a strict ISO date
 (```YYYY-MM-DD```) yields a date, a timestring (```YYYY-MM-DD HH:MM:SS.MMMZ```)
 yields a timestring. Understanding looser language is the model's job, not
@@ -46,7 +46,7 @@ class TokeoAiAddDaysTool(TokeoAiTool):
         Shift a UTC date or timestring by the given days.
 
         The grain is auto-detected from the input: a date-only string yields a
-        date, a timestring yields a datetime. The output keeps that grain -- a
+        date, a timestring yields a datetime. The output keeps that grain: a
         timestring in yields a timestring out, a plain date yields a plain date.
 
         ### Args

@@ -9,17 +9,17 @@ Ramani is Kiswahili for map or blueprint. This package ships the templates
 the Tokeo CLI uses to scaffold new projects. It contains no runtime logic
 and imports nothing at runtime; it is a pure template payload.
 
-The package installs into the ``tokeo`` namespace, so it sits alongside
+The package installs into the ```tokeo``` namespace, so it sits alongside
 the framework itself while shipping as its own distribution.
 
-### Notes:
+### Notes
 
-- ``tokeo`` is a PEP 420 native namespace package and carries no
-    ``__init__.py``. This distribution must never ship one either, or it
+- ```tokeo``` is a PEP 420 native namespace package and carries no
+    ```__init__.py```. This distribution must never ship one either, or it
     would shadow the framework's own namespace.
 - The generated output belongs to the project it was generated into and
     is not subject to this package's license. Files carrying their own
-    license header, currently only ``generate/project/*/core/akili/``,
+    license header, currently only ```generate/project/*/core/akili/```,
     are the exception.
 
 """

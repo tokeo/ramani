@@ -22,35 +22,35 @@
 Synthetic training data for the Spiral akili micro model.
 
 The calendar domain is closed, so the dataset is generated, not collected.
-Every example is a (request, plan-DSL) pair. The complete language -- every
-word and every sentence pattern the model is taught -- lives in
+Every example is a (request, plan-DSL) pair. The complete language (every
+word and every sentence pattern the model is taught) lives in
 ```AKILI-LEX.yaml``` next to this module; this module holds the mechanics:
 loading and validating the lexicon, the mixture, and how patterns are
 filled and rendered into plans. Teaching akili new language is editing the
 lexicon and retraining.
 
-### What the mixture teaches
+The mixture teaches:
 
 - ~15% abstentions mapped to ```<nomatch>``` (about 12% chatter and hard
     negatives, about 3% signed-count requests): without them the model
-    would invent a plan for every input -- this is the anti-hallucination
+    would invent a plan for every input; this is the anti-hallucination
     share. Negatives carry preambles and lead-ins too, so surrounding
     chatter alone never signals "calendar"; calendar-near hard negatives
     ("the date of christmas") keep the honesty close to the domain, and
     a sign written onto a bare count is taught as ```<nomatch>``` too, in
-    every phrasing -- bare ("plus -2 days") and consumer-wrapped ("the
-    weekday of today plus -2 days") -- since a sign in the request is not
+    every phrasing, bare ("plus -2 days") and consumer-wrapped ("the
+    weekday of today plus -2 days"), since a sign in the request is not
     part of the language, so the model echoes instead of inventing a digit
     or quietly dropping the shift.
 - ~11% relative words (tomorrow, uebermorgen, last week, next year ...):
     the lexicon maps every word to its shift from today; umlaut and
     folded spellings are taught side by side.
 - ~4% relative chains ("tomorrow next year"): two relative words, two
-    shifts from today in order -- the three-step plan is full, so these
+    shifts from today in order; the three-step plan is full, so these
     carry no consumer.
 - ~45% shifts, plain and composed: the unit word (days, months, years)
     picks the tool, signs included, day units get half the mass; a {c}
-    in the pattern puts a consumer behind the shift -- the three-step
+    in the pattern puts a consumer behind the shift: the three-step
     share, e.g. "the weekday of today plus 2 days" ->
     ```current();add_days(date=@1,days=2);weekday(date=@2)```.
 - ~28% single-step requests for the non-shifting tools: recognition and
@@ -60,7 +60,7 @@ lexicon and retraining.
 - Day counts are half single-digit on purpose: short numbers must be
     copied exactly, not extended (2 is 2, never 26).
 - Offsets are signed: minus/before/ago wordings (minus/vor in German)
-    map to negative values, plus/after/in to positive ones -- the request
+    map to negative values, plus/after/in to positive ones; the request
     always shows the bare count, the sign lives in the plan. A literal
     sign inside a request ("plus -2 days") is deliberately not part of
     the language.
@@ -69,10 +69,10 @@ lexicon and retraining.
     touched, the plan side stays exact.
 
 The whole dataset is a pure function of its seed and the lexicon: same
-seed, same lexicon, same deduplicated pairs -- a training run is fully
+seed, same lexicon, same deduplicated pairs: a training run is fully
 reproducible. Run ```python -m {{ app_label }}.core.akili.data``` to print samples.
 
-### The lexicon
+The lexicon:
 
 ```yaml
 .. include:: ./AKILI-LEX.yaml
@@ -243,8 +243,8 @@ def _unit(rng, lang_en):
 def _count(rng, unit):
     # how large the {n} count is, per unit. the day distribution is the
     # important one: half the time a single digit (1-9), half the time a
-    # larger number (10-364). the single-digit half is deliberate -- short
-    # numbers MUST be copied exactly ("2" stays "2", never becomes "26"),
+    # larger number (10-364). the single-digit half is deliberate: short
+    # numbers must be copied exactly ("2" stays "2", never becomes "26"),
     # so they are over-represented to drill exact copying. weeks stay small
     # (1-8) so the resulting day shift (count x 7) is realistic and well
     # within the grammar's three-digit cap; months stay within a year
@@ -284,7 +284,7 @@ def _render_relative(rng, lang_en, minus=True):
 
 def _render_relative_chain(rng, lang_en, minus=True):
     # two relative words chain into two shifts from today: a day word
-    # first, then a month or year word -- three steps fill the plan, so
+    # first, then a month or year word; three steps fill the plan, so
     # no consumer fits here
     words = _LEXICON['relative_words'][_lang(lang_en)]
     rows = [(word, row['tool'], str(row['shift'])) for word, row in words.items()]
@@ -365,7 +365,7 @@ def _render_shift(rng, lang_en, minus=True):
         base = '@1'
     # the request shows the bare count and the unit word ("1 week"); the
     # plan carries count x factor, so a week becomes 7 days on add_days
-    # (there is no add_weeks tool -- a week shift IS a seven-day shift)
+    # (there is no add_weeks tool; a week shift is a seven-day shift)
     amount = count * unit.get('factor', 1)
     plan.append((tool, {'date': base, DOMAIN[tool][1]: sign + str(amount)}))
     request, plan = _consume(rng, lang_en, request, plan)
@@ -390,8 +390,8 @@ def _render_date_daydiff_relative(rng, lang_en):
     # between them. exactly three steps, so it fits the plan budget. only
     # forward relative words are used, so the count is positive and the
     # phrasing natural ("from today until tomorrow"). two relative endpoints
-    # ("from yesterday until tomorrow") would need four steps -- a shift for
-    # each endpoint plus the diff -- which exceeds the cap, so they are
+    # ("from yesterday until tomorrow") would need four steps (a shift for
+    # each endpoint plus the diff), which exceeds the cap, so they are
     # deliberately out of scope
     words = _LEXICON['relative_words'][_lang(lang_en)]
     forward = [(word, row['tool'], str(row['shift'])) for word, row in words.items() if row['shift'] > 0]
@@ -434,7 +434,7 @@ def _render_single(rng, tool, phrase, lang_en):
 def _typo(rng, request):
     # one human typo, a doubled letter or swapped neighbours ('tomorrow'
     # becomes 'tommorrow'), so the byte matcher survives sloppy fingers;
-    # only letter pairs qualify -- digits and date characters are never
+    # only letter pairs qualify; digits and date characters are never
     # touched, the plan side stays exact
     spots = [i for i in range(len(request) - 1) if request[i].isalpha() and request[i + 1].isalpha()]
     if not spots:

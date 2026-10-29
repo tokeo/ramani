@@ -27,7 +27,7 @@ tool only; the application runs the trained weights with plain NumPy (see
 ```infer.py```). Run ```python -m {{ app_label }}.core.akili.train``` from the project
 root; the weights land in ```{{ app_label }}/core/akili/weights.npz```.
 
-### The pipeline, step by step
+The pipeline, step by step:
 
 1. ```data.dataset()``` generates the synthetic (request, plan) pairs; a
     fixed leading slice is held back for the final evaluation and never
@@ -35,28 +35,26 @@ root; the weights land in ```{{ app_label }}/core/akili/weights.npz```.
 2. ```encode_pair```/```tensorize``` turn every pair into one fixed-length row
     of byte tokens: ```request + SEP + plan + EOS```, padded with ```PAD```.
 3. The loop samples random batches and minimizes cross-entropy on the
-    next-token prediction -- but only on the plan side: every position
+    next-token prediction, but only on the plan side: every position
     before ```SEP``` is masked out, so the model is never graded on
     predicting the request, only on producing the plan.
 4. ```evaluate``` decodes the held-out requests greedily and counts exact
-    plan-line matches -- the number printed as accuracy.
+    plan-line matches, the number printed as accuracy.
 5. ```save``` exports every parameter as a named float32 array into
     ```weights.npz```, together with the architecture, so the NumPy runtime
     can never load weights that do not fit its math.
 
-### Command line
+The command line option:
 
 - ```--no-minus```: train without the signed-offset wordings (minus/ago,
-    minus/vor) -- an ablation switch: same architecture and budget, but
+    minus/vor), an ablation switch: same architecture and budget, but
     the resulting model has no notion of minus days. Keep the flag
     identical across resumed chunks (```AKILI_CKPT```), since the dataset
     and its held-out split are rebuilt from seed and flags on every
     invocation.
 
-### Environment knobs
-
-The default values are read in one place -- the ```os.environ``` lookups in
-```main()``` -- so this guide names the knobs and leaves the numbers to the
+The default values are read in one place (the ```os.environ``` lookups in
+```main()```), so this guide names the knobs and leaves the numbers to the
 code, where they cannot drift from what actually runs:
 
 - ```AKILI_STEPS```: optimizer steps of the full schedule
@@ -105,7 +103,7 @@ class Block(nn.Module):
     One transformer block: attention, then a small per-position MLP.
 
     Both halves are *residual* (their output is added back to the input),
-    and each is preceded by a layer norm -- the pre-norm layout. Two reasons
+    and each is preceded by a layer norm: the pre-norm layout. Two reasons
     this matters for a tiny model: the residual add gives gradients a short
     path back to early layers (so depth trains at all), and normalizing the
     input to each sublayer keeps activations in a stable range, which lets
@@ -173,7 +171,7 @@ class AkiliNet(nn.Module):
         # the causal mask: an upper-triangular matrix of -inf above the
         # diagonal. added to the attention scores, it makes attending to any
         # position to the *right* impossible (softmax of -inf is 0), so the
-        # model can only use left context -- the basis of left-to-right
+        # model can only use left context, the basis of left-to-right
         # generation
         mask = torch.triu(torch.full((length, length), float('-inf')), diagonal=1)
         # the input to the blocks is the sum of what each byte means and
@@ -264,7 +262,7 @@ def main():
     # minus=True is the normal model; --no-minus flips it for the ablation
     minus = not arguments.no_minus
     # build the dataset, then split off a fixed held-out slice that the loop
-    # never sees -- the only honest place to read accuracy from
+    # never sees, the only honest place to read accuracy from
     examples = dataset(int(os.environ.get('AKILI_DATA', '60000')), minus=minus)
     held = examples[:600]
     train = examples[600:]
@@ -275,7 +273,7 @@ def main():
     # AdamW: adaptive per-parameter steps with weight decay (0.01) as gentle
     # regularization. the learning rate 3e-3 is high for a transformer, which
     # the OneCycle schedule below makes safe: warm up over the first 5% of
-    # steps, then anneal down -- fast, stable convergence for a short run
+    # steps, then anneal down: fast, stable convergence for a short run
     optimizer = torch.optim.AdamW(model.parameters(), lr=3e-3, weight_decay=0.01)
     schedule = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=3e-3, total_steps=steps, pct_start=0.05)
     # cross-entropy on the next byte; ignore_index=PAD means padded target
@@ -307,8 +305,8 @@ def main():
         targets = rows[:, 1:].clone()
         # the masked-loss trick, the core of teaching only the plan: mark
         # every position from the first SEP onward as "seen_sep". positions
-        # NOT yet past SEP (the request side) get their target set to PAD,
-        # which the loss ignores -- so the model is graded only on bytes it
+        # not yet past SEP (the request side) get their target set to PAD,
+        # which the loss ignores, so the model is graded only on bytes it
         # must *produce* (the plan), never on copying back the request
         seen_sep = (rows[:, :-1] == tokenizer.SEP).cumsum(dim=1) > 0
         targets[~seen_sep] = tokenizer.PAD
@@ -383,12 +381,12 @@ def evaluate(model, examples):
 
     Greedy decoding *without* the grammar automaton: the raw model has to
     produce the plan line character by character, byte-exact, with no fence
-    to catch a wrong turn. That makes this number an honest lower bound --
+    to catch a wrong turn. That makes this number an honest lower bound:
     the runtime adds the grammar on top, so real use is at least this good.
 
     Beside the aggregate it prints one line per request class (see
     ```classify```): an aggregate above the quality bar can still hide a
-    thin class that fails often -- the table is the honest look behind the
+    thin class that fails often; the table is the honest look behind the
     single number, and the teaching aid for exactly that lesson.
 
     ### Args
@@ -409,11 +407,11 @@ def evaluate(model, examples):
         label = classify(request, dsl)
         class_totals[label] = class_totals.get(label, 0) + 1
         # a hit is a *byte-exact* match of the whole plan line; anything off
-        # -- a wrong tool, a miscopied digit, a truncated step -- is a miss
+        # (a wrong tool, a miscopied digit, a truncated step) is a miss
         if generate(model, request) == dsl:
             hits += 1
             class_hits[label] = class_hits.get(label, 0) + 1
-    # the per-class table: the honest look behind the single number -- a
+    # the per-class table: the honest look behind the single number; a
     # thin class can fail often without denting the aggregate above the bar
     for label in sorted(class_totals):
         total = class_totals[label]
@@ -429,7 +427,7 @@ def generate(model, request):
     Greedy-decode the plan line for one request (training-side only).
 
     This mirrors the runtime decoder in ```infer.py``` but without the grammar
-    constraint and without the KV cache (clarity over speed -- it is only
+    constraint and without the KV cache (clarity over speed; it is only
     used for evaluation). The same ```PLAN_BUDGET``` bounds it, so a long plan
     (a relative chain) is decoded in full instead of being cut off and
     wrongly counted as a miss.

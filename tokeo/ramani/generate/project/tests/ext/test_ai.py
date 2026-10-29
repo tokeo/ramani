@@ -85,7 +85,7 @@ def test_{{ app_label }}_ai_tools_exec(scratch):
 
 def test_{{ app_label }}_ai_agent_guarded_runs_tools(scratch):
     # the guarded agent answers through the loop: calculate, tell the time,
-    # and read a file -- driven by the built-in mock model
+    # and read a file, driven by the built-in mock model
     with {{ app_class_name }}AiTestApp() as app:
         assert app.ai.ask('calc 2 + 3', agent='guarded', profile='mock') == 'Done. The tool returned: 5'
         assert app.ai.ask('current', agent='guarded', profile='mock').startswith('Done. The tool returned: 2')
@@ -96,7 +96,7 @@ def test_{{ app_label }}_ai_trace_records_the_whole_run(scratch):
     # the trace is the run's full, ordered history as a list of steps: each
     # step carries an origin and the object it left in hand. one tool call
     # appears in several steps (one per guard that ran), but they are the same
-    # object -- the guards refined it in place, so each is an unchanged step
+    # object; the guards refined it in place, so each is an unchanged step
     with {{ app_class_name }}AiTestApp() as app:
         result = app.ai.chat([{'role': 'user', 'content': 'calc 2 + 3'}], agent='guarded', profile='mock')
         assert result.answer.text == 'Done. The tool returned: 5'

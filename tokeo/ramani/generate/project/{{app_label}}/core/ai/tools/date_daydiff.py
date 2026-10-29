@@ -1,7 +1,7 @@
 """
 Date-diff tool for the {{ app_name }} ai agent.
 
-Counts the days between two dates -- the workhorse of the calendar toolset
+Counts the days between two dates, the workhorse of the calendar toolset
 the akili micro model drives. Dates are strict ISO (```YYYY-MM-DD```);
 understanding looser language is the model's job, not the tool's.
 

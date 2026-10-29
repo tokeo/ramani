@@ -79,7 +79,7 @@ class TokeoAiCalcTool(TokeoAiTool):
 
         ### Returns
 
-        - **int | float**: The numeric result
+        - **int|float**: The numeric result
 
         ### Raises
 

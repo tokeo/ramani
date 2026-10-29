@@ -23,7 +23,7 @@ pdoc:
   lang: 'en'
   ### suffix shown in the html <title>
   title: "{{ app_name }} API"
-  ### sidebar brand label; null falls back to "🚀 <app label>"
+  ### sidebar brand label; null falls back to "rocket <app label>"
   brand: null
   ### jinja2 template packages to customise (see the CUSTOMIZE.md there).
   templates:

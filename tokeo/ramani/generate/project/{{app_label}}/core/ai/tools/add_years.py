@@ -1,7 +1,7 @@
 """
 Add-years tool for the {{ app_name }} ai agent.
 
-Shifts a date or timestring by a number of years -- forward or, with a
+Shifts a date or timestring by a number of years, forward or, with a
 negative number, backward. The day is clamped where needed (february 29 plus
 one year is february 28). The grain is kept: a strict ISO date
 (```YYYY-MM-DD```) yields a date, a timestring (```YYYY-MM-DD HH:MM:SS.MMMZ```)
@@ -49,7 +49,7 @@ class TokeoAiAddYearsTool(TokeoAiTool):
         Shift a UTC date or timestring by the given years, clamping the day.
 
         The grain is auto-detected from the input: a date-only string yields a
-        date, a timestring yields a datetime. The output keeps that grain -- a
+        date, a timestring yields a datetime. The output keeps that grain: a
         timestring in yields a timestring out, a plain date yields a plain date.
 
         ### Args

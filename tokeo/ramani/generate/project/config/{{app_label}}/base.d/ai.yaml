@@ -41,7 +41,7 @@ ai:
       type: {{ app_label }}.core.ai.tools.read_file.TokeoAiReadFileTool
       options:
         base_dir: tmp
-    ### the writing tool -- denied by the "readonly" policy guard below
+    ### the writing tool, denied by the "readonly" policy guard below
     append_file:
       type: {{ app_label }}.core.ai.tools.append_file.TokeoAiAppendFileTool
       options:
@@ -76,7 +76,7 @@ ai:
       - weekday
       - week_number
       - moon_phase
-    ### runs model-generated python -- DANGER, only safe behind the wasm sandbox
+    ### runs model-generated python: danger, only safe behind the wasm sandbox
     coding:
       type: tokeo.core.ai.tools.TokeoAiPythonUntrustedExecTool
 
@@ -135,7 +135,7 @@ ai:
         # memory_mb: 256       # rlimit cap (linux; macos rejects small caps)
         cwd: tmp/sandbox
     ### real isolation for model code: a wasm guest, hard memory cap, no network.
-    ### opt-in -- needs tokeo[wasm] and a built python.wasm (core/ai/sandboxes/WASM.md)
+    ### opt-in: needs tokeo[wasm] and a built python.wasm (core/ai/sandboxes/WASM.md)
     coded:
       type: tokeo.core.ai.sandboxes.TokeoAiWasmSandbox
       tools:
@@ -248,7 +248,7 @@ ai:
         - mathematics
         - filesystem
 
-    ### mock against the coder agent -- synthesizes python that runs in wasm.
+    ### mock against the coder agent: synthesizes python that runs in wasm.
     ###   {{ app_label }} ai ask "text upper der wochentag von heute" --profile codermock
     codermock:
       type: mock
@@ -267,7 +267,7 @@ ai:
         # timeout: 120
       ### passed straight to the endpoint; override per call with --model_param
       ### key=value. common: temperature, top_p, max_tokens, stop, seed,
-      ### response_format, tool_choice (see tokeo CONFIG.md § 8)
+      ### response_format, tool_choice (see tokeo CONFIG.md section 8)
       ### common keys:
       ###   temperature      randomness/creativity, ~0.0-2.0 (lower = focused)
       ###   top_p            nucleus sampling cutoff, 0.0-1.0

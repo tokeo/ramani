@@ -5,20 +5,26 @@ This module provides isolated API functions for Tokeo applications using
 FastAPI integration. It contains REST API routes that expose application
 functionality to clients, connecting web interfaces with core business logic.
 
-### Features
-
-- **Isolated endpoint functions**: Prevents global state pollution
-- **Business logic integration**: Seamless connection with ```core.tasks```
-- **JSON data exchange**: For frontend/backend interaction
-- **API documentation** through automatically generated OpenAPI specs
-
-### API Structure
-
 Endpoints are defined as pure asynchronous functions. Instead of using
 decorators directly in this file, these functions are imported and mapped
 programmatically inside ```site/routes.py```.
 
-### Usage
+The APIs module can interact with various parts of the application:
+
+- ```performers```: For complex business workflows and orchestration
+- ```operators```: For maintenance and operational tasks
+- ```steps```: For atomic business operations and utilities
+- ```models```: For data access and persistence
+- ```services```: For external service integration
+
+### Features
+
+- Isolated endpoint functions: Prevents global state pollution
+- Business logic integration: Seamless connection with ```core.tasks```
+- JSON data exchange: For frontend/backend interaction
+- API documentation through automatically generated OpenAPI specs
+
+### Example
 
 Define a new API endpoint as a pure function:
 
@@ -62,16 +68,6 @@ def apis_map():
     fa.post('/_/api/products/search')(search_products)
 ```
 
-### Integration Points
-
-The APIs module can interact with various parts of the application:
-
-- **performers**: For complex business workflows and orchestration
-- **operators**: For maintenance and operational tasks
-- **steps**: For atomic business operations and utilities
-- **models**: For data access and persistence
-- **services**: For external service integration
-
 ### Notes
 
 - Keep business logic in ```core.*``` modules, not in the API handlers
@@ -93,9 +89,9 @@ async def api_example():
 
     ### Returns
 
-    - JSON response with a message field
+    - **dict**: JSON response with a message field
 
-    ### Example Response
+    ### Example
 
     ```json
     {

@@ -43,7 +43,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
     sees the start of a large output without the whole blob entering the history.
     It never changes the ```decision``` and notes the cut on ```reason``` (at the
     tool stage). Derived from the core ```TokeoAiTruncateTransformer```
-    type; see the stage guide in `tokeo.core.ai.governor.TokeoAiGovernor` for
+    type; see the stage guide in ```tokeo.core.ai.governor.TokeoAiGovernor``` for
     what each stage hands a governor.
 
     """
@@ -104,7 +104,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         if not cut:
             return
         # cap only as_str, the model-facing view: truncate shrinks what the model
-        # reads to protect the budget, it hides nothing -- so the structured views
+        # reads to protect the budget, it hides nothing, so the structured views
         # (as_json, as_data) keep the full output for the trace. coherence across
         # the three views is not needed here, unlike a redact guard that must not
         # leave a secret in an unmasked view

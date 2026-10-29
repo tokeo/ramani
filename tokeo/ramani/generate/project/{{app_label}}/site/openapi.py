@@ -78,13 +78,13 @@ def get_openapi_custom():
     ### Returns
 
     - **dict**: Complete OpenAPI schema dictionary with all application routes
-      and custom metadata
+        and custom metadata
 
     ### Notes
 
     : The function implements a caching mechanism. If the schema is already
-      generated and stored in app.nicegui.fastapi_app.openapi_schema, it will
-      return the cached version rather than regenerating it.
+        generated and stored in app.nicegui.fastapi_app.openapi_schema, it will
+        return the cached version rather than regenerating it.
 
     """
     # check if already cached data exist
@@ -139,8 +139,8 @@ async def custom_swagger_ui_html():
     ### Notes
 
     : This endpoint is excluded from the API schema itself via the
-      include_in_schema=False parameter to avoid recursive documentation.
-      Further customization options are available in the FastAPI docs.
+        include_in_schema=False parameter to avoid recursive documentation.
+        Further customization options are available in the FastAPI docs.
 
     """
     resp = get_swagger_ui_html(
@@ -169,7 +169,8 @@ async def custom_redoc_html():
     ### Notes
 
     : This endpoint is excluded from the API schema itself via the
-      include_in_schema=False parameter to avoid recursive documentation.
+        include_in_schema=False parameter to avoid recursive documentation.
+
     : Further customization options are available in the FastAPI docs
 
     """

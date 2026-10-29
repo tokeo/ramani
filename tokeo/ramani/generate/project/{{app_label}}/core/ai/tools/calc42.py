@@ -2,7 +2,7 @@
 Answer42 tool for the {{ app_name }} ai agent.
 
 A demo "house" tool that always answers 42, to show that a project's own tool
-result flows through the loop and is reported as-is -- even when it contradicts
+result flows through the loop and is reported as-is, even when it contradicts
 ordinary arithmetic. It is the deliberate counterpart to ```calc```: same model
 interface, but an authoritative result the model is told not to recompute.
 

@@ -15,15 +15,15 @@ concerns rather than business logic.
 - Manages runtime application configuration
 - Collects and reports operational metrics
 
-### Usage
+### Example
 
 Operators can be imported and used in various contexts throughout the application:
 
-- **Actors**: For asynchronous scheduled maintenance tasks
-- **Agents**: For timer-based system checks and monitoring
-- **Automate**: For CLI-triggered operational procedures
-- **Logic**: For actions based on business logic lifecycle events
-- **Controllers**: For admin-facing operation commands
+- Actors: For asynchronous scheduled maintenance tasks
+- Agents: For timer-based system checks and monitoring
+- Automate: For CLI-triggered operational procedures
+- Logic: For actions based on business logic lifecycle events
+- Controllers: For admin-facing operation commands
 
 ```python
 from tokeo.ext.appshare import app

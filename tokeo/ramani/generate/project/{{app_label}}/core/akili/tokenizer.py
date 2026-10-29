@@ -24,29 +24,27 @@ Byte tokenizer for the Spiral akili micro model.
 A tokenizer turns text into integers the network can embed, and turns the
 network's integer outputs back into text. Most language models learn a
 *subword* vocabulary (tens of thousands of merged fragments) from a large
-corpus. akili does the opposite and on purpose: it has **no trained
-vocabulary at all**. The alphabet is simply the 256 possible byte values
+corpus. akili does the opposite and on purpose: it has no trained
+vocabulary at all. The alphabet is simply the 256 possible byte values
 plus three control tokens.
 
-### Why bytes, not subwords
-
-The whole job of akili is to copy dates and numbers exactly -- "2026-12-24"
+The whole job of akili is to copy dates and numbers exactly: "2026-12-24"
 must come out as "2026-12-24", and "2" must stay "2", never "two" and never
 "26". A subword vocabulary would merge "202", "6-", "12" into learned
 chunks whose splitting depends on the training corpus, which makes faithful
 copying harder for a tiny model. With raw bytes every character is its own
-token, so copying a date is just "emit the same token ids you saw" -- a
+token, so copying a date is just "emit the same token ids you saw", a
 pattern a small network learns reliably. The price (a few tokens per word
 instead of one) is irrelevant here: requests are short.
 
-### The vocabulary, exactly
+The vocabulary, exactly:
 
-- ids 0..255 -- the raw byte values; any utf-8 text maps onto these
-- id 256 = PAD -- fills a batch row out to a fixed length; the loss
+- ids 0..255: the raw byte values; any utf-8 text maps onto these
+- id 256 = PAD: fills a batch row out to a fixed length; the loss
     ignores these positions, they carry no meaning
-- id 257 = SEP -- the boundary between the request and the plan; the
+- id 257 = SEP: the boundary between the request and the plan; the
     model learns "after SEP, start planning"
-- id 258 = EOS -- end of the plan; emitting it stops generation
+- id 258 = EOS: end of the plan; emitting it stops generation
 
 That is VOCAB = 259 rows in the embedding table and 259 scores at the
 output head. Change any of these constants and you must retrain: every id

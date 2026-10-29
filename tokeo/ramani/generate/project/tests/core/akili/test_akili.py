@@ -2,7 +2,7 @@
 Real test cases for akili, the Spiral micro language model.
 
 Two layers, because akili is train-first. The data-contract tests run
-without weights and lock in what the synthetic data *teaches* -- bare time
+without weights and lock in what the synthetic data *teaches*: bare time
 words, greetings, signed counts, plan legality, tool coverage. The model
 test needs ```weights.npz``` (skips until it exists) and checks the actual
 answers of the project's own trained model, under the ```guarded``` agent.
@@ -49,7 +49,7 @@ class {{ app_class_name }}AiTestApp({{ app_class_name }}Test):
 def test_{{ app_label }}_akili_lexicon_loads():
     # the editable language definition (AKILI-LEX.yaml) must parse and
     # validate cleanly: every section filled for both languages, tools
-    # known to the grammar, required placeholders present -- this runs
+    # known to the grammar, required placeholders present; this runs
     # without weights and catches lexicon edits before a training run
     from {{ app_label }}.core.akili.data import _LEXICON
     from {{ app_label }}.core.akili.dsl import DOMAIN
@@ -65,7 +65,7 @@ def test_{{ app_label }}_akili_lexicon_loads():
     for tool in _LEXICON['consumers']:
         assert tool in DOMAIN
     # the longest plan the data can produce must fit the decoder budget,
-    # with room for the closing EOS step -- a longer pattern group would
+    # with room for the closing EOS step; a longer pattern group would
     # otherwise be silently truncated at inference time
     from {{ app_label }}.core.akili.data import dataset
     from {{ app_label }}.core.akili.infer import PLAN_BUDGET
@@ -77,7 +77,7 @@ def test_{{ app_label }}_akili_lexicon_loads():
 def test_{{ app_label }}_akili_data_contract():
     # the teaching guarantees that make the model's answers predictable.
     # these assert what the synthetic data contains, so a lexicon or mixture
-    # edit that would change the trained behaviour fails here -- before a
+    # edit that would change the trained behaviour fails here, before a
     # training run, and without needing any weights
     from {{ app_label }}.core.akili.data import dataset, _LEXICON
     from {{ app_label }}.core.akili.dsl import DOMAIN, NOMATCH, Constrainer, parse
@@ -98,7 +98,7 @@ def test_{{ app_label }}_akili_data_contract():
     assert any(d == NOMATCH and 'hallo' in r for r, d in pairs)
 
     # a sign written onto a count is not language: it maps to <nomatch>,
-    # bare and consumer-wrapped, and NO positive example ever carries one
+    # bare and consumer-wrapped, and no positive example ever carries one
     assert not any(_SIGNED.search(r) for r, d in pairs if d != NOMATCH)
     assert any(_SIGNED.search(r) and d == NOMATCH for r, d in pairs)
     consumers = [names[lang] for names in _LEXICON['consumers'].values() for lang in ('en', 'de')]
@@ -157,7 +157,7 @@ def test_{{ app_label }}_akili_domain_covers_calendar_tools():
     # akili's DOMAIN (dsl.py) and the project's `calendar` tool group (ai.yaml)
     # are two hand-kept lists of the same toolset. the planner only emits tools
     # in both lists, so one the config activates but DOMAIN misspells (a rename
-    # landing in one list only) drops from the grammar silently -- no error,
+    # landing in one list only) drops from the grammar silently: no error,
     # just a worse plan. lock the two lists together here, without weights
     from {{ app_label }}.core.akili.dsl import DOMAIN
 
@@ -170,8 +170,8 @@ def test_{{ app_label }}_akili_domain_covers_calendar_tools():
 def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeypatch):
     # regression for a timezone bug: the current tool must report the UTC
     # calendar day, never the local one. the clock is frozen 30 minutes before
-    # UTC midnight -- in any timezone ahead of UTC (UTC+1 makes this 00:30 the
-    # next day) the LOCAL day has already rolled over, so a naive date.today()
+    # UTC midnight; in any timezone ahead of UTC (UTC+1 makes this 00:30 the
+    # next day) the local day has already rolled over, so a naive date.today()
     # expectation runs a full day ahead of the tool's UTC output. that is the
     # exact divergence a real run hit (utc 2026-07-03 23:40, local 2026-07-04).
     # no weights needed: the tool reads the clock, it does not plan
@@ -197,7 +197,7 @@ def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeyp
 def test_{{ app_label }}_ai_akili_model():
     # the project's own trained micro language model ({{ app_label }}/core/akili)
     # plans with learned weights: exact copies, real chains incl. the
-    # today-bridge, honest nomatch -- and the guards still rule the loop
+    # today-bridge, honest nomatch, and the guards still rule the loop
     with {{ app_class_name }}AiTestApp() as app:
 
         def ask(text):
@@ -205,7 +205,7 @@ def test_{{ app_label }}_ai_akili_model():
 
         # the quality bar first: the held-out exact-plan accuracy is recorded
         # in the weights, and below the floor the per-phrasing checks below
-        # are flaky -- so fail here with a clear message instead of on some
+        # are flaky, so fail here with a clear message instead of on some
         # borderline wording. retrain with more steps to lift it
         from {{ app_label }}.core.akili.infer import AkiliModel
 
@@ -227,7 +227,7 @@ def test_{{ app_label }}_ai_akili_model():
         # a bare time word is the current date: today/now/heute/jetzt all
         # resolve to current(); the time part varies, so match the date head.
         # every akili date tool reports UTC (current -> utc_now, add_* -> to_utc),
-        # so build the expected days on that SAME utc basis and compute it once:
+        # so build the expected days on that same utc basis and compute it once:
         # a naive date.today() compares a local day against a utc day and diverges
         # near utc midnight in a timezone ahead of utc
         _today = utc_now().date()

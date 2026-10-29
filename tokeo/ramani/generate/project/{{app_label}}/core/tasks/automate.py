@@ -15,7 +15,7 @@ primarily triggered by direct CLI invocation.
 - Accesses the application context through the app parameter
 - Bridges to asynchronous processing by triggering dramatiq actors
 
-### Usage
+### Example
 
 Define automation functions with the standard interface pattern:
 

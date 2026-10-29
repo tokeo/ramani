@@ -11,12 +11,12 @@
 ### Each service binds one or more listeners and dispatches the SMTP dialog to
 ### your own handler class (a subclass of tokeo.ext.smtpd.TokeoSmtpdEvents).
 ###
-### Every setting below is shown with its DEFAULT value and is commented out --
+### Every setting below is shown with its default value and is commented out;
 ### uncomment and change only what you need. The listener host/port is kept
 ### active so the example service runs out of the box on 127.0.0.1:2525.
 smtpd:
-  ### global caps across ALL services (default: unlimited). A single service may
-  ### set a SMALLER value under its own settings -- the smaller value always wins.
+  ### global caps across all services (default: unlimited). A single service may
+  ### set a smaller value under its own settings; the smaller value always wins.
   ### maximum connections processed at the same time over all services
   # max_processings: null
   ### maximum simultaneous open connections over all services
@@ -79,8 +79,8 @@ smtpd:
         ### null keeps the whole message in RAM. A directory plus the start
         ### of a file name spools every message in parallel to a temp file.
         ### E.g. '/tmp/<prefix>YYYYMMDD-HHMMSS-<unique>.eml' while receiving:
-        ### ctx.message.data then carries ONLY the headers while
-        ### ctx.message.spooler owns the file -- complete at
+        ### ctx.message.data then carries only the headers while
+        ### ctx.message.spooler owns the file, complete at
         ### on_message_data_event and deleted right after it; take it over
         ### via spooler.keep(path) or spooler.keep() (debug keeps all files)
         # spool: null

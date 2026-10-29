@@ -6,7 +6,7 @@ generated project: the untrusted tool runs model-style code with total
 isolation (no app mount), and the trusted tool is rebuilt in the guest from the
 mounted project source. The enforcement mechanics (hard memory cap) are shown
 with a tiny WAT guest so they run anywhere wasmtime is installed; the real
-guest runs need a user-supplied CPython-WASI build and skip without one -- set
+guest runs need a user-supplied CPython-WASI build and skip without one; set
 ```TOKEO_TEST_PYTHON_WASM``` and ```TOKEO_TEST_WASI_STDLIB``` to run them.
 """
 
@@ -21,7 +21,7 @@ from {{ app_label }}.main import {{ app_class_name }}Test
 wasmtime = pytest.importorskip('wasmtime')
 
 
-# a guest that grows memory forever, trapping once the store limit refuses --
+# a guest that grows memory forever, trapping once the store limit refuses;
 # proves the hard cap without needing a real interpreter
 _GROW_WAT = r"""(module (memory (export "memory") 1)
   (func (export "_start")
@@ -43,7 +43,7 @@ def test_{{ app_label }}_wasm_memory_cap_is_hard():
 
 
 def test_{{ app_label }}_untrusted_exec_runs_in_process():
-    # the tool returns the snippet's raw value now -- the sandbox layer wraps it
+    # the tool returns the snippet's raw value now; the sandbox layer wraps it
     # into a ToolResult, so exec itself is sandbox-agnostic and value-only
     tool = TokeoAiPythonUntrustedExecTool(None)
     assert tool.exec(code='sum(range(10))') == 45
@@ -209,7 +209,7 @@ def test_{{ app_label }}_trusted_exec_in_wasm_guest():
 def test_{{ app_label }}_untrusted_guest_cannot_import_the_app():
     # the untrusted path mounts the pact contract but no app, so importing the
     # project fails in the guest, recorded as a tool exception on the result (A)
-    # with no value -- the app stays invisible to untrusted code
+    # with no value: the app stays invisible to untrusted code
     with {{ app_class_name }}WasmTestApp(config_defaults=wasm_ai_config()) as app:
         agent = app.ai._agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(

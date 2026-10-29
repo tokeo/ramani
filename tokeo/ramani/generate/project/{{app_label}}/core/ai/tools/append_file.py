@@ -2,7 +2,7 @@
 Append-file tool for the {{ app_name }} ai agent.
 
 Appends a line of text to one configured file below a configured base
-directory -- the writing half of the file pair, and so the natural target for
+directory: the writing half of the file pair, and so the natural target for
 a policy guard: an agent that may read should not silently write, and denying
 ```append_file``` by name shows action-level governance on a tool that really
 exists. The target ```file``` and the ```base_dir``` are tool settings from the
@@ -38,7 +38,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
 
     The ```Meta``` description and parameters are what the model sees; the
     ```base_dir``` and the target ```file``` are the tool's own settings: they
-    are declared in ```config_defaults``` -- the tool's whole outward surface --
+    are declared in ```config_defaults``` (the tool's whole outward surface),
     overridden per item by its config ```options``` and read through
     ```_config```.
 
@@ -69,7 +69,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
         """
         Append the text as one line to the configured file.
 
-        The value carries the write outcome -- the file name, its byte size
+        The value carries the write outcome: the file name, its byte size
         before and after, whether it was newly created, and its filesystem
         timestamps; the model sees only true/false (success) as the as_str.
 
@@ -89,7 +89,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
 
         """
         target = _resolve_below(self._config('base_dir'), self._config('file'))
-        # check existence and size BEFORE the append: a missing file is created
+        # check existence and size before the append: a missing file is created
         # by append mode, so this is the only point that can tell new from empty
         created = not target.is_file()
         size_before = 0 if created else target.stat().st_size

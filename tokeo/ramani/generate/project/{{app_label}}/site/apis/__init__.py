@@ -8,10 +8,11 @@ unused imports.
 
 ### Notes
 
-: Every new API endpoint function created in this directory should be imported
-  here and added to the ```__all__``` list
+: Every new API endpoint function created in this directory should be
+    imported here and added to the ```__all__``` list
+
 : This structure ensures ```pdoc``` correctly indexes and documents the public
-  API methods of this package
+    API methods of this package
 
 """
 

@@ -39,7 +39,7 @@ scheduler:
       name: count-word timer
       ### what to do if multiple run times occur until task starts (earliest, latest, all)
       coalesce: latest
-      ### maximum number of seconds the scheduled job’s actual run time is allowed to be late
+      ### maximum number of seconds the scheduled job's actual run time is allowed to be late
       misfire_grace_time: null
       ### number of seconds to add to the scheduled time for each job
       delay: null

@@ -36,7 +36,7 @@ class TokeoAiReadFileTool(TokeoAiTool):
 
     The ```Meta``` description and parameters are what the model sees; they are
     code, not config. The ```base_dir``` is the tool's own setting: it is declared
-    in ```config_defaults``` -- the tool's whole outward surface -- overridden per
+    in ```config_defaults``` (the tool's whole outward surface), overridden per
     item by its config ```options``` and read through ```_config```.
 
     """

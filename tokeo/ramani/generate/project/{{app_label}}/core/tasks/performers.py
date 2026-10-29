@@ -15,7 +15,7 @@ processing via dramatiq actors.
 - Dispatches asynchronous processing to dramatiq actors
 - Provides reusable business operations for consistent implementation
 
-### Usage
+### Example
 
 Define performer functions that orchestrate complex operations:
 

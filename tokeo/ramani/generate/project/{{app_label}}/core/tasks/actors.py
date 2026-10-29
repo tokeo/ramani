@@ -12,7 +12,7 @@ task processors that can handle asynchronous workloads through message passing.
 - Rate-limits via the ```app.dramatiq.locks``` interface
 - Calls app-specific business logic through the application context
 
-### Usage
+### Example
 
 Register actors with the @app.dramatiq.actor decorator:
 

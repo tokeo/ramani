@@ -128,7 +128,7 @@ class {{ app_class_name }}Test(TestApp, {{ app_class_name }}):
     for {{ app_class_name }} applications. It modifies various settings to be more
     suitable for automated testing.
 
-    ### Usage
+    ### Example
 
     ```python
     # Basic test setup
@@ -163,7 +163,9 @@ def dramatiq():
     It sets up the necessary environment without running the full
     CLI application stack.
 
-    ### Used by {{ app_name }} CLI for the dramatiq workers
+    ### Example
+
+    Used by the {{ app_name }} CLI for the dramatiq workers:
 
     ```bash
     {{ app_label }} dramatiq serve

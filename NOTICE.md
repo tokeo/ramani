@@ -20,7 +20,7 @@ scaffolding.
 
 The only exception are files that carry their own license header. At
 present this applies to the akili demonstration module, generated to
-`<app_label>/core/akili/` when selected. Those files remain under the
+```<app_label>/core/akili/``` when selected. Those files remain under the
 Apache License, Version 2.0, and ship with their own LICENSE copy in
 that directory. The module is a self-contained demonstration LLM and
 would be normally used only for demonstration purposes. In general it

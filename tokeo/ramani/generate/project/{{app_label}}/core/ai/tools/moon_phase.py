@@ -1,7 +1,7 @@
 """
 Moon-phase tool for the {{ app_name }} ai agent.
 
-Tells the moon phase of a date -- the one astronomy treat in the calendar
+Tells the moon phase of a date, the one astronomy treat in the calendar
 toolset, computed from pure arithmetic (days since a known new moon over the
 mean synodic month), so it stays deterministic and needs no data source.
 Dates are strict ISO (```YYYY-MM-DD```).

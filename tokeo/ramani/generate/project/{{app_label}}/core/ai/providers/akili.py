@@ -3,8 +3,8 @@ Akili ai provider for the {{ app_name }} application.
 
 ```akili``` is the project's own micro language model: a few hundred thousand
 parameters trained from scratch on the project's synthetic calendar data (the
-lab lives in ```{{ app_label }}/core/akili```), running in-process with plain NumPy -- no
-host to start, no network, deterministic. It plans tool chains, including
+lab lives in ```{{ app_label }}/core/akili```), running in-process with plain
+NumPy: no host to start, no network, deterministic. It plans tool chains, including
 nested requests like "the weekday of today plus 2 days", as a constrained
 plan DSL decoded greedily over the active tools, so it can never emit a
 malformed plan or a tool outside the injection.
@@ -56,9 +56,9 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
         - **profile** (dict): The resolved profile (unused settings pass
             through untouched)
         - **messages** (list): Chat messages as plain OpenAI-style dicts
-        - **tools** (list | None): OpenAI-style function specs; the decoder
+        - **tools** (list|None): OpenAI-style function specs; the decoder
             is constrained to these active tools
-        - **model_params** (dict | None): Ignored; the micro model has no
+        - **model_params** (dict|None): Ignored; the micro model has no
             sampling knobs, so per-call parameters do not apply
 
         ### Returns
@@ -147,7 +147,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
                 prompt = message.get('content') or ''
                 feedback = []
             elif message.get('role') == 'tool':
-                # count ONLY results answering one of our own calls
+                # count only results answering one of our own calls
                 if str(message.get('tool_call_id') or '').startswith('call_'):
                     feedback.append(str(message.get('content') or ''))
         return prompt, feedback

@@ -1,7 +1,7 @@
 """
 Add-months tool for the {{ app_name }} ai agent.
 
-Shifts a date or timestring by a number of months -- forward or, with a
+Shifts a date or timestring by a number of months, forward or, with a
 negative number, backward. The day is clamped to the target month's length
 (january 31 plus one month is february 28 or 29). The grain is kept: a strict
 ISO date (```YYYY-MM-DD```) yields a date, a timestring
@@ -49,7 +49,7 @@ class TokeoAiAddMonthsTool(TokeoAiTool):
         Shift a UTC date or timestring by the given months, clamping the day.
 
         The grain is auto-detected from the input: a date-only string yields a
-        date, a timestring yields a datetime. The output keeps that grain -- a
+        date, a timestring yields a datetime. The output keeps that grain: a
         timestring in yields a timestring out, a plain date yields a plain date.
 
         ### Args

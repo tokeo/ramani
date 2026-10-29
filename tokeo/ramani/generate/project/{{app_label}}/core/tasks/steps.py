@@ -15,7 +15,7 @@ transformation, or external service integration.
 - Exposes standardized interfaces for consistency and maintainability
 - Usable from both synchronous and asynchronous contexts
 
-### Usage
+### Example
 
 Define step functions that implement specific business operations:
 

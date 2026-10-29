@@ -1,5 +1,5 @@
 """
-The {{ app_name }} task collection -- actors, automations, agents,
+The {{ app_name }} task collection: actors, automations, agents,
 operators, performers, and steps; lazily loaded so importing the
 package stays cheap until a task module is touched.
 """

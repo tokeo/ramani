@@ -3,14 +3,14 @@
 
 ## TODO
 
-1. **// [ ] TODO: Example todo**
+1. // [ ] TODO: Example todo
     * Describe the todo.
     <br />
 
 
 ## BUG FIXES
 
-1. **// [ ] FIXME: Example to fix**
+1. // [ ] FIXME: Example to fix
     * Describe the bug.
     <br />
 
@@ -19,7 +19,7 @@
 
 ### Documentation
 
-1. **// [ ] TODO: Whatever to improve**
+1. // [ ] TODO: Whatever to improve
   * Describe and give examples.
     ```python
     print('Also code is allowed in md.')
