@@ -19,7 +19,7 @@
 # limitations under the License.
 
 """
-Synthetic training data for the Spiral akili micro model.
+Synthetic training data for the {{ app_name }} akili micro model.
 
 The calendar domain is closed, so the dataset is generated, not collected.
 Every example is a (request, plan-DSL) pair. The complete language (every

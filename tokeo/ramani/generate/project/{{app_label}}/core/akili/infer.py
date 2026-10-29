@@ -19,7 +19,7 @@
 # limitations under the License.
 
 """
-NumPy inference for the Spiral akili micro model.
+NumPy inference for the {{ app_name }} akili micro model.
 
 The application runs the trained weights (```weights.npz```, created by
 ```python -m {{ app_label }}.core.akili.train```) with plain NumPy: no torch, no

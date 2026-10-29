@@ -19,7 +19,7 @@
 # limitations under the License.
 
 """
-Byte tokenizer for the Spiral akili micro model.
+Byte tokenizer for the {{ app_name }} akili micro model.
 
 A tokenizer turns text into integers the network can embed, and turns the
 network's integer outputs back into text. Most language models learn a

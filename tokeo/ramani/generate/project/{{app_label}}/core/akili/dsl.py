@@ -19,7 +19,7 @@
 # limitations under the License.
 
 """
-Akili plan DSL for the Spiral ai micro model.
+Akili plan DSL for the {{ app_name }} ai micro model.
 
 The trained akili model does one thing: it turns a request into a *plan*,
 written in a tiny deterministic language. One line, steps joined by ```;```,

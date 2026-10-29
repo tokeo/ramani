@@ -232,11 +232,11 @@ the tools it needs: ```agent.tools - agent.deny - profile.deny```.
 ### 12. Relative words, and chains of them
 
 ```shell
-spiral ai ask "welches datum ist übermorgen" --profile akili
+{{ app_label }} ai ask "welches datum ist übermorgen" --profile akili
 ```
 
 ```shell
-spiral ai ask "the date of tomorrow next year" --profile akili
+{{ app_label }} ai ask "the date of tomorrow next year" --profile akili
 ```
 
 Expected: the day after tomorrow, and tomorrow's date shifted one year;
@@ -262,15 +262,15 @@ where part 3 picks up the story.
 ### 13. The unit word picks the tool for months and years
 
 ```shell
-spiral ai ask "add 2 months to 2026-06-08" --profile akili
+{{ app_label }} ai ask "add 2 months to 2026-06-08" --profile akili
 ```
 
 ```shell
-spiral ai ask "das datum 3 monate nach 2026-01-15" --profile akili
+{{ app_label }} ai ask "das datum 3 monate nach 2026-01-15" --profile akili
 ```
 
 ```shell
-spiral ai ask "heute plus 1 jahr" --profile akili
+{{ app_label }} ai ask "heute plus 1 jahr" --profile akili
 ```
 
 Expected: shifted dates via ```add_months``` and ```add_years```; the same
@@ -282,11 +282,11 @@ between them would surface.
 ### 14. Weeks are seven-day shifts (there is no add_weeks tool)
 
 ```shell
-spiral ai ask "2026-06-08 plus 3 weeks" --profile akili
+{{ app_label }} ai ask "2026-06-08 plus 3 weeks" --profile akili
 ```
 
 ```shell
-spiral ai ask "heute minus 1 woche" --profile akili
+{{ app_label }} ai ask "heute minus 1 woche" --profile akili
 ```
 
 Expected: ```add_days``` plans with ```days=21``` and ```days=-7```: the
@@ -297,11 +297,11 @@ planning time, not in a tool.
 ### 15. Days between today and a relative date
 
 ```shell
-spiral ai ask "count the days from today until next week" --profile akili
+{{ app_label }} ai ask "count the days from today until next week" --profile akili
 ```
 
 ```shell
-spiral ai ask "tage von heute bis morgen" --profile akili
+{{ app_label }} ai ask "tage von heute bis morgen" --profile akili
 ```
 
 Expected: ```7``` and ```1```, each from a three-step plan (resolve today,
@@ -313,11 +313,11 @@ sit further out on the edge, and part 3 walks them on purpose.
 ### 16. The practised minus counts backwards from today
 
 ```shell
-spiral ai ask "der wochentag von heute minus 2 tagen" --profile akili
+{{ app_label }} ai ask "der wochentag von heute minus 2 tagen" --profile akili
 ```
 
 ```shell
-spiral ai ask "the date 2 weeks ago" --profile akili
+{{ app_label }} ai ask "the date 2 weeks ago" --profile akili
 ```
 
 Expected: the weekday of the day before yesterday, and today shifted
@@ -329,11 +329,11 @@ mixture; part 3 stands exactly there.
 ### 17. Wordings, languages, and small slips
 
 ```shell
-spiral ai ask "what is the date right now" --profile akili
+{{ app_label }} ai ask "what is the date right now" --profile akili
 ```
 
 ```shell
-spiral ai ask "welche kw ist heute" --profile akili
+{{ app_label }} ai ask "welche kw ist heute" --profile akili
 ```
 
 Expected: the current date, and today's ISO week from the German "kw"

@@ -19,7 +19,7 @@
 # limitations under the License.
 
 """
-Training for the Spiral akili micro model.
+Training for the {{ app_name }} akili micro model.
 
 A from-scratch decoder-only transformer (a few hundred thousand parameters)
 learns one mapping: request bytes -> plan DSL bytes. Torch is a training-side

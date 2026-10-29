@@ -1,5 +1,5 @@
 """
-Real test cases for akili, the Spiral micro language model.
+Real test cases for akili, the {{ app_name }} micro language model.
 
 Two layers, because akili is train-first. The data-contract tests run
 without weights and lock in what the synthetic data *teaches*: bare time
