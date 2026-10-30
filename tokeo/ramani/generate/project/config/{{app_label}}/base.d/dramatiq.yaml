@@ -56,3 +56,5 @@ dramatiq:
   locks_tag: dramatiq_locks
   ### mark lock keys with prefix
   locks_key_prefix: dq_
+  ### seconds between two checks of a waiting lock or temper call
+  locks_sleep_time: 0.1
