@@ -13,13 +13,16 @@ authors = [
 {% if project_license == "Proprietary" %}# {% endif %}license = "{{ project_license }}"
 {% if project_license == "Proprietary" %}# {% endif %}license-files = ["LICENSE.txt"]
 urls = {"Homepage" = "{{ project_url }}"}
-requires-python = ">=3.10"  # Adjust based on your needs
+requires-python = ">=3.11"  # Adjust based on your needs
 dependencies = [
-    "tokeo==1.3.0",
+    "tokeo==2.2.0",
 {% if feature_ai == "Y" %}
-    "tokeo-fundi==1.3.0",
+    "tokeo-fundi==2.2.0",
 {% endif %}
-    "cement==3.0.14",
+{% if feature_smtpd == "Y" %}
+    "tokeo-smtpd==2.2.0",
+{% endif %}
+    "cement==3.0.16",
     "cement[jinja2]",
     "jinja2",
     "cement[yaml]",
@@ -31,7 +34,7 @@ dependencies = [
     "prompt_toolkit",
 {% endif -%}
 {% if feature_diskcache == "Y" or feature_dramatiq == "Y" or feature_apscheduler == "Y" %}
-    "diskcache",
+    "tokeo-diskcache==5.6.3",
 {% endif -%}
 {% if feature_dramatiq == "Y" %}
     "dramatiq>=2.0.0",

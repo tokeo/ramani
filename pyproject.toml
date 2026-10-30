@@ -13,9 +13,9 @@ authors = [
 license = "Apache-2.0"
 license-files = ["LICENSE.txt", "NOTICE.md"]
 urls = {"Homepage" = "https://github.com/tokeo/ramani"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-    "tokeo >= 1.3.0, < 2.0.0",
+    "tokeo >= 2.2.0, < 3.0.0",
 ]
 
 [project.optional-dependencies]
