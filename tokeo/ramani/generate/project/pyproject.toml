@@ -24,9 +24,9 @@ dependencies = [
 {% endif %}
     "cement==3.0.16",
     "cement[jinja2]",
-    "jinja2",
+    "jinja2>=3.1.6",
     "cement[yaml]",
-    "PyYAML",
+    "PyYAML>=5.4",
     "cement[colorlog]",
     "colorlog",
     "lazy_loader",
@@ -37,47 +37,47 @@ dependencies = [
     "tokeo-diskcache==5.6.3",
 {% endif -%}
 {% if feature_dramatiq == "Y" %}
-    "dramatiq>=2.0.0",
+    "dramatiq>=2.2.1",
     "dramatiq[rabbitmq]",
     "pika",
 {% endif -%}
 {% if feature_grpc == "Y" %}
-    "grpcio",
+    "grpcio>=1.56.2",
     "grpcio-tools",
-    "protobuf",
+    "protobuf>=6.33.5",
 {% endif -%}
 {% if feature_apscheduler == "Y" %}
     "apscheduler>=3.0,<4.0",
 {% endif -%}
 {% if feature_dramatiq == "Y" or feature_grpc == "Y" or feature_apscheduler == "Y" %}
-    "requests",
+    "requests>=2.33.0",
 {% endif -%}
 {% if feature_nicegui == "Y" %}
     "nicegui>=3.12.1",
-    "fastapi",
-    "starlette",
-    "pydantic[email]",
+    "fastapi>=0.109.1",
+    "starlette>=1.3.1",
+    "pydantic[email]>=2.4.0",
 {% endif -%}
 {% if feature_pocketbase == "Y" %}
     "pocketbase>=0.15.0",
 {% endif -%}
 {% if feature_automate == "Y" %}
     "invoke>=2.2.1",
-    "paramiko>=2.7,<4",
+    "paramiko>=5.0.0",
 {% endif -%}
 {% if feature_ai == "Y" %}
-    "httpx",
+    "httpx>=0.23.0",
 {% endif -%}
 {% if feature_ai == "Y" and feature_ai_akili == "Y" %}
-    "numpy",
+    "numpy>=1.22.0",
     "numba",
-    "torch",
+    "torch>=2.13.0",
 {% endif -%}
 {% if feature_ai == "Y" and feature_ai_wasm == "Y" %}
-    "wasmtime",
+    "wasmtime>=48.0.0",
 {% endif -%}
 {% if feature_vault == "Y" or (feature_smtpd == "Y" and feature_smtpd_auto_certificates == "Y") %}
-    "cryptography>=45.0.0",
+    "cryptography>=50.0.0",
 {% endif -%}
 ]
 
@@ -85,13 +85,13 @@ dependencies = [
 dev = [
     "pip-tools>=7.0.0",
     "build>=1.0.0",
-    "setuptools>=77.0.0",
-    "wheel>=0.40.0",
+    "setuptools>=83.0.0",
+    "wheel>=0.46.2",
     "twine>=6.0.0",
-    "pytest>=8.5.0",
+    "pytest>=9.0.3",
     "pytest-cov>=6.0.0",
     "coverage>=7.10.0",
-    "pyink>=25.0.0",
+    "pyink>=26.5.1",
     "flake8>=7.0.0",
     "watchdog",
 {% if feature_dramatiq == "Y" %}
