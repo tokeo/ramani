@@ -13,12 +13,8 @@ nicegui:
   host: '127.0.0.1'
   ### port for serving the web service
   port: 8080
-  ### module with apis to serve
-  apis_module: {{ app_label }}.site.apis
-  ### module with routes to serve
-  routes_module: {{ app_label }}.site.routes
-  ### name of the routes or map method
-  routes: routes
+  ### function that maps the pages and apis, as module:function
+  routes: {{ app_label }}.site.routes:routes
   ### web page title
   title: {{ app_name }} Site
   ### relative filepath or absolute URL to a favicon
@@ -57,7 +53,7 @@ nicegui:
   message_history_length: 1000
   ### cache control directives for internal static files
   cache_control_directives: public, max-age=31536000, immutable, stale-while-revalidate=31536000
-  ### root dir to watch for hotload on file changes, null = pages root
+  ### root dir to watch for hotload on file changes, null = site dir of the app
   hotload_dir: null
   ### file mask(s) to include for watch
   hotload_includes: '*.py'

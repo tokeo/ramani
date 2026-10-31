@@ -29,9 +29,9 @@ smtpd:
   services:
       ### a name used in logs to identify this service
     - name: mx-{{ app_label }}
-      ### dotted path to your handler class (a subclass of TokeoSmtpdEvents,
+      ### your handler class as module:class (a subclass of TokeoSmtpdEvents,
       ### see the example in {{ app_label }}/core/smtpd/events_handler.py)
-      events_handler: "{{ app_label }}.core.smtpd.events_handler.{{ app_class_name }}SmtpdEvents"
+      events_handler: "{{ app_label }}.core.smtpd.events_handler:{{ app_class_name }}SmtpdEvents"
       ### one or more host:port listeners this service accepts mail on
       listeners:
         - host: 127.0.0.1
