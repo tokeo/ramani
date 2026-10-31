@@ -1,6 +1,6 @@
 from cement import ex
 from tokeo.ext.argparse import Controller
-from tokeo.core.utils.controllers import controller_log_info_help
+from tokeo.core.cement.controllers import log_info_help
 from ..core import tasks
 
 
@@ -37,6 +37,6 @@ class EmitController(Controller):
         ],
     )
     def count_words(self):
-        controller_log_info_help(self)
+        log_info_help(self)
         self.app.log.info('  given url: ' + self.app.pargs.url)
         tasks.actors.count_words.send(self.app.pargs.url)

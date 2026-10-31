@@ -35,7 +35,7 @@ import grpc
 from google.protobuf import empty_pb2
 from cement import ex
 from tokeo.ext.argparse import Controller
-from tokeo.core.utils.controllers import controller_log_info_help
+from tokeo.core.cement.controllers import log_info_help
 from ..core.exc import {{ app_class_name }}Error
 from ..core.grpc import {{ app_label }}_servicer  # noqa: F401
 from ..core.grpc.proto import {{ app_label }}_pb2
@@ -210,7 +210,7 @@ class GrpcCallController(Controller):
         # .close() is possible on a channel and should be used
         # in circumstances in which the with statement does
         # not fit the needs of the code.
-        controller_log_info_help(self)
+        log_info_help(self)
         with self._grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
             response = stub.Ping(
@@ -238,7 +238,7 @@ class GrpcCallController(Controller):
         # .close() is possible on a channel and should be used
         # in circumstances in which the with statement does
         # not fit the needs of the code.
-        controller_log_info_help(self)
+        log_info_help(self)
         self.app.log.info('  given url: ' + self.app.pargs.url)
         with self._grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)

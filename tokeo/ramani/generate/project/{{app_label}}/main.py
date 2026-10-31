@@ -69,6 +69,12 @@ class {{ app_class_name }}(App):
             'tokeo.ext.jinja2',
             'tokeo.ext.appshare',
             'tokeo.ext.smtp',
+{% if feature_dramatiq == "Y" or feature_apscheduler == "Y" or feature_automate == "Y" %}
+            'tokeo.ext.tui.output',
+{% endif -%}
+{% if feature_apscheduler == "Y" or feature_automate == "Y" %}
+            'tokeo.ext.tui.input',
+{% endif -%}
 {% if feature_vault == "Y" %}
             'tokeo.ext.vault',
 {% endif -%}
