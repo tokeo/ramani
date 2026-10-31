@@ -80,7 +80,7 @@ your_app emit count-words --url https://github.com
 
 # Expose services via gRPC
 your_app grpc serve
-your_app grpc-client count-words --url https://github.com
+your_app grpccall count-words --url https://github.com
 
 # Schedule recurring tasks
 your_app scheduler launch

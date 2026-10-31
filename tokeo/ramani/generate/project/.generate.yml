@@ -185,6 +185,14 @@ variables:
           - '^(.*)/tests/core/grpc$'
           - '^(.*)/tests/core/grpc/(.*)$'
 
+  - name: feature_grpc_auto_certificates
+    prompt: "Enable grpc TLS auto certificates [(Y)es/(N)o]"
+    validate: "^[YN]$"
+    case: "upper"
+    default: "Y"
+    requires:
+      feature_grpc: "Y"
+
   - name: feature_nicegui
     prompt: "Enable nicegui [(Y)es/(N)o]"
     validate: "^[YN]$"
