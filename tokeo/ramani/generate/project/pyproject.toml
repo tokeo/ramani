@@ -22,6 +22,9 @@ dependencies = [
 {% if feature_smtpd == "Y" %}
     "tokeo-smtpd==2.2.0",
 {% endif %}
+{% if feature_pocketbase == "Y" %}
+    "tokeo-pb==2.2.0",
+{% endif %}
     "cement==3.0.16",
     "cement[jinja2]",
     "jinja2>=3.1.6",
@@ -57,9 +60,6 @@ dependencies = [
     "fastapi>=0.109.1",
     "starlette>=1.3.1",
     "pydantic[email]>=2.4.0",
-{% endif -%}
-{% if feature_pocketbase == "Y" %}
-    "pocketbase>=0.15.0",
 {% endif -%}
 {% if feature_automate == "Y" %}
     "invoke>=2.2.1",

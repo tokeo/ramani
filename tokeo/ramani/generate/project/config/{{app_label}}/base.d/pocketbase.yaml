@@ -19,10 +19,10 @@ pocketbase:
   # refresh the token once fewer than this many seconds of validity
   # remain
   auth_token_min_valid_seconds: 60
-  # cap on concurrent http connections per process (passed to httpx
-  # as max_connections); unset uses the httpx default and excess
+  # cap on concurrent http connections per process (httpx
+  # max_connections); unset uses the httpx default and excess
   # requests wait for a free connection
-  concurrent_connections: null
+  max_connections: null
   ### verify the certificate chain (https only); False disables it
   tls_verify_cert: true
   ### verify the certificate hostname (https only); False skips
