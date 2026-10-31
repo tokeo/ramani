@@ -23,7 +23,7 @@ dependencies = [
     "tokeo-smtpd==2.2.0",
 {% endif %}
 {% if feature_pocketbase == "Y" %}
-    "tokeo-pb==2.2.0",
+    "tokeo-pocketbase==2.2.0",
 {% endif %}
     "cement==3.0.16",
     "cement[jinja2]",
