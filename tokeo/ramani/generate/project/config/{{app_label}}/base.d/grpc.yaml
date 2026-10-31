@@ -33,7 +33,6 @@ grpc:
   ### auto cert key: 'rsa' (size in bits) or 'ec' (size = curve 256/384/521)
   tls_key_type: ec
   tls_key_size: 521
-  ### client ca to allow client validation by client certificates
+  ### client ca: when set, only clients with a valid cert of this ca pass the
+  ### tls handshake, the interceptors still decide each call
   tls_client_ca: null
-  ### access only with a valid client certificate otherwise forward validation to interceptors
-  tls_require_client_cert: false
