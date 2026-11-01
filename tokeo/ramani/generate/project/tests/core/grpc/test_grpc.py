@@ -9,7 +9,7 @@ SIGTERM and checks that it stops cleanly.
 
 import signal
 
-import grpc
+from {{ app_label }}.core.exc import {{ app_class_name }}Error
 from {{ app_label }}.main import {{ app_class_name }}Test
 from tests.utils import free_port
 from tests.utils.process import SubProcess
@@ -26,8 +26,8 @@ def _pong(url):
         app.log.info = lambda msg, **kwargs: logged.append(msg)
         try:
             app.run()
-        except (grpc.RpcError, OSError):
-            # not served yet: refused by grpc, or by the tls probe of --insecure
+        except {{ app_class_name }}Error:
+            # not served yet, grpccall names why
             return False
     return '  response: pong' in logged
 

@@ -33,7 +33,6 @@ a channel to the configured grpc url and calls the matching stub method.
 
 import base64
 import ssl
-from concurrent import futures  # noqa: F401
 import grpc
 from google.protobuf import empty_pb2
 from cement import ex
@@ -151,7 +150,10 @@ class GrpcCallController(Controller):
             # split host:port, ssl.get_server_certificate connects and returns
             # the cert pem; this is the trust-on-first-use moment
             host, _, port = target.rpartition(':')
-            cert_pem = ssl.get_server_certificate((host, int(port)))
+            try:
+                cert_pem = ssl.get_server_certificate((host, int(port)))
+            except OSError as err:
+                raise {{ app_class_name }}Error(f'grpc server at {target} is not reachable: {err}') from err
             root_ca = cert_pem.encode()
         else:
             with open(server_pem, 'rb') as f:
@@ -214,10 +216,13 @@ class GrpcCallController(Controller):
         log_info_help(self)
         with self._grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
-            response = stub.Ping(
-                empty_pb2.Empty(),
-                metadata=self._grpc_metadata(),
-            )
+            try:
+                response = stub.Ping(
+                    empty_pb2.Empty(),
+                    metadata=self._grpc_metadata(),
+                )
+            except grpc.RpcError as err:
+                raise {{ app_class_name }}Error(f'grpc ping failed: {err.code().name}: {err.details()}') from err
             self.app.log.info('  response: ' + response.message)
 
     @ex(
@@ -245,7 +250,10 @@ class GrpcCallController(Controller):
         self.app.log.info('  given url: ' + self.app.pargs.url)
         with self._grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
-            _ = stub.CountWords(
-                {{ app_label }}_pb2.CountWordsRequest(url=self.app.pargs.url),
-                metadata=self._grpc_metadata(),
-            )
+            try:
+                stub.CountWords(
+                    {{ app_label }}_pb2.CountWordsRequest(url=self.app.pargs.url),
+                    metadata=self._grpc_metadata(),
+                )
+            except grpc.RpcError as err:
+                raise {{ app_class_name }}Error(f'grpc count-words failed: {err.code().name}: {err.details()}') from err
