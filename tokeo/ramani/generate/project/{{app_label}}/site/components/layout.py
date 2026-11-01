@@ -94,7 +94,7 @@ def css_inject():
                 --nicegui-default-gap: 0;
             }
 
-            .colum, .flex, .row {
+            .column, .flex, .row {
                 flex-wrap: unset;
             }
 
@@ -128,7 +128,7 @@ def page(
         with ux.div().classes('w-full flex flex-col sm:flex-row flex-grow overflow-hidden'):
 
             # left side bar
-            with ux.div().classes(f'sidebar-max-width sm:w-1/3 md:1/4 w-full flex-shrink flex-grow-0 p-4 {COLORS["sidebar_bg"]}'):
+            with ux.div().classes(f'sidebar-max-width sm:w-1/3 md:w-1/4 w-full flex-shrink flex-grow-0 p-4 {COLORS["sidebar_bg"]}'):
 
                 # upper app info
                 if app_info:
@@ -211,4 +211,4 @@ def footer(footer_info=None, footer_copyright='{{ app_copyright }}'):
 
             # bottom copyright
             with ux.div().classes('text-center text-xs py-2'):
-                ux.a(footer_copyright).classes('').props('href="#')
+                ux.a(footer_copyright).props('href="#"')

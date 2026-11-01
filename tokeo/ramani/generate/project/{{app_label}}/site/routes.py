@@ -28,8 +28,9 @@ def pages_map():
         '/catalog': page_catalog,  # Newly mapped route
     }
 
+    title = app.config.get('nicegui', 'title')
     for path, method in pages.items():
-        ui.page(path, title=f'Tokeo - {path[2:]}')(method)
+        ui.page(path, title=f'{title} - {path[1:]}')(method)
 ```
 
 ### Notes
@@ -85,10 +86,12 @@ def pages_map():
         '/hello-world': page_hello_world,
     }
 
+    # the configured site title, followed by the path of a subpage
+    title = app.config.get('nicegui', 'title')
     # register all of them in a loop
     for path, method in pages.items():
         # pass additional arguments like dark mode or title here!
-        ui.page(path, title=f'Tokeo - {path[2:]}')(method)
+        ui.page(path, title=f'{title} - {path[1:]}' if path != '/' else title)(method)
 
 
 def routes():
