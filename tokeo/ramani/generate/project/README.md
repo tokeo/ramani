@@ -25,8 +25,12 @@ Some directions you might take from here:
 - Add intelligence by integrating LLMs or classic ML pipelines
 {% endif %}
 - Uncover insights by analyzing data with pandas, matplotlib or seaborn
+{% if feature_nicegui == "Y" %}
 - Create stylish dashboards and web tools with the built-in NiceGUI extension and the tailwindcss based admin theme
+{% endif %}
+{% if feature_apscheduler == "Y" or feature_automate == "Y" %}
 - Schedule tasks and create workflows with the scheduler extension, or automate locally and remotely
+{% endif %}
 - Build robust APIs for your services
 
 <br/>
@@ -105,13 +109,13 @@ make proto
 
 ```bash
 # Run the scheduler with interactive shell
-{{ app_label }} scheduler launch
+{{ app_label }} scheduler launch --shell
 
 # Within the scheduler shell, list and manage tasks
 Scheduler> list
 Scheduler> tasks pause 1 2 3  # Pause task with ID 1, 2, 3
 Scheduler> tasks resume 1  # Resume task with ID 1
-Scheduler> tasks fire 1  # Resume task with ID 1
+Scheduler> tasks fire 1  # Fire task with ID 1 now
 ```
 
 {% endif %}
@@ -131,7 +135,7 @@ Scheduler> tasks fire 1  # Resume task with ID 1
 # Start the web interface
 {{ app_label }} nicegui serve
 
-# Access the interface at http://localhost:4123
+# Access the interface at http://localhost:8080
 ```
 
 {% endif %}
@@ -148,6 +152,26 @@ Scheduler> tasks fire 1  # Resume task with ID 1
 # Get value
 {{ app_label }} cache get counter
 ```
+
+{% endif %}
+{% if feature_pocketbase == "Y" %}
+### Use PocketBase
+
+The connection, the service login and the realtime limits are set in ```config/{{ app_label }}/base.d/pocketbase.yaml```. In code the app reaches the server through ```app.pocketbase```, a nicegui page follows records live; ```POCKETBASE.md``` of tokeo-pocketbase walks through it.
+
+{% endif %}
+{% if feature_smtpd == "Y" %}
+### Receive Mails
+
+```bash
+# List the configured services
+{{ app_label }} smtpd list
+
+# Run all of them
+{{ app_label }} smtpd serve --all
+```
+
+The example service accepts mail to ```tokeo@local``` and counts the words of the first url in the body, see ```{{ app_label }}/core/smtpd/events_handler.py```.
 
 {% endif %}
 ### Keep Secrets in the Config
@@ -179,8 +203,8 @@ Your application speaks to AI providers through one governed runtime. The model 
 # The mock provider answers without any external service
 {{ app_label }} ai ask "ping"
 
-# Inspect agents, profiles, and registered tools
-{{ app_label }} ai list
+# Check the ai configuration for typos and broken references
+{{ app_label }} ai lint
 ```
 {% if feature_ai_akili == "Y" %}
 
@@ -281,9 +305,6 @@ Your project is organized into a clean, modular structure:
 {% endif %}
 - ```{{ app_label }}/core/utils/``` - A place to put your overall tools and helper functions
 - ```{{ app_label }}/controllers/``` - Command-line interface controllers
-{% if feature_ai == "Y" %}
-- ```{{ app_label }}/pact/ai/``` - AI util-functions necessary for sandboxes
-{% endif %}
 {% if feature_nicegui == "Y" %}
 - ```{{ app_label }}/site/``` - Web interface pages and apis
 {% endif %}

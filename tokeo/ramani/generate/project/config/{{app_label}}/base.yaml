@@ -9,20 +9,18 @@
 ### The configuration is loaded in the following order, with each file overriding
 ### settings from the previous ones:
 ###
-### 1. Base configuration: ```config/{{ app_label }}.yaml```
-### 1. Environment-specific configuration: ```config/{{ app_label }}.[environment].yaml```
-### 1. Local environment-specific configuration: ```config/{{ app_label }}.[environment].local.yaml```
-### 1. Directory based configuration: ```config/{{ app_label }}/base.yaml```
-### 1. Directory splitted configuration: ```config/{{ app_label }}/base.d/function.yaml```
-### 1. Directory splitted environment-specific configuration: ```config/{{ app_label }}/development.d/function.yaml```
+### 1. Base configuration: ```config/{{ app_label }}/base.yaml```, then ```config/{{ app_label }}/base.d/*.yaml```
+### 1. Environment configuration: ```config/{{ app_label }}/[environment].yaml```, then
+###    ```config/{{ app_label }}/[environment].d/*.yaml```
+### 1. Local configuration: ```[environment].local.yaml``` and the ```*.local.yaml``` of
+###    ```[environment].d```, never for base
 ###
 ### Where ```[environment]``` can be one of:
 ###
 ### - ```development``` - Used during development
 ### - ```testing``` - Used for testing environments
+### - ```staging``` - Used for staging environments
 ### - ```production``` - Used in production deployments
-###
-### - ```base``` - Used for Standard on directory based configurations
 ###
 ### ### Overloading Configuration:
 ###

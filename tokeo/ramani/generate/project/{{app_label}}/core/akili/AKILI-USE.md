@@ -124,7 +124,7 @@ swaps the whole composition: tools, guards, sandboxes, budgets.
 ### 6. Inspecting the trace
 
 ```shell
-{{ app_label }} ai ask "calc 6 * 7" --agent guarded --json
+{{ app_label }} ai ask "calc 6 * 7" --agent guarded --trace
 ```
 
 Expected: the full machine-readable result: every invocation with its
@@ -165,7 +165,7 @@ never asked you for Python.
 ### 7b. A reversed string, the synthesized code in the trace
 
 ```shell
-{{ app_label }} ai ask "text reverse otto" --profile codermock --json
+{{ app_label }} ai ask "text reverse otto" --profile codermock --trace
 ```
 
 Expected: the result plus the full trace, and in it the synthesized
@@ -211,7 +211,7 @@ as a real tool call under the guarded agent.
 ### 10. The plan, made visible
 
 ```shell
-{{ app_label }} ai ask "weekday of 2026-12-24" --profile akili --json
+{{ app_label }} ai ask "weekday of 2026-12-24" --profile akili --trace
 ```
 
 Expected: the trace shows the tool chain the model planned, step by
@@ -221,7 +221,7 @@ byte tokenizer at work; no subword vocabulary to mangle a date).
 ### 11. Shared governance with an own subset by profile deny
 
 ```shell
-{{ app_label }} ai ask "calc 2 + 3" --profile akili --json
+{{ app_label }} ai ask "calc 2 + 3" --profile akili --trace
 ```
 
 Expected: no calculation. The akili profile shares the ```guarded``` agent
@@ -292,7 +292,7 @@ between them would surface.
 
 Expected: ```add_days``` plans with ```days=21``` and ```days=-7```: the
 model learned to *translate* the unit, because the toolset has no week
-tool. Look at the plan with ```--json```: the multiplication happened at
+tool. Look at the plan with ```--trace```: the multiplication happened at
 planning time, not in a tool.
 
 ### 15. Days between today and a relative date
@@ -444,7 +444,7 @@ composition.
 ### Governance catches what the model gets wrong
 
 ```shell
-{{ app_label }} ai ask "erinnere mich in 3 tagen an annas geburtstag" --profile akili --json
+{{ app_label }} ai ask "erinnere mich in 3 tagen an annas geburtstag" --profile akili --trace
 ```
 
 The hallucinated plan is right there in the trace: arguments, schema,
@@ -476,7 +476,7 @@ percentages: two hits move a small class by ten points.
 Everything shown so far lives in the model's strong classes. The per-class
 table has weaker ones, and you can stand on that edge yourself. Each
 pair below starts with a request that usually lands and follows with its
-close sibling that tends to tip. Run each a few times, add ```--json``` to
+close sibling that tends to tip. Run each a few times, add ```--trace``` to
 see the plan, and keep your own table next to it: your weight set differs,
 so your edge differs; that is the point.
 

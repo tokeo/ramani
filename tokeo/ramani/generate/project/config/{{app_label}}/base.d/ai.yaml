@@ -49,7 +49,7 @@ ai:
         file: notes.txt
     mathematics:
       - calc
-    ### calendar tools the akili micro model drives (strict iso dates)
+    ### calendar tools with strict iso dates
     date_daydiff:
       type: {{ app_label }}.core.ai.tools.date_daydiff.TokeoAiDateDayDiffTool
     add_days:
@@ -135,7 +135,8 @@ ai:
         # memory_mb: 256       # rlimit cap (linux; macos rejects small caps)
         cwd: tmp/sandbox
     ### real isolation for model code: a wasm guest, hard memory cap, no network.
-    ### opt-in: needs tokeo[wasm] and a built python.wasm (core/ai/sandboxes/WASM.md)
+    ### opt-in: needs the wasmtime package (feature_ai_wasm) and a built
+    ### python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
     coded:
       type: tokeo.core.ai.sandboxes.TokeoAiWasmSandbox
       tools:

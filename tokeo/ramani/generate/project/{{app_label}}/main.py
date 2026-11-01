@@ -38,7 +38,8 @@ class {{ app_class_name }}(App):
     ### Notes
 
     - The application includes several extensions by default:
-        colorlog, generate, pdoc, print, jinja2, yaml and others
+        colorlog, pdoc, print, jinja2, yaml, vault and the ones of the
+        chosen features
     - The application's configuration is loaded from YAML files
     - Signal handling (SIGINT, SIGTERM) is automatically managed
 
@@ -129,8 +130,7 @@ class {{ app_class_name }}Test(TestApp, {{ app_class_name }}):
 
     This class extends both TestApp from the Cement framework and
     the {{ app_class_name }} application class to provide a testing environment
-    for {{ app_class_name }} applications. It modifies various settings to be more
-    suitable for automated testing.
+    for {{ app_class_name }} applications, with the same extensions and handlers.
 
     ### Example
 
@@ -146,9 +146,8 @@ class {{ app_class_name }}Test(TestApp, {{ app_class_name }}):
 
     ### Notes
 
-    - Uses standard logging instead of colorlog for cleaner test output
-    - Includes a smaller set of extensions to reduce test complexity
-    - Appends '_test' to the app label to distinguish from production instances
+    - Appends '_test' to the app label; appenv strips it again and runs the
+        app in the testing environment with the config of the app
 
     """
 
@@ -202,17 +201,13 @@ def main():
     the primary entry point when running {{ app_name }} as
     a command-line application.
 
-    ### Returns
+    ### Notes
 
-    - **int**: Exit code indicating success (0) or failure (non-zero)
-
-    ### Raises
-
-    - **AssertionError**: When an assertion fails during application execution
-    - **{{ app_class_name }}BaseException**: When a {{ app_class_name }}-specific
-        error occurs and is not handled
-    - **TokeoBaseException**: When a tokeo specific error occurs and is not handled
-    - **CaughtSignal**: When a signal (e.g., SIGINT, SIGTERM) is caught
+    - An error of setup or run is logged and ends the process with exit code
+        1, a {{ app_class_name }}BaseException, a TokeoBaseException or an
+        AssertionError; with debug the traceback follows
+    - Ctrl-C and SIGTERM end it with exit code 0
+    - An error before the app exists ends it with exit code 9
 
     """
     app = None

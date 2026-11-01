@@ -64,9 +64,10 @@ smtpd:
         ### by checking ctx.message.bytesize and raising Smtpd552Exception
         # data_size: null
 
-        ### --- line endings (see feature_cr_lf_modes) ---
-        ### CRLF_ENSURE normalises a bare LF to CRLF; CRLF_LEAVE keeps the
-        ### line ending as received; CRLF_STRICT rejects a bare LF with 500
+        ### --- line endings (crlf_mode and crlf_data_mode in SMTPD.md) ---
+        ### CRLF_ENSURE ends each line with CRLF and drops a bare CR or LF;
+        ### CRLF_LEAVE keeps the line ending as received; CRLF_STRICT rejects
+        ### a line without CRLF with 500
         # crlf_mode: CRLF_ENSURE
         ### bare CR/LF in DATA (SMTP smuggling): CRLF_DATA_MODERATE |
         ### CRLF_DATA_STRICT | CRLF_DATA_STRICT_CLOSE | CRLF_DATA_UNSAFE

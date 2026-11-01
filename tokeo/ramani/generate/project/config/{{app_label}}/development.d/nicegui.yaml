@@ -6,5 +6,6 @@
 
 
 nicegui:
-  ### serve the web service on all interfaces
+  ### serve the web service; listen on all addresses, use 127.0.0.1 on a
+  ### shared network
   host: '0.0.0.0'

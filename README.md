@@ -80,7 +80,7 @@ your_app emit count-words --url https://github.com
 
 # Expose services via gRPC
 your_app grpc serve
-your_app grpccall count-words --url https://github.com
+your_app grpccall count-words --url https://github.com --tls
 
 # Schedule recurring tasks
 your_app scheduler launch
@@ -89,7 +89,7 @@ your_app scheduler launch
 your_app automate run uname --verbose --as-json
 
 # Receive emails with the SMTPD service
-your_app smtpd serve
+your_app smtpd serve --all
 
 # Create web interfaces
 your_app nicegui serve
@@ -112,7 +112,6 @@ Every ```project``` blueprint expands into a clean, modular layout:
 - ```your_app/core/grpc/``` - gRPC service definitions and implementations
 - ```your_app/core/utils/``` - A place to put your overall tools and helper functions
 - ```your_app/controllers/``` - Command-line interface controllers
-- ```your_app/pact/ai/``` - AI util-functions necessary for sandboxes (when the AI branch is selected)
 - ```your_app/site/``` - Web interface pages and apis
 - ```your_app/templates/``` - Templates for rendering content
 - ```tests/``` - Test suite to ensure reliability

@@ -14,6 +14,21 @@ automate:
     local:
       ### define shell for local tasks
       shell: /bin/sh
+  ### named groups of hosts, a task names a group in its hosts
+  # hostgroups:
+  #   web:
+  #     - web1
+  #     - web2
+  ### named connections, a host or task takes one by "use"; _defaults hold
+  ### the settings of all connections
+  # connections:
+  #   _defaults:
+  #     connect_timeout: 60
+  #     port: 22
+  #     user: null
+  #     password: null
+  #     identity: null
+  #     known_hosts: null
   ### list of tasks
   tasks:
     ### optional default settings

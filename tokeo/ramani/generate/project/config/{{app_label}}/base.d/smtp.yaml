@@ -28,10 +28,18 @@ smtp:
   port: 25
   ### default timeout when connection will cause an error
   timeout: 30
+  ### name announced in EHLO/HELO (null: the FQDN of the local host)
+  # local_hostname: null
+  ### local address to bind before connecting (null: by routing)
+  # source_address: null
   ### enable SSL connection
   # ssl: false
   ### enable TLS on connection, available for SSL and non SSL connections
   tls: true
+  ### verify certificate chain and hostname for ssl and tls
+  # host_cert_verify: false
+  ### CA for the verify: a single line is a file path, more lines PEM text
+  # host_cert_ca: null
   ### enable authentication for service
   # auth: false
   ### auth username or identity

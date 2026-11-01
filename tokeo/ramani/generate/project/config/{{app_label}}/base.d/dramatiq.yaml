@@ -34,6 +34,28 @@ dramatiq:
   ### If not provided or "0", a thousand times the number of configured worker
   ### threads are prefetched.
   delay_queue_prefetch: 0
+  ### worker poll interval in milliseconds (null: dramatiq default)
+  # worker_poll_interval: null
+  ### start the worker processes by spawn instead of forkserver
+  # use_spawn: false
+  ### time limit per message in milliseconds
+  # time_limit: 600_000
+  ### max age of a message in milliseconds (null: no limit)
+  # max_age: null
+  ### raise Shutdown in running actors when the worker stops
+  # notify_shutdown: false
+  ### max retries of a failed message
+  # max_retries: 20
+  ### min delay of a retry in milliseconds
+  # min_backoff: 15_000
+  ### max delay of a retry in milliseconds (at most 7 days)
+  # max_backoff: 604_800_000
+  ### send a heartbeat of each worker process for the monitor
+  # monitoring: false
+  ### seconds between two heartbeats
+  # monitoring_interval: 5
+  ### send task arguments and error texts: off, on or debug (with --debug)
+  # monitoring_with_details: debug
 
   ### broker to use for backend
   broker: rabbitmq

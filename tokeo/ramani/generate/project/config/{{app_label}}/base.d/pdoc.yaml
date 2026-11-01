@@ -11,6 +11,8 @@
 pdoc:
   ### modules to render (str | list), app, test and tokeo as default
   modules: null
+  ### module prefixes to skip in the discovery
+  # exclude: []
   ### render content into output directory
   output_dir: html
   ### serve the pdoc service
@@ -30,9 +32,9 @@ pdoc:
     - {{ app_label }}.templates.pdoc.html
     - tokeo.templates.pdoc.html
   ### packages or directories holding external markdown snippets
-  ### docstrings:
-  ###  - {{ app_label }}.templates.pdoc.docstrings
-  ###  - tokeo.templates.pdoc.docstrings
+  # docstrings:
+  #   - {{ app_label }}.templates.pdoc.docstrings
+  #   - tokeo.templates.pdoc.docstrings
   ### render the yaml configuration
   show_config: true
   ### how many levels of the class hierarchy above a documented class to

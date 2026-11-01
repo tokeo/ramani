@@ -6,5 +6,6 @@
 
 
 pdoc:
-  ### serve the pdoc service
+  ### serve the pdoc service; listen on all addresses, use 127.0.0.1 on a
+  ### shared network
   host: '0.0.0.0'

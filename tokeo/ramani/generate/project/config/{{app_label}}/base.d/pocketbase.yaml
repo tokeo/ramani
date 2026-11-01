@@ -11,17 +11,31 @@
 pocketbase:
   ### connection string to database
   url: http://127.0.0.1:8090
-  # username/identity for the service login; unset keeps the handler
-  # anonymous (authentication is opt-in)
+  ### username/identity for the service login; unset keeps the handler
+  ### anonymous (authentication is opt-in)
   auth_identity: null
-  # password for the service login
+  ### password for the service login, as !vault:plain or an encrypted value
   auth_password: null
-  # refresh the token once fewer than this many seconds of validity
-  # remain
+  ### refresh the token once fewer than this many seconds of validity
+  ### remain
   auth_token_min_valid_seconds: 60
-  # cap on concurrent http connections per process (httpx
-  # max_connections); unset uses the httpx default and excess
-  # requests wait for a free connection
+  ### ask the server again after this many seconds whether the login still
+  ### holds; PocketBase takes a refused token as a guest
+  # auth_check_seconds: 60
+  ### realtime channels, e.g. of app.nicegui.pb.live: seconds without data
+  ### until a connection counts as lost, keep it 30 above the idle timeout
+  ### of the server (300 unless changed by a hook)
+  # realtime_read_timeout: 330
+  ### events that may wait for slow callbacks before a channel hangs up,
+  ### so PocketBase never holds events for it
+  # realtime_max_pending: 1000
+  ### seconds between two confirmations of the login of a channel
+  # realtime_auth_check: 60
+  ### the longest delay in seconds before a channel connects again
+  # realtime_max_delay: 30
+  ### cap on concurrent http connections per process (httpx
+  ### max_connections); unset uses the httpx default and excess
+  ### requests wait for a free connection
   max_connections: null
   ### verify the certificate chain (https only); False disables it
   tls_verify_cert: true

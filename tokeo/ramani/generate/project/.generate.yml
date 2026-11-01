@@ -64,7 +64,7 @@ variables:
     default: "Y"
 
   - name: feature_ai
-    prompt: "Enable ai (must agree to Fundi licese) [(Y)es/(N)o]"
+    prompt: "Enable ai (must agree to Fundi license) [(Y)es/(N)o]"
     validate: "^[YN]$"
     case: "upper"
     default: "Y"
