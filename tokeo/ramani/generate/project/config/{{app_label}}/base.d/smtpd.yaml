@@ -95,9 +95,15 @@ smtpd:
         ### --- encryption (STARTTLS) ---
         ### TLS_FORBIDDEN | TLS_OPTIONAL | TLS_WHEN_AUTH | TLS_REQUIRED |
         ### TLS_IMMEDIATE (implicit TLS, e.g. port 465).
+{% if feature_smtpd_auto_certificates == "Y" %}
         ### without a configured certificate a self-signed test certificate
         ### is generated in memory (fine for the example, replace for real use)
         encrypt_mode: TLS_OPTIONAL
+{% else %}
+        ### without auto certificates TLS stays off until a certificate is
+        ### configured below (tls_cert_path and tls_key_path)
+        encrypt_mode: TLS_FORBIDDEN
+{% endif %}
         ### the self-signed certificate derives its CN and SAN from the
         ### listener hosts; set them here if you need other names
         # tls_cert_cn: null
