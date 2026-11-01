@@ -45,17 +45,17 @@ def process_business_data(item_id):
 
 """
 
-import requests
 from tokeo.ext.appshare import app  # noqa: F401
+from {{ app_label }}.core.logic import words
 
 
 @app.dramatiq.actor(queue_name='count_words')
 def count_words(url):
     """
-    Actor function to asynchrouniously: 'count words on a webpage'.
+    Actor function to asynchronously: 'count words on a webpage'.
 
-    This example implements the delegated word counting in an asynchronous
-    worker using Dramatiq.
+    This example runs the word counting of ```core.logic.words``` in an
+    asynchronous worker using Dramatiq.
 
     ### Args
 
@@ -64,9 +64,4 @@ def count_words(url):
         Value was set on putting the task on the queue.
 
     """
-    try:
-        response = requests.get(url)
-        count = len(response.text.split(' '))
-        app.log.info(f'There are {count} words at {url!r}.')
-    except Exception as err:
-        app.log.error(f'Could not count words: {err}')
+    words.count_words(url)

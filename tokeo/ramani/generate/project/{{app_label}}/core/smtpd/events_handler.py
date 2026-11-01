@@ -10,8 +10,11 @@ for it.
 import re
 from tokeo.ext.smtpd import TokeoSmtpdEvents
 from tokeo.core.smtpd.exc import Smtpd550Exception
+{% if feature_dramatiq == "Y" %}
 from {{ app_label }}.core import tasks
-
+{% else %}
+from {{ app_label }}.core.logic import words
+{% endif %}
 
 #: a simple url matcher for the example (http/https up to the next whitespace)
 URL_PATTERN = re.compile(r'https?://\S+')
@@ -52,5 +55,9 @@ class {{ app_class_name }}SmtpdEvents(TokeoSmtpdEvents):
         match = URL_PATTERN.search(ctx.message.data.decode('utf-8', errors='replace'))
         if match:
             url = match.group(0)
-            self.app.log.info(f'mx-{{ app_label }}: enqueue tasks count_words for {url}')
+            self.app.log.info(f'mx-{{ app_label }}: count_words for {url}')
+{% if feature_dramatiq == "Y" %}
             tasks.actors.count_words.send(url)
+{% else %}
+            words.count_words(url)
+{% endif %}

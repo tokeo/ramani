@@ -84,7 +84,11 @@ myapp automate run process_report
 """
 
 from tokeo.ext.appshare import app
+{% if feature_dramatiq == "Y" %}
 from {{ app_label }}.core import tasks
+{% else %}
+from {{ app_label }}.core.logic import words
+{% endif %}
 
 
 def count_words(runner, verbose=False, **kwargs):
@@ -93,7 +97,7 @@ def count_words(runner, verbose=False, **kwargs):
 
     This automation example executes a system command on the target,
     creates a search URL with the result, and delegates word counting
-    to an asynchronous actor.
+    to an asynchronous actor, without Dramatiq it counts right away.
 
     ### Args
 
@@ -112,8 +116,12 @@ def count_words(runner, verbose=False, **kwargs):
     app.log.info('Automation count_words called')
     result = runner('uname -mrs', hide=not verbose, warn=False)
     url = f'https://google.com/q="{result.stdout}"'.replace('\n', '').replace('\r', '')
-    app.log.info(f'Run actor from automation with url: {url}')
+    app.log.info(f'Count words from automation with url: {url}')
+{% if feature_dramatiq == "Y" %}
     tasks.actors.count_words.send(url)
+{% else %}
+    words.count_words(url)
+{% endif %}
     return True
 
 

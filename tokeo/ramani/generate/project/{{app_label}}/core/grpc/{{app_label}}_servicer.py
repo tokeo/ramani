@@ -15,7 +15,8 @@ servicer base and fills in the actual rpc methods.
 - Ping is a sync example: it answers 'pong' immediately, no worker dispatch,
     useful as a connectivity smoke test
 - CountWords is the shipped example. It logs the incoming url, dispatches the
-    count_words actor and returns an empty response right away
+    count_words actor and returns an empty response right away; without
+    Dramatiq it counts in the call and answers when done
 
 To add a new rpc method:
 
@@ -28,7 +29,11 @@ To add a new rpc method:
 
 from google.protobuf import empty_pb2
 from tokeo.ext.appshare import app
+{% if feature_dramatiq == "Y" %}
 from {{ app_label }}.core import tasks
+{% else %}
+from {{ app_label }}.core.logic import words
+{% endif %}
 from .proto import {{ app_label }}_pb2
 from .proto import {{ app_label }}_pb2_grpc  # noqa: F401
 
@@ -41,5 +46,9 @@ class {{ app_class_name }}Servicer({{ app_label }}_pb2_grpc.{{ app_class_name }}
 
     def CountWords(self, request, context):
         app.print('{{ app_class_name }}Servicer CountWords called for: ', request.url)
+{% if feature_dramatiq == "Y" %}
         tasks.actors.count_words.send(request.url)
+{% else %}
+        words.count_words(request.url)
+{% endif %}
         return empty_pb2.Empty()

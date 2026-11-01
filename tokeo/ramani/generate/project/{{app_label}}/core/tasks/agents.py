@@ -57,7 +57,11 @@ scheduler:
 """
 
 from tokeo.ext.appshare import app  # noqa: F401
+{% if feature_dramatiq == "Y" %}
 from {{ app_label }}.core import tasks
+{% else %}
+from {{ app_label }}.core.logic import words
+{% endif %}
 
 
 def count_words_timer(url=''):
@@ -65,7 +69,7 @@ def count_words_timer(url=''):
     Agent function triggered by a scheduler timer to: 'count words on a webpage'.
 
     This example agent delegates the actual word counting to an asynchronous
-    worker using Dramatiq.
+    worker using Dramatiq, without Dramatiq it counts right away.
 
     ### Args
 
@@ -74,4 +78,8 @@ def count_words_timer(url=''):
 
     """
     app.log.info(f'Timer start with url: {url}')
+{% if feature_dramatiq == "Y" %}
     tasks.actors.count_words.send(url)
+{% else %}
+    words.count_words(url)
+{% endif %}

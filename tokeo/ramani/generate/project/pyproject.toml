@@ -52,7 +52,7 @@ dependencies = [
 {% if feature_apscheduler == "Y" %}
     "apscheduler>=3.0,<4.0",
 {% endif -%}
-{% if feature_dramatiq == "Y" or feature_grpc == "Y" or feature_apscheduler == "Y" %}
+{% if feature_dramatiq == "Y" or feature_grpc == "Y" or feature_apscheduler == "Y" or feature_automate == "Y" or feature_smtpd == "Y" %}
     "requests>=2.33.0",
 {% endif -%}
 {% if feature_nicegui == "Y" %}
