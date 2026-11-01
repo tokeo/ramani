@@ -19,7 +19,6 @@ from tokeo.core.ai import TokeoAiTool
 from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.utils.date import to_utc
 
-
 # the eight common phase names, one per eighth of the synodic cycle
 _PHASES = (
     'new moon',

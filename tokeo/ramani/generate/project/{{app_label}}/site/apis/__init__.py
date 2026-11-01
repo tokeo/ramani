@@ -18,7 +18,6 @@ unused imports.
 
 from .example import api_example
 
-
 # Tell Python explicitly that these are the public exports
 __all__ = [
     'api_example',

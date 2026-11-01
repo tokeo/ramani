@@ -50,7 +50,6 @@ from contextlib import contextmanager
 from tokeo.ext.appshare import app
 from . import layout
 
-
 ui = app.nicegui.ui
 ux = app.nicegui.ux
 

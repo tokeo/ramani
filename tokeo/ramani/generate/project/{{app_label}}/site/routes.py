@@ -54,7 +54,6 @@ from tokeo.ext.appshare import app
 from .apis import api_example
 from .pages import page_root, page_hello_world
 
-
 ui = app.nicegui.ui
 fa = app.nicegui.fastapi_app
 

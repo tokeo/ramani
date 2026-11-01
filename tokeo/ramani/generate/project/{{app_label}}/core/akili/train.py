@@ -78,6 +78,7 @@ from torch import nn
 from {{ app_label }}.core.akili import tokenizer
 from {{ app_label }}.core.akili.data import dataset
 from {{ app_label }}.core.akili.dsl import NOMATCH
+
 # one source of truth for the plan-length budget: the same constant the
 # NumPy runtime uses, so training-side decoding and evaluation reserve
 # exactly as much room for the plan as inference does

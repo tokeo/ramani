@@ -52,7 +52,6 @@ from contextlib import contextmanager
 from tokeo.ext.appshare import app
 from tokeo.ext.nicegui import guard_user_context
 
-
 ui = app.nicegui.ui
 ux = app.nicegui.ux
 
@@ -85,8 +84,7 @@ app.nicegui.fastapi_app.config.quasar_config['screen'] = {
 
 
 def css_inject():
-    ui.add_head_html(
-        """
+    ui.add_head_html("""
         <style>
             .nicegui-content {
                 display: block;
@@ -105,8 +103,7 @@ def css_inject():
             }
 
         </style>
-        """
-    )
+        """)
 
 
 @contextmanager

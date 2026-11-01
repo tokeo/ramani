@@ -28,7 +28,6 @@ import re
 
 from tokeo.core.ai import TokeoAiError, TokeoAiProvider, ChatResult, ToolCall, Usage
 
-
 _ISO_DATE = re.compile(r'\b\d{4}-\d{2}-\d{2}\b')
 _INTEGER = re.compile(r'(?<![\d-])-?\d+(?![\d-])')
 

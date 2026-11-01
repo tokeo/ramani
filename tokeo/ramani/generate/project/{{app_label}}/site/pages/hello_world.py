@@ -9,7 +9,6 @@ multi-user routing requirements.
 from tokeo.ext.appshare import app
 from ..components import blocks
 
-
 ui = app.nicegui.ui
 ux = app.nicegui.ux
 

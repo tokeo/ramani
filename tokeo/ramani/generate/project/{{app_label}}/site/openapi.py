@@ -28,7 +28,6 @@ from fastapi.openapi.docs import get_redoc_html
 from tokeo.ext.appshare import app
 from {{ app_label }}.core.version import get_version
 
-
 SUMMARY = """
 
 The {{ app_name }} API Reference

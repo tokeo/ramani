@@ -16,7 +16,6 @@ import operator
 
 from tokeo.core.ai import TokeoAiError, TokeoAiTool
 
-
 _BINOPS = {
     ast.Add: operator.add,
     ast.Sub: operator.sub,
