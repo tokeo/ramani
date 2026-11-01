@@ -46,9 +46,10 @@ the edges is the lesson the big models hide.
 Part 1 needs no weights, so feel free to start there immediately. Before
 part 2, train the weights once. They are a project asset (gitignored),
 built from the synthetic data in ```AKILI-LEX.yaml``` in a few minutes on
-a CPU:
+a CPU, with the ```akili``` extra installed (numba and torch):
 
 ```shell
+pip install -e .[akili]
 python -m {{ app_label }}.core.akili.train
 ```
 

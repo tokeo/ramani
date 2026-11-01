@@ -236,8 +236,9 @@ ai:
 
 {% if feature_ai_akili == "Y" %}
     ### the project's own trained akili micro model (in {{ app_label }}/core/akili):
-    ### plans real tool chains in-process, no server. train once, then ask
-    ### (AKILI-USE.md walks the demos):
+    ### plans real tool chains in-process, no server. train once with the
+    ### akili extra, then ask (AKILI-USE.md walks the demos):
+    ###   pip install -e .[akili]
     ###   python -m {{ app_label }}.core.akili.train
     ###   {{ app_label }} ai ask "wochentag von heute plus 14 tage" --profile akili
     akili:

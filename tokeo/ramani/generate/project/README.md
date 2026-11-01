@@ -167,7 +167,8 @@ Your application speaks to AI providers through one governed runtime. The model 
 Your project also ships akili, a train-first micro LLM (~600K parameters, ~2.5 MB) that plans calendar tool calls. No weights are included. You create them, and that is the point:
 
 ```bash
-# Train on your machine (CPU is fine)
+# Train on your machine (CPU is fine), with the akili extra (numba and torch)
+pip install -e .[akili]
 python -m {{ app_label }}.core.akili.train
 
 # Then ask in English or German (guarded, traced, deterministic)
