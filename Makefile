@@ -63,12 +63,14 @@ endif
 fmt:
 	@if [ "0${VIRTUAL_ENV}"${no_venv} = "0" ]; then echo "No venv activated! Add no_venv=1 to enforce make."; exit 1; fi
 	# align with https://google.github.io/styleguide/pyguide.html
-	pyink --pyink-use-majority-quotes --line-length 139 --include "\.py" --exclude="/(\.git|__pycache__)/" $(sources)
+	# the templates of tokeo/ramani/generate are jinja2, no python to format
+	pyink --pyink-use-majority-quotes --line-length 139 --include "\.py" --exclude="/(\.git|__pycache__|generate)/" $(sources)
 
 lint:
 	@if [ "0${VIRTUAL_ENV}"${no_venv} = "0" ]; then echo "No venv activated! Add no_venv=1 to enforce make."; exit 1; fi
 	# align with https://google.github.io/styleguide/pyguide.html
-	flake8 --max-line-length 140 --max-doc-length 84 --extend-ignore "" --exclude "*/grpc/proto/*_pb2*.py,.git,__pycache__" $(sources)
+	# the templates of tokeo/ramani/generate are jinja2, no python to check
+	flake8 --max-line-length 140 --max-doc-length 84 --extend-ignore "" --exclude "*/ramani/generate/*,.git,__pycache__" $(sources)
 
 sdist: clean
 	python -m build --sdist

@@ -7,7 +7,7 @@ Ramani contains project blueprints for the tokeo framework.
 
 Ramani is Kiswahili for map or blueprint. This package ships the templates
 the Tokeo CLI uses to scaffold new projects. It contains no runtime logic
-and imports nothing at runtime; it is a pure template payload.
+and imports only cement for its version; it is a pure template payload.
 
 The package installs into the ```tokeo``` namespace, so it sits alongside
 the framework itself while shipping as its own distribution.
@@ -24,6 +24,10 @@ the framework itself while shipping as its own distribution.
 
 """
 
+# the templates are no modules of their own, pdoc skips the generate folder
+__pdoc__ = {
+    'generate': False,
+}
 
 # cement is a build requirement, the build and the app count the version alike
 from cement.utils.version import get_version as cement_get_version
