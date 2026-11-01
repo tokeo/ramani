@@ -5,7 +5,7 @@ Verifies the project's own tools, the ```guarded``` agent, and the guard
 pipeline against the real shipped configuration (the testing environment
 merges ```testing.d/ai.yaml``` over ```base.d/ai.yaml```, pointing the file tools
 below ```tmp/tests```). Run from the project root, for example with
-```pytest tests/ext/ai/test_{{ app_label }}_ai.py```.
+```pytest tests/core/ai/test_ai.py```.
 """
 
 import logging

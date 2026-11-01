@@ -234,6 +234,7 @@ ai:
       purpose: mocking
       agent: guarded
 
+{% if feature_ai_akili == "Y" %}
     ### the project's own trained akili micro model (in {{ app_label }}/core/akili):
     ### plans real tool chains in-process, no server. train once, then ask
     ### (AKILI-USE.md walks the demos):
@@ -247,6 +248,7 @@ ai:
       deny:
         - mathematics
         - filesystem
+{% endif %}
 
     ### mock against the coder agent: synthesizes python that runs in wasm.
     ###   {{ app_label }} ai ask "text upper der wochentag von heute" --profile codermock

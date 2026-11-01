@@ -80,8 +80,6 @@ variables:
           - '^(.*)/config/{{app_label}}/([^/]*)/ai.yaml$'
           - '^(.*)/tests/core/ai$'
           - '^(.*)/tests/core/ai/(.*)$'
-          - '^(.*)/tests/ext/ai$'
-          - '^(.*)/tests/ext/ai/(.*)$'
           - '^(.*)/{{app_label}}/core/akili$'
           - '^(.*)/{{app_label}}/core/akili/(.*)$'
           - '^(.*)/tests/core/akili$'
@@ -101,6 +99,7 @@ variables:
           - '^(.*)/{{app_label}}/core/akili/(.*)$'
           - '^(.*)/tests/core/akili$'
           - '^(.*)/tests/core/akili/(.*)$'
+          - '^(.*)/{{app_label}}/core/ai/providers/akili\.py$'
 
   - name: feature_ai_wasm
     prompt: "Enable ai wasm sandbox [(Y)es/(N)o]"
@@ -204,6 +203,7 @@ variables:
           - '^(.*)/{{app_label}}/site$'
           - '^(.*)/{{app_label}}/site/(.*)$'
           - '^(.*)/config/{{app_label}}/([^/]*)/nicegui.yaml$'
+          - '^(.*)/tests/utils/nicegui\.py$'
 
   - name: feature_pocketbase
     prompt: "Enable pocketbase [(Y)es/(N)o]"
