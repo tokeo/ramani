@@ -38,8 +38,10 @@ vault:
       type: scrypt
       ### name of the environment variable holding the passphrase
       env: VAULT_HUMAN_PASSPHRASE
-      ### public random salt (base64); not secret, commit it with the config
-      salt: RxO2vJ30JzLGy2Cd0af/+g==
+      ### public random salt (base64), not secret, commit it with the config;
+      ### take a fresh one per project from
+      ### "{{ app_label }} vault create --type scrypt human"
+      salt: null
       ### scrypt cost factor N (a power of two); higher is slower and safer
       cost: 16384
       ### scrypt block size r

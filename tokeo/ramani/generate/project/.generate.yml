@@ -24,7 +24,7 @@ variables:
 
   - name: app_class_name
     prompt: "App Class Name"
-    validate: "^[A-Z][a-zA-Z0-9]+$"
+    validate: "^(?!(None|True|False)$)[A-Z][a-zA-Z0-9]+$"
     default: "Inspire"
 
   - name: app_description
