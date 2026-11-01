@@ -25,6 +25,9 @@ a channel to the configured grpc url and calls the matching stub method.
     dispatches a worker; useful to verify connectivity without Dramatiq
 - count_words dispatches the count_words actor on the server and returns an
     empty response right away
+- The stubs of the proto are imported by the commands, so the app and its
+    help run before ```make proto```; a command before it names the missing
+    module
 
 """
 
@@ -37,10 +40,6 @@ from cement import ex
 from tokeo.ext.argparse import Controller
 from tokeo.core.cement.controllers import log_info_help
 from ..core.exc import {{ app_class_name }}Error
-from ..core.grpc import {{ app_label }}_servicer  # noqa: F401
-from ..core.grpc.proto import {{ app_label }}_pb2
-from ..core.grpc.proto import {{ app_label }}_pb2_grpc
-
 
 # shared by every grpc command on this controller; spliced into the @ex args
 _GRPC_AUTH_ARGS = [
@@ -210,6 +209,8 @@ class GrpcCallController(Controller):
         # .close() is possible on a channel and should be used
         # in circumstances in which the with statement does
         # not fit the needs of the code.
+        from ..core.grpc.proto import {{ app_label }}_pb2_grpc
+
         log_info_help(self)
         with self._grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
@@ -238,6 +239,8 @@ class GrpcCallController(Controller):
         # .close() is possible on a channel and should be used
         # in circumstances in which the with statement does
         # not fit the needs of the code.
+        from ..core.grpc.proto import {{ app_label }}_pb2, {{ app_label }}_pb2_grpc
+
         log_info_help(self)
         self.app.log.info('  given url: ' + self.app.pargs.url)
         with self._grpc_channel() as channel:
