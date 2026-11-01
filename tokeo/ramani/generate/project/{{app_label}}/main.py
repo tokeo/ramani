@@ -78,7 +78,7 @@ class {{ app_class_name }}(App):
 {% if feature_vault == "Y" %}
             'tokeo.ext.vault',
 {% endif -%}
-{% if feature_diskcache == "Y" or feature_dramatiq == "Y" or feature_apscheduler == "Y" %}
+{% if feature_diskcache == "Y" %}
             'tokeo.ext.diskcache',
 {% endif -%}
 {% if feature_dramatiq == "Y" %}

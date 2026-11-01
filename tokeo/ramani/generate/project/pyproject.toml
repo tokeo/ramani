@@ -36,7 +36,7 @@ dependencies = [
 {% if feature_apscheduler == "Y" or feature_automate == "Y" %}
     "prompt_toolkit",
 {% endif -%}
-{% if feature_diskcache == "Y" or feature_dramatiq == "Y" or feature_apscheduler == "Y" %}
+{% if feature_diskcache == "Y" %}
     "tokeo-diskcache==5.6.3",
 {% endif -%}
 {% if feature_dramatiq == "Y" %}

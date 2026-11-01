@@ -36,6 +36,10 @@ def test_lock_of_its_own(rando):
 - pytest empties ```tmp/tests/``` at the start of the next run, so a test
     cleans nothing up and its files stay for a look until then
 - ```pytest --basetemp=<dir>``` puts the temporary files there instead
+{% if feature_diskcache == "Y" %}
+- The tests share a diskcache in ```tmp/tests/diskcache```, set by the
+    environment override of ```diskcache.directory```
+{% endif %}
 - A test marked ```isolated``` keeps the temporary files of its own pytest
     in ```isolated/<test>``` of them
 - A fixture goes into this file only if every test may need it, the
@@ -59,6 +63,10 @@ def pytest_configure(config):
         os.makedirs(os.path.join(ROOT, "tmp"), exist_ok=True)
         config.option.basetemp = os.path.join(ROOT, "tmp", "tests")
     config.addinivalue_line("markers", "isolated: runs the test in a pytest of its own, in a fresh process")
+{% if feature_diskcache == "Y" %}
+    # the tests share a diskcache below tmp/tests, not the one of the project
+    os.environ.setdefault("{{ app_label | upper }}_DISKCACHE_DIRECTORY", os.path.join(ROOT, "tmp", "tests", "diskcache"))
+{% endif %}
 
 
 @pytest.hookimpl(tryfirst=True)

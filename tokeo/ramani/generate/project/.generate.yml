@@ -131,6 +131,12 @@ variables:
     case: "upper"
     default: "Y"
     extend:
+      - when: "Y"
+        variables:
+          ### the scheduler locks its tasks by diskcache
+          - name: feature_diskcache
+            prompt: false
+            default: "Y"
       - when: "N"
         ignore:
           - '^(.*)/{{app_label}}/core/tasks/agents(.*)$'
@@ -147,7 +153,26 @@ variables:
           - '^(.*)/{{app_label}}/core/tasks/automate(.*)$'
           - '^(.*)/config/{{app_label}}/([^/]*)/automate.yaml$'
 
+  - name: feature_dramatiq
+    prompt: "Enable dramatiq [(Y)es/(N)o]"
+    validate: "^[YN]$"
+    case: "upper"
+    default: "Y"
+    extend:
+      - when: "Y"
+        variables:
+          ### the workers lock and throttle by diskcache
+          - name: feature_diskcache
+            prompt: false
+            default: "Y"
+      - when: "N"
+        ignore:
+          - '^(.*)/{{app_label}}/controllers/emit(.*)$'
+          - '^(.*)/{{app_label}}/core/tasks/actors(.*)$'
+          - '^(.*)/config/{{app_label}}/([^/]*)/dramatiq.yaml$'
+
   - name: feature_diskcache
+    ### asked only when neither dramatiq nor apscheduler set it already
     prompt: "Enable diskcache [(Y)es/(N)o]"
     validate: "^[YN]$"
     case: "upper"
@@ -156,18 +181,6 @@ variables:
       - when: "N"
         ignore:
           - '^(.*)/config/{{app_label}}/([^/]*)/diskcache.yaml$'
-
-  - name: feature_dramatiq
-    prompt: "Enable dramatiq [(Y)es/(N)o]"
-    validate: "^[YN]$"
-    case: "upper"
-    default: "Y"
-    extend:
-      - when: "N"
-        ignore:
-          - '^(.*)/{{app_label}}/controllers/emit(.*)$'
-          - '^(.*)/{{app_label}}/core/tasks/actors(.*)$'
-          - '^(.*)/config/{{app_label}}/([^/]*)/dramatiq.yaml$'
 
   - name: feature_grpc
     prompt: "Enable grpc [(Y)es/(N)o]"
