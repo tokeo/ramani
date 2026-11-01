@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=77.0.0", "wheel"]
+requires = ["setuptools>=77.0.0", "wheel", "cement==3.0.16"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -115,6 +115,9 @@ include-package-data = true
 "{{ app_label }}.core.grpc" = ["**/*.proto"]
 {% endif -%}
 "{{ app_label }}.templates" = ["**/*", "**/.*"]
+
+[tool.setuptools.exclude-package-data]
+"{{ app_label }}.templates" = ["**/__pycache__/*", "**/*.pyc"]
 
 [tool.setuptools.dynamic]
 version = {attr = "{{ app_label }}.core.version.get_version"}
