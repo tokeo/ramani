@@ -150,6 +150,26 @@ Scheduler> tasks fire 1  # Resume task with ID 1
 ```
 
 {% endif %}
+### Keep Secrets in the Config
+
+A secret in a config file is a ```!vault:``` value. The ```plain``` profile keeps it readable but masks it in pdoc and dumps{% if feature_vault_crypted == "Y" %}, the profiles ```easy``` and ```human``` encrypt it{% endif %}:
+
+```yaml
+smtp:
+  auth_password: !vault:plain top.secret
+```
+
+```bash
+# Read a value of the config, decrypted
+{{ app_label }} vault decrypt --config smtp.auth_password
+{% if feature_vault_crypted == "Y" %}
+
+# Scaffold a profile with fresh key material, then encrypt a value for it
+{{ app_label }} vault create --type scrypt human
+{{ app_label }} vault encrypt --profile human "my-secret"
+{% endif %}
+```
+
 {% if feature_ai == "Y" %}
 ### Ask an AI Agent
 

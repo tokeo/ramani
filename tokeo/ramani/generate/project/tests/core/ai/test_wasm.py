@@ -92,6 +92,7 @@ class {{ app_class_name }}WasmTestApp({{ app_class_name }}Test):
         extensions = [
             'colorlog',
             'tokeo.ext.yaml',
+            'tokeo.ext.vault',
             'tokeo.ext.appenv',
             'tokeo.ext.print',
             'tokeo.ext.jinja2',

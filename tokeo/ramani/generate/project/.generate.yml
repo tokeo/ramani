@@ -57,15 +57,11 @@ variables:
     case: "upper"
     default: "Y"
 
-  - name: feature_vault
-    prompt: "Enable vault [(Y)es/(N)o]"
+  - name: feature_vault_crypted
+    prompt: "Enable crypted vaults (enc, scrypt; needs cryptography) [(Y)es/(N)o]"
     validate: "^[YN]$"
     case: "upper"
     default: "Y"
-    extend:
-      - when: "N"
-        ignore:
-          - '^(.*)/config/{{app_label}}/([^/]*)/vault.yaml$'
 
   - name: feature_ai
     prompt: "Enable ai (must agree to Fundi licese) [(Y)es/(N)o]"

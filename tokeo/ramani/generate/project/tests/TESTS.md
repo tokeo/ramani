@@ -225,6 +225,10 @@ class SchedulerWithoutTuiTest(SchedulerTest):
         extensions = ['tokeo.ext.print', 'tokeo.ext.tui.input', 'tokeo.ext.scheduler']
 ```
 
+A test app that reads the config files of the app, by ```tokeo.ext.yaml```
+and ```tokeo.ext.appenv```, also loads ```tokeo.ext.vault```: the config holds
+```!vault:``` values, e.g. the passwords as ```!vault:plain```.
+
 A base class of its own only pays when the derivations differ a lot;
 otherwise the main test app is the base.
 

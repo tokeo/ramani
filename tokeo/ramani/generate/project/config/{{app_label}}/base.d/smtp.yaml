@@ -36,7 +36,7 @@ smtp:
   # auth: false
   ### auth username or identity
   # auth_identity: null
-  ### auth password
+  ### auth password, as !vault:plain or an encrypted value
   # auth_password: null
   ### attach one or more files by default to the messages
   # files: null

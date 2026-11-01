@@ -42,7 +42,7 @@ nicegui:
   openapi_swagger_url: /_/openapi/info
   ### enable openapi and redoc url
   openapi_redoc_url: /_/openapi/docs
-  ### secret key for browser-based storage
+  ### secret key for browser-based storage, as !vault:plain or an encrypted value
   storage_secret: null
   ### additional keyword arguments passed to SessionMiddleware
   session_middleware_kwargs: null

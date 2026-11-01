@@ -15,7 +15,7 @@ dramatiq:
     ### connection username or identity for rabbitmq server
     auth_identity: guest
     ### connection password for rabbitmq server
-    auth_password: guest
+    auth_password: !vault:plain guest
 
 
 
@@ -28,8 +28,8 @@ smtp:
   auth: true
   ### auth username or identity
   auth_identity: production.user
-  ### auth password
-  auth_password: top.secret
+  ### auth password; replace it, or encrypt it with "{{ app_label }} vault encrypt"
+  auth_password: !vault:plain top.secret
 
 
 

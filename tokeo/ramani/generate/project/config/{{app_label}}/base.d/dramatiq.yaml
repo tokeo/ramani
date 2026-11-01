@@ -40,11 +40,11 @@ dramatiq:
   ### connection settings for rabbitmw
   rabbitmq:
     ### connection url to rabbitmq server
-    url: amqp://none:nonet@localhost:5672/
+    url: !vault:plain amqp://none:nonet@localhost:5672/
     ### connection username or identity for rabbitmq server (overrule url)
     auth_identity: guest
     ### connection password for rabbitmq server (overrule url)
-    auth_password: guest
+    auth_password: !vault:plain guest
     ### verify the certificate hostname (amqps only); a string pins
     ### the expected name, False skips the check (chain still checked)
     tls_verify_hostname: true

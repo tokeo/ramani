@@ -17,6 +17,13 @@
 vault:
   ### named encryption profiles; each binds a handler type to its key material
   profiles:
+    ### keeps a value readable but marks it as secret: masked in pdoc and
+    ### dumps, no key and no cryptography; switch to enc or scrypt for real
+    ### secrets in shared files
+    plain:
+      type: plain
+{% if feature_vault_crypted == "Y" %}
+
     ### profile encrypting directly with a ready Fernet key from the environment
     easy:
       ### handler type; "enc" encrypts and decrypts with a Fernet key
@@ -39,3 +46,4 @@ vault:
       block_size: 8
       ### scrypt parallelization factor p
       parallelization: 1
+{% endif %}
