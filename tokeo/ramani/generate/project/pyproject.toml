@@ -17,7 +17,7 @@ requires-python = ">=3.11"  # Adjust based on your needs
 dependencies = [
     "tokeo==2.2.0",
 {% if feature_ai == "Y" %}
-    "tokeo-fundi==2.2.0",
+    "tokeo-fundi{% if feature_ai_wasm == "Y" %}[wasm]{% endif %}==2.2.0",
 {% endif %}
 {% if feature_smtpd == "Y" %}
     "tokeo-smtpd==2.2.0",
@@ -72,9 +72,6 @@ dependencies = [
 {% endif -%}
 {% if feature_ai == "Y" and feature_ai_akili == "Y" %}
     "numpy>=1.22.0",
-{% endif -%}
-{% if feature_ai == "Y" and feature_ai_wasm == "Y" %}
-    "wasmtime>=48.0.0",
 {% endif -%}
 {% if feature_vault_crypted == "Y" or (feature_smtpd == "Y" and feature_smtpd_auto_certificates == "Y") or (feature_grpc == "Y" and feature_grpc_auto_certificates == "Y") %}
     "cryptography>=50.0.0",

@@ -141,8 +141,8 @@ ai:
         # memory_mb: 256       # rlimit cap (linux; macos rejects small caps)
         cwd: tmp/sandbox
     ### real isolation for model code: a wasm guest, hard memory cap, no network.
-    ### opt-in: needs the wasmtime package (feature_ai_wasm) and a built
-    ### python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
+    ### opt-in: needs the extra tokeo-fundi[wasm] (feature_ai_wasm) and a
+    ### built python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
     coded:
       type: tokeo.core.ai.sandboxes:TokeoAiWasmSandbox
       tools:
