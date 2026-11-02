@@ -120,10 +120,15 @@ ai:
   ### sandboxes contain a tool's execution. an agent lists a chain; a tool runs
   ### in the first sandbox whose "tools" contain it, else the call is denied
   sandboxes:
-    ### zero isolation, in-process; put last as the "_all" catch-all
+    ### zero isolation, in-process; only trusted, quick tools, named one by one
+    ### or by group (there is no catch-all, a new tool runs nowhere until named)
     allow:
       type: in_process
-      tools: _all
+      tools:
+        - calendar
+        - filesystem
+        - mathematics
+        - answer42
     ### fault/resource isolation in a subprocess (timeout + optional memory cap);
     ### not a jail against hostile code
     jailed:

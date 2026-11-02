@@ -89,7 +89,7 @@ with a wall-clock timeout, not in your application process.
 ```
 
 Expected: the current timestamp. ```current``` is not listed by ```jailed```, so
-the chain walks on to ```allow``` (```in_process```, ```tools: _all```): same
+the chain walks on to ```allow``` (```in_process```, it names ```calendar```): same
 agent, different "where". Remove ```allow``` from the chain and unlisted
 tools would be denied instead: the chain is the single truth.
 
