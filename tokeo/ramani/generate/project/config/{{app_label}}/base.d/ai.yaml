@@ -13,7 +13,8 @@
 ai:
   ### tokeo-fundi is source-available, not open source. set this to true once
   ### you have read LICENSE.md of the tokeo-fundi distribution. that confirms
-  ### you know the terms and silences the notice logged at every start
+  ### you know the terms and silences the notice logged at every ai command
+  ### and at the first ai call from code (once per process)
   license_acknowledged: false
 
   ### app-wide loop budgets (nearest wins: call arg > agent option > this base)
