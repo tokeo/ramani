@@ -230,7 +230,8 @@ ai:
           - allow
 
   ### profiles bind the model. an item: "type" is a provider alias or a
-  ### class path; connection settings under "options"; "agent" names the agent
+  ### class path, "model" the model, "agent" the agent; the connection of the
+  ### provider under "options". every setting has exactly one place
   profiles:
     ### the built-in local mock: deterministic, no server (calls a tool when the
     ### first prompt word names one).
@@ -269,14 +270,15 @@ ai:
     ###   {{ app_label }} ai ask "hauptstadt von frankreich" --profile assistant
     assistant:
       type: oai_compat
+      model: "<modelname>"
       options:
-        model: "<modelname>"
         base_url: http://localhost:8000/v1
         # key: ${OPENAI_API_KEY}     # env/vault resolution; never clear text
         # timeout: 120
-      ### passed straight to the endpoint; override per call with --model_param
-      ### key=value. common: temperature, top_p, max_tokens, stop, seed,
-      ### response_format, tool_choice (see tokeo CONFIG.md section 8)
+      ### model_params is not checked, it goes straight to the endpoint;
+      ### override per call with --model_param key=value. common: temperature,
+      ### top_p, max_tokens, stop, seed, response_format, tool_choice (see
+      ### tokeo CONFIG.md section 8)
       ### common keys:
       ###   temperature      randomness/creativity, ~0.0-2.0 (lower = focused)
       ###   top_p            nucleus sampling cutoff, 0.0-1.0
