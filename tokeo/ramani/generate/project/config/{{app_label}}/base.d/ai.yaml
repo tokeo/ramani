@@ -91,8 +91,8 @@ ai:
       options:
         deny:
           - append_file
-    ### asks a person before append_file (ai ask / ai chat in a terminal);
-    ### a yes lifts the readonly no and is recorded, without a terminal: no
+    ### asks a person to confirm the state before append_file (ai ask / ai chat
+    ### in a terminal); the readonly no stays a no, notes are recorded
     ask_write:
       type: confirm
       options:
