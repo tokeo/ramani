@@ -130,6 +130,7 @@ def wasm_ai_config():
     trusted_mounts, trusted_pythonpath = _trusted_mounts()
     cfg = init_defaults('ai')
     cfg['ai'] = dict(
+        license_acknowledged=False,
         defaults=dict(profile='mock', agent=None),
         tools=dict(
             run_untrusted=dict(type='tokeo.core.ai.tools:TokeoAiPythonUntrustedExecTool'),
