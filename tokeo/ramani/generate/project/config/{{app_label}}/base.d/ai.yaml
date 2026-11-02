@@ -11,10 +11,8 @@
 ### agents, profiles etc. For the full ai config reference look at the documentation
 ### ships with module ```tokeo.core.ai.config```
 ai:
-  ### tokeo-fundi is source-available, not open source. set this to true once
-  ### you have read LICENSE.md of the tokeo-fundi distribution. that confirms
-  ### you know the terms and silences the notice logged at every ai command
-  ### and at the first ai call from code (once per process)
+  ### tokeo-fundi is source-available, not open source
+  ### read LICENSE.md of tokeo-fundi first and set true to prevent notice
   license_acknowledged: false
 
   ### app-wide loop budgets (nearest wins: call arg > agent option > this base)
@@ -232,7 +230,7 @@ ai:
 
   ### profiles bind the model. an item: "type" is a provider alias or a
   ### class path, "model" the model, "agent" the agent; the connection of the
-  ### provider under "options". every setting has exactly one place
+  ### provider under "options"
   profiles:
     ### the built-in local mock: deterministic, no server (calls a tool when the
     ### first prompt word names one).
@@ -276,10 +274,8 @@ ai:
         base_url: http://localhost:8000/v1
         # key: ${OPENAI_API_KEY}     # env/vault resolution; never clear text
         # timeout: 120
-      ### model_params is not checked, it goes straight to the endpoint;
-      ### override per call with --model_param key=value. common: temperature,
-      ### top_p, max_tokens, stop, seed, response_format, tool_choice (see
-      ### tokeo CONFIG.md section 8)
+      ### passed unchecked to the endpoint; per call --model_param key=value
+      ### (see tokeo CONFIG.md section 8)
       ### common keys:
       ###   temperature      randomness/creativity, ~0.0-2.0 (lower = focused)
       ###   top_p            nucleus sampling cutoff, 0.0-1.0
