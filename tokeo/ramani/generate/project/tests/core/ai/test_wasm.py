@@ -156,8 +156,8 @@ def wasm_ai_config():
             ),
         ),
         agents=dict(
-            untrusted_coder=dict(type='fundi', options=dict(governors=[], sandboxes=['wasm_untrusted'])),
-            trusted_coder=dict(type='fundi', options=dict(governors=[], sandboxes=['wasm_trusted'])),
+            untrusted_coder=dict(type='fundi', options=dict(governors=[], tools=['run_untrusted'], sandboxes=['wasm_untrusted'])),
+            trusted_coder=dict(type='fundi', options=dict(governors=[], tools=['run_trusted'], sandboxes=['wasm_trusted'])),
         ),
         profiles=dict(
             mock=dict(type='mock', agent='untrusted_coder'),
@@ -179,6 +179,10 @@ def test_{{ app_label }}_untrusted_exec_in_wasm_guest():
             'run_untrusted',
             dict(code='import statistics\nstatistics.median([5, 1, 9, 3, 7])'),
             agent,
+            None,
+            None,
+            None,
+            None,
         )
         # value is None when the tool returned nothing, so guard the access
         text = out.value.as_str if out.value else ''
@@ -198,6 +202,10 @@ def test_{{ app_label }}_trusted_exec_in_wasm_guest():
             'run_trusted',
             dict(code='import {{ app_label }}\nbool({{ app_label }}.__name__)'),
             agent,
+            None,
+            None,
+            None,
+            None,
         )
         # value is None when the tool returned nothing, so guard the access
         text = out.value.as_str if out.value else ''
@@ -209,15 +217,19 @@ def test_{{ app_label }}_trusted_exec_in_wasm_guest():
     reason=f'no wasm build at {_RUNTIME} / {_STDLIB} (override via TOKEO_TEST_PYTHON_WASM and TOKEO_TEST_WASI_STDLIB)',
 )
 def test_{{ app_label }}_untrusted_guest_cannot_import_the_app():
-    # the untrusted path mounts the pact contract but no app, so importing the
-    # project fails in the guest, recorded as a tool exception on the result (A)
-    # with no value: the app stays invisible to untrusted code
+    # the untrusted guest gets nothing of tokeo or the app, so importing the
+    # project fails there, recorded as a tool exception on the result (A) with
+    # no value: the app stays invisible to untrusted code
     with {{ app_class_name }}WasmTestApp(config_defaults=wasm_ai_config()) as app:
         agent = app.ai._agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_untrusted',
             dict(code='import {{ app_label }}\n1'),
             agent,
+            None,
+            None,
+            None,
+            None,
         )
         assert out.value is None
         assert 'ModuleNotFoundError' in (out.state.exception or '')
