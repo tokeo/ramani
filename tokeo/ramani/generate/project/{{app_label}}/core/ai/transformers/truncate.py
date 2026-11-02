@@ -13,7 +13,7 @@ caps the run's final ```ChatResult.text```. Each stage reads its own settings vi
 per stage (an ```on_return```/```on_close``` options block) or one shared default.
 
 This module is self-contained: it holds only the transformer class. The
-project names it by its full dotted class path under ```ai.transformers``` in
+project names it by its class path (module:Class) under ```ai.transformers``` in
 the config, so it needs no registration and no entry in the app extensions;
 the handler imports and instantiates it on demand.
 

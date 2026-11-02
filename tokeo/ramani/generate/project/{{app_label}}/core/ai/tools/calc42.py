@@ -7,7 +7,7 @@ ordinary arithmetic. It is the deliberate counterpart to ```calc```: same model
 interface, but an authoritative result the model is told not to recompute.
 
 This module is self-contained: it holds only the tool class. The project names
-it by its full dotted class path under ```ai.tools``` in the config, so it needs
+it by its class path (module:Class) under ```ai.tools``` in the config, so it needs
 no registration and no entry in the app extensions; the handler imports and
 instantiates it on demand.
 """

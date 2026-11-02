@@ -132,17 +132,17 @@ def wasm_ai_config():
     cfg['ai'] = dict(
         defaults=dict(profile='mock', agent=None),
         tools=dict(
-            run_untrusted=dict(type='tokeo.core.ai.tools.TokeoAiPythonUntrustedExecTool'),
-            run_trusted=dict(type='tokeo.core.ai.tools.TokeoAiPythonTrustedExecTool'),
+            run_untrusted=dict(type='tokeo.core.ai.tools:TokeoAiPythonUntrustedExecTool'),
+            run_trusted=dict(type='tokeo.core.ai.tools:TokeoAiPythonTrustedExecTool'),
         ),
         sandboxes=dict(
             wasm_untrusted=dict(
-                type='tokeo.core.ai.sandboxes.TokeoAiWasmSandbox',
+                type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
                 tools=['run_untrusted'],
                 options=dict(runtime=_RUNTIME, stdlib=_STDLIB, memory_mb=256, timeout=10),
             ),
             wasm_trusted=dict(
-                type='tokeo.core.ai.sandboxes.TokeoAiWasmSandbox',
+                type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
                 tools=['run_trusted'],
                 options=dict(
                     runtime=_RUNTIME,
@@ -155,8 +155,8 @@ def wasm_ai_config():
             ),
         ),
         agents=dict(
-            untrusted_coder=dict(type='fundi', options=dict(sandboxes=['wasm_untrusted'])),
-            trusted_coder=dict(type='fundi', options=dict(sandboxes=['wasm_trusted'])),
+            untrusted_coder=dict(type='fundi', options=dict(governors=[], sandboxes=['wasm_untrusted'])),
+            trusted_coder=dict(type='fundi', options=dict(governors=[], sandboxes=['wasm_trusted'])),
         ),
         profiles=dict(
             mock=dict(type='mock', agent='untrusted_coder'),

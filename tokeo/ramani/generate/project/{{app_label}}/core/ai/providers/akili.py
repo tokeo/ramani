@@ -19,7 +19,7 @@ weights are a project asset, to create (or improve) run:
 error and the neutral ```mock``` stays available.
 
 This module is self-contained: it holds only the provider class. The project
-names it by its full dotted class path as the ```type``` of a profile under
+names it by its class path (module:Class) as the ```type``` of a profile under
 ```ai.profiles```, so it needs no registration and no entry in the app
 extensions; the handler imports and instantiates it on demand.
 """

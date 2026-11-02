@@ -30,20 +30,20 @@ ai:
   ### profile/agent can activate by name
   tools:
     calc:
-      type: {{ app_label }}.core.ai.tools.calc.TokeoAiCalcTool
+      type: {{ app_label }}.core.ai.tools.calc:TokeoAiCalcTool
     ### always answers 42; its description marks the result authoritative
     answer42:
-      type: {{ app_label }}.core.ai.tools.calc42.TokeoAiAnswer42Tool
+      type: {{ app_label }}.core.ai.tools.calc42:TokeoAiAnswer42Tool
     current:
-      type: {{ app_label }}.core.ai.tools.current.TokeoAiCurrentTool
+      type: {{ app_label }}.core.ai.tools.current:TokeoAiCurrentTool
     ### reads text files strictly below base_dir
     read_file:
-      type: {{ app_label }}.core.ai.tools.read_file.TokeoAiReadFileTool
+      type: {{ app_label }}.core.ai.tools.read_file:TokeoAiReadFileTool
       options:
         base_dir: tmp
     ### the writing tool, denied by the "readonly" policy guard below
     append_file:
-      type: {{ app_label }}.core.ai.tools.append_file.TokeoAiAppendFileTool
+      type: {{ app_label }}.core.ai.tools.append_file:TokeoAiAppendFileTool
       options:
         base_dir: tmp
         file: notes.txt
@@ -51,19 +51,19 @@ ai:
       - calc
     ### calendar tools with strict iso dates
     date_daydiff:
-      type: {{ app_label }}.core.ai.tools.date_daydiff.TokeoAiDateDayDiffTool
+      type: {{ app_label }}.core.ai.tools.date_daydiff:TokeoAiDateDayDiffTool
     add_days:
-      type: {{ app_label }}.core.ai.tools.add_days.TokeoAiAddDaysTool
+      type: {{ app_label }}.core.ai.tools.add_days:TokeoAiAddDaysTool
     add_months:
-      type: {{ app_label }}.core.ai.tools.add_months.TokeoAiAddMonthsTool
+      type: {{ app_label }}.core.ai.tools.add_months:TokeoAiAddMonthsTool
     add_years:
-      type: {{ app_label }}.core.ai.tools.add_years.TokeoAiAddYearsTool
+      type: {{ app_label }}.core.ai.tools.add_years:TokeoAiAddYearsTool
     weekday:
-      type: {{ app_label }}.core.ai.tools.weekday.TokeoAiWeekdayTool
+      type: {{ app_label }}.core.ai.tools.weekday:TokeoAiWeekdayTool
     week_number:
-      type: {{ app_label }}.core.ai.tools.week_number.TokeoAiWeekNumberTool
+      type: {{ app_label }}.core.ai.tools.week_number:TokeoAiWeekNumberTool
     moon_phase:
-      type: {{ app_label }}.core.ai.tools.moon_phase.TokeoAiMoonPhaseTool
+      type: {{ app_label }}.core.ai.tools.moon_phase:TokeoAiMoonPhaseTool
     filesystem:
       - read_file
       - append_file
@@ -78,10 +78,10 @@ ai:
       - moon_phase
     ### runs model-generated python: danger, only safe behind the wasm sandbox
     coding:
-      type: tokeo.core.ai.tools.TokeoAiPythonUntrustedExecTool
+      type: tokeo.core.ai.tools:TokeoAiPythonUntrustedExecTool
 
   ### guards check a call and may deny it (deny-and-continue). an item: "type"
-  ### is a built-in alias or a dotted class path, settings under "options"
+  ### is a built-in alias or a class path (module:Class), options under "options"
   guards:
     ### checks call arguments against the tool's parameters schema
     tool_schema_validate:
@@ -105,16 +105,16 @@ ai:
           - '\bAKIA[0-9A-Z]{16}\b'
           - '(?i)\b(?:api[_-]?key|secret|password|token)\b\s*[:=]\s*\S+'
   ### transformers reshape (mask, rewrite, enrich) but never deny. same item
-  ### form as guards; the core ships no built-in type, so "type" is a dotted path
+  ### form as guards; the core ships no built-in type, so "type" is a class path
   transformers:
     ### caps over-long text (project example, core/ai/transformers/truncate.py)
     truncate:
-      type: {{ app_label }}.core.ai.transformers.truncate.{{ app_class_name }}AiTruncateTransformer
+      type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
         limit: 500
 
   ### conductors steer the run (order, redirect, drive). same item form as
-  ### guards; no built-in type yet, so "type" is a dotted class path
+  ### guards; no built-in type yet, so "type" is a class path
   conductors: {}
 
   ### sandboxes contain a tool's execution. an agent lists a chain; a tool runs
@@ -143,7 +143,7 @@ ai:
     ### opt-in: needs the wasmtime package (feature_ai_wasm) and a built
     ### python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
     coded:
-      type: tokeo.core.ai.sandboxes.TokeoAiWasmSandbox
+      type: tokeo.core.ai.sandboxes:TokeoAiWasmSandbox
       tools:
         - coding
       options:
@@ -154,7 +154,7 @@ ai:
 
   ### agents are the composition root: they bind tools, governors and the sandbox
   ### chain and set the budget. the model is bound late via the profile. an item:
-  ### "type" ("fundi" or a dotted path), settings under "options"
+  ### "type" ("fundi" or a class path), settings under "options"
   agents:
     ### default agent (defaults.agent): governs nothing, audits everything
     audited:
@@ -230,7 +230,7 @@ ai:
           - allow
 
   ### profiles bind the model. an item: "type" is a provider alias or a
-  ### dotted path; connection settings under "options"; "agent" names the agent
+  ### class path; connection settings under "options"; "agent" names the agent
   profiles:
     ### the built-in local mock: deterministic, no server (calls a tool when the
     ### first prompt word names one).
@@ -248,7 +248,7 @@ ai:
     ###   python -m {{ app_label }}.core.akili.train
     ###   {{ app_label }} ai ask "wochentag von heute plus 14 tage" --profile akili
     akili:
-      type: {{ app_label }}.core.ai.providers.akili.TokeoAiAkiliProvider
+      type: {{ app_label }}.core.ai.providers.akili:TokeoAiAkiliProvider
       purpose: calendar
       ### shares the guarded agent but denies the tools it does not need
       agent: guarded
