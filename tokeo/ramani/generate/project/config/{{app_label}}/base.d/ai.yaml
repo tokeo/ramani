@@ -91,6 +91,12 @@ ai:
       options:
         deny:
           - append_file
+    ### asks a person before append_file (ai ask / ai chat in a terminal);
+    ### a yes lifts the readonly no and is recorded, without a terminal: no
+    ask_write:
+      type: confirm
+      options:
+        tools: [append_file]
     ### logs every step at every stage, blocks nothing
     trace_audit:
       type: trace_audit
@@ -172,7 +178,7 @@ ai:
 
     ### guarded project tools: read/calc/time yes, write denied; results
     ### redacted and capped, every outcome audited. calc runs jailed.
-    ###   {{ app_label }} ai ask "append_file hello" --agent guarded   # denied
+    ###   {{ app_label }} ai ask "append_file hello" --agent guarded   # asks you
     guarded:
       type: fundi
       options:
@@ -182,6 +188,7 @@ ai:
           - filesystem
         governors:
           - readonly
+          - ask_write: [on_call]
           - tool_schema_validate
           - regex_redact
           - truncate
