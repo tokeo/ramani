@@ -1,3 +1,8 @@
+"""
+Defines the ```emit``` commands of {{ app_name }} that send tasks to the
+message queue by hand.
+"""
+
 from cement import ex
 from tokeo.ext.argparse import Controller
 from tokeo.core.cement.controllers import log_info_help
