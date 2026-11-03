@@ -222,6 +222,21 @@ python -m {{ app_label }}.core.akili.train
 
 The model's whole language lives in ```{{ app_label }}/core/akili/AKILI-LEX.yaml```: teach it new words and sentence patterns by editing the file and retraining. ```AKILI-LLM.md``` next to it explains training, the anatomy of the weights, and grammar-constrained decoding with detailed diagrams.
 {% endif %}
+{% if feature_ai_docker == "Y" %}
+
+#### Tools in a docker container
+
+The sandbox ```docked``` runs a tool in a throwaway container of your app's own image: no network, a read-only root, no capabilities, a memory, process and time cap, and a user that is not root. The agent ```contained``` runs ```calc``` there.
+
+```bash
+# Build the image once, then ask through the container
+make docker
+{{ app_label }} ai ask "calc 2 + 3" --agent contained
+```
+
+> [!WARNING]
+> Whoever may use the docker service is root on the host in effect. Give the app docker rights only where that is acceptable, prefer rootless podman (```command: podman``` in the sandbox options), and never mount the docker socket into a container of the app.
+{% endif %}
 
 {% endif %}
 

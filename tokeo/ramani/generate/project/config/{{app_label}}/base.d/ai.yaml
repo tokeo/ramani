@@ -23,7 +23,7 @@ ai:
   ### selection when a command names none ("profile" = model, "agent" = tools)
   defaults:
     profile: mock
-    agent: null
+    agent: audited
 
   ### the toolset. an item is "type" (+ "options"); a list value is a group a
   ### profile/agent can activate by name
@@ -110,9 +110,9 @@ ai:
       type: {{ app_label }}.core.ai.guards.words:{{ app_class_name }}AiWordFilterGuard
       options:
         words: [password]
-    ### logs every step at every stage, blocks nothing
-    trace_audit:
-      type: trace_audit
+    ### logs every step at every stage, blocks nothing. the short form: a
+    ### string is the type of an item without options
+    trace_audit: trace_audit
     ### masks secret-looking spans at the tool stages; "patterns" is required
     regex_redact:
       type: regex_redact
@@ -186,6 +186,23 @@ ai:
         memory_mb: 256
         timeout: 10
 
+{% if feature_ai_docker == "Y" %}
+    ### a hardened, throwaway container of the app's own image (make docker):
+    ### no network, read-only, no capabilities, a user that is not root.
+    ### whoever may use docker is root on the host in effect: never mount the
+    ### docker socket into a container of the app
+    docked:
+      type: docker
+      tools:
+        - mathematics
+      options:
+        image: {{ app_label }}:latest
+        memory_mb: 256
+        timeout: 20
+        # command: podman      # rootless instead of docker
+        # reuse: true          # one container for the process, not per call
+
+{% endif %}
   ### agents are the composition root: they bind tools, governors and the sandbox
   ### chain and set the budget. the model is bound late via the profile. an item:
   ### "type" ("fundi" or a class path), settings under "options"
@@ -226,6 +243,21 @@ ai:
           - jailed
           - allow
 
+{% if feature_ai_docker == "Y" %}
+    ### calc in a docker container (needs docker and the image: make docker).
+    ###   {{ app_label }} ai ask "calc 2 + 3" --agent contained
+    contained:
+      type: fundi
+      options:
+        tools:
+          - mathematics
+        governors:
+          - tool_schema_validate
+          - trace_audit
+        sandboxes:
+          - docked
+
+{% endif %}
     ### runs model-written code in the wasm guest (opt-in, needs ./wasm).
     ###   {{ app_label }} ai ask "text reverse otto" --agent coder
     coder:

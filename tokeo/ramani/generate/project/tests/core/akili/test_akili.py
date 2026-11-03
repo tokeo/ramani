@@ -16,6 +16,7 @@ from pathlib import Path
 import pytest
 from tokeo.core.utils.date import utc_now
 from {{ app_label }}.main import {{ app_class_name }}Test
+from {{ app_label }}.core import akili
 
 # the held-out exact-plan accuracy the trained model must reach before the
 # per-phrasing checks are trustworthy. calibrated to the measured plateau
@@ -284,3 +285,15 @@ def test_{{ app_label }}_ai_akili_model():
         )
         assert chained.answer.text == f'[akili] date_daydiff: {days}'
         assert chained.answer.raw['plan'] == ['current', 'date_daydiff']
+
+
+def test_{{ app_label }}_akili_stays_apache_under_the_project_license():
+    # akili is Apache-2.0 whatever license the project chose (here
+    # {{ project_license }}): its LICENSE.txt ships next to it, the package data
+    # takes it into the wheel, and every module names the license
+    folder = Path(akili.__file__).parent
+    license_text = (folder / 'LICENSE.txt').read_text()
+    assert 'Apache License' in license_text and 'Version 2.0' in license_text
+    for module in sorted(folder.glob('*.py')):
+        assert 'SPDX-License-Identifier: Apache-2.0' in module.read_text(), module.name
+    assert '"{{ app_label }}.core.akili" = ["**/LICENSE.*"' in Path('pyproject.toml').read_text()
