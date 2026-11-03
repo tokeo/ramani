@@ -17,7 +17,7 @@ nicegui:
   routes: {{ app_label }}.site.routes:routes
   ### web page title
   title: {{ app_name }} Site
-  ### relative filepath or absolute URL to a favicon
+  ### relative project path of the favicon
   favicon: public/favicon.ico
   ### page meta viewport content
   viewport: width=device-width, initial-scale=1
