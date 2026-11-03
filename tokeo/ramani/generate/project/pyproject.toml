@@ -11,7 +11,7 @@ authors = [
     {name = "{{ creator_name }}", email = "{{ creator_email }}"}
 ]
 {% if project_license == "Proprietary" %}# {% endif %}license = "{{ project_license }}"
-{% if project_license == "Proprietary" %}# {% endif %}license-files = ["LICENSE.txt"]
+{% if project_license == "Proprietary" %}# {% endif %}license-files = ["LICENSE.txt", "NOTICE.md"]
 urls = {"Homepage" = "{{ project_url }}"}
 requires-python = ">=3.11"  # Adjust based on your needs
 dependencies = [
