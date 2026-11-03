@@ -21,6 +21,8 @@ from tokeo.core.ai.guards.validate import TokeoAiToolSchemaValidator
 from tokeo.core.ai.guards.redact import TokeoAiRegexRedactGuard, TokeoAiRedactGuardError
 from {{ app_label }}.core.ai.transformers.truncate import {{ app_class_name }}AiTruncateTransformer
 from {{ app_label }}.core.ai.transformers.today import {{ app_class_name }}AiTodayTransformer
+from {{ app_label }}.core.ai.transformers.retrieve import {{ app_class_name }}AiRetrieveTransformer
+from {{ app_label }}.core.ai.knowledge import KnowledgeIndex
 from {{ app_label }}.core.ai.tools.calc import TokeoAiCalcTool
 from {{ app_label }}.main import {{ app_class_name }}Test
 
@@ -302,3 +304,56 @@ def test_{{ app_label }}_ai_the_word_filter_denies_its_configured_words(scratch)
         result = app.ai.chat([{'role': 'user', 'content': 'append_file my password'}], agent='careful', profile='mock')
     assert "contains 'password'" in result.answer.text
     assert not (scratch / 'notes.txt').exists()
+
+
+def test_{{ app_label }}_ai_knowledge_index_ranks_sections_with_sources():
+    # BM25 over the sections of docs/knowledge: the vacation section ranks
+    # first, its heading stays with its text, a word nowhere finds nothing
+    index = KnowledgeIndex.of('docs/knowledge')
+    hits = index.search('how many vacation days per year')
+    assert (hits[0].source, hits[0].section) == ('vacation.md', 1)
+    assert hits[0].text.startswith('# Vacation\nEvery employee gets 30 vacation days')
+    assert [hit.score for hit in hits] == sorted((hit.score for hit in hits), reverse=True)
+    assert index.search('xylophone') == []
+
+
+def test_{{ app_label }}_ai_knowledge_index_is_built_again_after_a_change(scratch):
+    # the index lives in memory and is built again when a file changes
+    folder = scratch / 'knowledge'
+    folder.mkdir(exist_ok=True)
+    (folder / 'a.md').write_text('apples are green')
+    try:
+        assert KnowledgeIndex.of(str(folder)).search('bananas', min_score=0) == []
+        (folder / 'a.md').write_text('apples are green\n\nbananas are yellow')
+        hits = KnowledgeIndex.of(str(folder)).search('bananas', min_score=0)
+        assert [(hit.source, hit.section) for hit in hits] == [('a.md', 2)]
+    finally:
+        (folder / 'a.md').unlink()
+        folder.rmdir()
+
+
+def test_{{ app_label }}_ai_retrieve_transformer_puts_sources_before_the_question():
+    # the input pipeline as a small RAG: the fitting sections go as a system
+    # message right before the question, numbered with their sources
+    with {{ app_class_name }}AiTestApp() as app:
+        transformer = {{ app_class_name }}AiRetrieveTransformer(app)
+        transformer._setup(app, 'retrieve', dict(options=dict(base_dir='docs/knowledge', top_k=2)))
+        ctx = TokeoAiContext(messages=[{'role': 'user', 'content': 'which hotel price per night'}])
+        transformer.on_prompt(ctx)
+        transformer.on_prompt(ctx)
+        assert [m['role'] for m in ctx.messages] == ['system', 'user']
+        assert '[1] travel.md#2' in ctx.messages[0]['content']
+        assert '150 euros per night' in ctx.messages[0]['content']
+        # without a fitting section the conversation stays as it is
+        ctx = TokeoAiContext(messages=[{'role': 'user', 'content': 'xylophone'}])
+        transformer.on_prompt(ctx)
+        assert [m['role'] for m in ctx.messages] == ['user']
+
+
+def test_{{ app_label }}_ai_search_docs_tool_answers_with_sources():
+    # the model asks for the sections itself: the tool call passes the guards
+    # of informed and the answer names the source
+    with {{ app_class_name }}AiTestApp() as app:
+        result = app.ai.chat([{'role': 'user', 'content': 'search_docs hotel per night'}], agent='informed', profile='mock')
+    assert '[1] travel.md#2' in result.answer.text
+    assert '150 euros per night' in result.answer.text

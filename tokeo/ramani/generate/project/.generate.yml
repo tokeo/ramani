@@ -80,6 +80,8 @@ variables:
           - '^(.*)/{{app_label}}/core/akili/(.*)$'
           - '^(.*)/tests/core/akili$'
           - '^(.*)/tests/core/akili/(.*)$'
+          - '^(.*)/docs/knowledge$'
+          - '^(.*)/docs/knowledge/(.*)$'
 
   - name: feature_ai_akili
     prompt: "Enable ai akili llm [(Y)es/(N)o]"

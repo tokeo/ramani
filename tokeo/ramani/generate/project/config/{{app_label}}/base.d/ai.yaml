@@ -75,6 +75,13 @@ ai:
       - weekday
       - week_number
       - moon_phase
+    ### searches the knowledge files (docs/knowledge) by BM25, with sources
+    search_docs:
+      type: {{ app_label }}.core.ai.tools.search_docs:TokeoAiSearchDocsTool
+      options:
+        base_dir: docs/knowledge
+    knowledge:
+      - search_docs
     ### runs model-generated python: danger, only safe behind the wasm sandbox
     coding:
       type: tokeo.core.ai.tools:TokeoAiPythonUntrustedExecTool
@@ -127,6 +134,13 @@ ai:
     ### input pipeline at on_prompt, core/ai/transformers/today.py)
     today_prompt:
       type: {{ app_label }}.core.ai.transformers.today:{{ app_class_name }}AiTodayTransformer
+    ### puts the best sections of docs/knowledge in front of the question, with
+    ### sources (project example of a small RAG, core/ai/transformers/retrieve.py)
+    retrieve:
+      type: {{ app_label }}.core.ai.transformers.retrieve:{{ app_class_name }}AiRetrieveTransformer
+      options:
+        base_dir: docs/knowledge
+        top_k: 3
 
   ### conductors steer the run (order, redirect, drive). same item form as
   ### guards; no built-in type yet, so "type" is a class path
@@ -148,6 +162,7 @@ ai:
         - filesystem
         - mathematics
         - answer42
+        - knowledge
     ### fault/resource isolation in a subprocess (timeout + optional memory cap);
     ### not a jail against hostile code
     jailed:
@@ -263,6 +278,24 @@ ai:
         governors:
           - words
           - ask_write: [on_call]
+          - trace_audit
+        sandboxes:
+          - allow
+
+    ### a small RAG: retrieve puts the fitting sections of docs/knowledge in
+    ### front of the question (see them with --trace), search_docs lets the
+    ### model look them up itself, through redact and truncate.
+    ###   {{ app_label }} ai ask "how many vacation days do I get" --agent informed --trace
+    ###   {{ app_label }} ai ask "search_docs hotel per night" --agent informed
+    informed:
+      type: fundi
+      options:
+        tools:
+          - knowledge
+        governors:
+          - retrieve
+          - regex_redact
+          - truncate
           - trace_audit
         sandboxes:
           - allow
