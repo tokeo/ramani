@@ -12,12 +12,15 @@ import logging
 from pathlib import Path
 
 import pytest
-from tokeo.core.ai import Invocation, ChatResult, ChatMessage, TraceStep, TokeoAiError
+from tokeo.core.ai import Invocation, ChatResult, ChatMessage, TraceStep, TokeoAiError, TokeoAiContext
+from tokeo.core.ai.guards.confirm import CONFIRM_HOOK, TokeoAiConfirmAnswer
+from tokeo.core.utils.date import utc_now
 from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.ai.linter import TokeoAiLinter
 from tokeo.core.ai.guards.validate import TokeoAiToolSchemaValidator
 from tokeo.core.ai.guards.redact import TokeoAiRegexRedactGuard, TokeoAiRedactGuardError
 from {{ app_label }}.core.ai.transformers.truncate import {{ app_class_name }}AiTruncateTransformer
+from {{ app_label }}.core.ai.transformers.today import {{ app_class_name }}AiTodayTransformer
 from {{ app_label }}.core.ai.tools.calc import TokeoAiCalcTool
 from {{ app_label }}.main import {{ app_class_name }}Test
 
@@ -249,3 +252,53 @@ def test_{{ app_label }}_ai_truncate_transformer_caps_long_results():
         result = ChatResult(text='y' * 50)
         transformer.on_close(None, result)
         assert result.text == 'y' * 10 + '... [truncated 40 chars]'
+
+
+def test_{{ app_label }}_ai_today_transformer_puts_the_date_in_front_once():
+    # the input pipeline: at on_prompt the transformer inserts today's date as
+    # the first message; a second model call of the same run adds nothing
+    with {{ app_class_name }}AiTestApp() as app:
+        transformer = {{ app_class_name }}AiTodayTransformer(app)
+        transformer._setup(app, 'today_prompt', dict(options={}))
+        ctx = TokeoAiContext(messages=[{'role': 'user', 'content': 'welcher tag ist heute'}])
+        transformer.on_prompt(ctx)
+        transformer.on_prompt(ctx)
+        assert [m['role'] for m in ctx.messages] == ['system', 'user']
+        assert ctx.messages[0]['content'] == f'Today is {utc_now().date().isoformat()} (UTC).'
+
+
+def test_{{ app_label }}_ai_today_conductor_adds_the_date_call(scratch):
+    # the mock answers without a tool, the conductor adds a call of current
+    # to that first answer; the model then answers with the real date
+    with {{ app_class_name }}AiTestApp() as app:
+        result = app.ai.chat([{'role': 'user', 'content': 'welcher tag ist heute'}], agent='dated', profile='mock')
+    calls = [step.object for step in result.trace if isinstance(step.object, Invocation)]
+    assert {(call.name, call.id[:4]) for call in calls} == {('current', 'inj_')}
+    assert utc_now().date().isoformat() in result.answer.text
+
+
+def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scratch):
+    # careful asks a person before append_file. the first answer is no_retry
+    # with a note, the word filter reads it and denies the same call; the
+    # person confirms that state with yes, so the call never runs
+    first = TokeoAiConfirmAnswer('no_retry', by='human', note='deny: world')
+    answers = iter([first, TokeoAiConfirmAnswer('yes', by='human')])
+
+    def channel(app, request):
+        return next(answers)
+
+    with {{ app_class_name }}AiTestApp(hooks=[(CONFIRM_HOOK, channel)]) as app:
+        result = app.ai.chat([{'role': 'user', 'content': 'append_file hello world'}], agent='careful', profile='mock')
+    asked = [(c['answer'], c['state_before']['decision'], c['state_before']['reason']) for c in result.loopdata.confirmations]
+    assert asked == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]
+    assert "denied: contains 'world'" in result.answer.text
+    assert not (scratch / 'notes.txt').exists()
+
+
+def test_{{ app_label }}_ai_the_word_filter_denies_its_configured_words(scratch):
+    # without any note the configured word password is denied, no question
+    # changes that; the default of confirm (no) keeps the no
+    with {{ app_class_name }}AiTestApp() as app:
+        result = app.ai.chat([{'role': 'user', 'content': 'append_file my password'}], agent='careful', profile='mock')
+    assert "contains 'password'" in result.answer.text
+    assert not (scratch / 'notes.txt').exists()

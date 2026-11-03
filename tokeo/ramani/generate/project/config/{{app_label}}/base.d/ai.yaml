@@ -97,6 +97,12 @@ ai:
       type: confirm
       options:
         tools: [append_file]
+    ### denies a call whose arguments contain a word; a confirm note
+    ### "deny: word, ..." adds words (project example, core/ai/guards/words.py)
+    words:
+      type: {{ app_label }}.core.ai.guards.words:{{ app_class_name }}AiWordFilterGuard
+      options:
+        words: [password]
     ### logs every step at every stage, blocks nothing
     trace_audit:
       type: trace_audit
@@ -117,10 +123,18 @@ ai:
       type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
         limit: 500
+    ### puts today's date in front of the prompt (project example of the
+    ### input pipeline at on_prompt, core/ai/transformers/today.py)
+    today_prompt:
+      type: {{ app_label }}.core.ai.transformers.today:{{ app_class_name }}AiTodayTransformer
 
   ### conductors steer the run (order, redirect, drive). same item form as
   ### guards; no built-in type yet, so "type" is a class path
-  conductors: {}
+  conductors:
+    ### adds a call of "current" to the first model answer (project example,
+    ### core/ai/conductors/today.py)
+    today_call:
+      type: {{ app_label }}.core.ai.conductors.today:{{ app_class_name }}AiTodayConductor
 
   ### sandboxes contain a tool's execution. an agent lists a chain; a tool runs
   ### in the first sandbox whose "tools" contain it, else the call is denied
@@ -219,6 +233,36 @@ ai:
           - calendar
         governors:
           - truncate: [on_close]
+          - trace_audit
+        sandboxes:
+          - allow
+
+    ### calendar with the real date: today_prompt puts it in the prompt,
+    ### today_call adds a call of current to the first answer.
+    ###   {{ app_label }} ai ask "welcher tag ist heute" --agent dated
+    dated:
+      type: fundi
+      options:
+        tools:
+          - calendar
+        governors:
+          - today_prompt
+          - today_call
+          - trace_audit
+        sandboxes:
+          - allow
+
+    ### writing with a word filter and a person to confirm. answer no_retry
+    ### with the note "deny: world" and the filter judges the call anew.
+    ###   {{ app_label }} ai ask "append_file hello world" --agent careful
+    careful:
+      type: fundi
+      options:
+        tools:
+          - filesystem
+        governors:
+          - words
+          - ask_write: [on_call]
           - trace_audit
         sandboxes:
           - allow
