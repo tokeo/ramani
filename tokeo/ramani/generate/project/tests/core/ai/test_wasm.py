@@ -54,9 +54,8 @@ def test_{{ app_label }}_trusted_exec_runs_in_process():
     assert tool.exec(code='6 * 7') == 42
 
 
-# --------------------------------------------------------------------------------------
-# end-to-end through the wasm sandbox, config embedded so the test is self-contained
-# --------------------------------------------------------------------------------------
+# ---- end-to-end through the wasm sandbox ------------------------------------
+# the config is embedded, so the test is self-contained
 
 _PYTHON_WASM = os.environ.get('TOKEO_TEST_PYTHON_WASM')
 _WASI_STDLIB = os.environ.get('TOKEO_TEST_WASI_STDLIB')

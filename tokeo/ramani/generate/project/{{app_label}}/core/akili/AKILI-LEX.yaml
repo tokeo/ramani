@@ -18,9 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# =========================================================================
-# akili lexicon: the complete language of the training data
-# =========================================================================
+# ---- akili lexicon: the complete language of the training data --------------
 #
 # everything the model can learn to understand is written down here: the
 # words and the sentence patterns. data.py reads this file when it
@@ -60,9 +58,7 @@
 #     {c}  a consumer name (see consumers)
 
 
-# =========================================================================
-# 1. words
-# =========================================================================
+# ---- 1. words ---------------------------------------------------------------
 
 # words that simply mean "today": they put a current() step in front of
 # the plan and reference its result
@@ -128,9 +124,7 @@ consumers:
   moon_phase:  {en: 'moon phase',  de: 'mondphase'}
 
 
-# =========================================================================
-# 2. chatter
-# =========================================================================
+# ---- 2. chatter -------------------------------------------------------------
 
 # out-of-domain requests mapped to <nomatch>: the anti-hallucination
 # share; without it the model would invent a plan for every input
@@ -192,9 +186,7 @@ leadins:
   - 'ich brauche'
 
 
-# =========================================================================
-# 3. patterns: one sentence shape per group
-# =========================================================================
+# ---- 3. patterns: one sentence shape per group ------------------------------
 
 patterns:
 
