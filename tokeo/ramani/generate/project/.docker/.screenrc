@@ -8,41 +8,48 @@ defscrollback 10000
 mousetrack on
 defmousetrack on
 
-### create windows
+### the windows: scheduler (paused) and a shell on the left, the services of
+### the enabled features on the right
+{% set left = (["scheduler"] if feature_apscheduler == "Y" else []) + ["shell"] %}
+{% set right = (["automate"] if feature_automate == "Y" else []) + (["grpc"] if feature_grpc == "Y" else []) + (["dramatiq"] if feature_dramatiq == "Y" else []) %}
+{% set commands = dict(
+    scheduler=app_label ~ " scheduler launch --paused",
+    shell="sh",
+    automate=app_label ~ " automate shell",
+    grpc=app_label ~ " grpc serve",
+    dramatiq=app_label ~ " dramatiq serve --skip-logging",
+) %}
+{% set windows = left + right %}
+
+### create the regions
+{% if right %}
 split -v
+{% endif %}
+{% for _ in left[1:] %}
 split
+{% endfor %}
+{% if right %}
+{% for _ in left %}
 focus next
-focus next
+{% endfor %}
+{% for _ in right[1:] %}
 split
-split
+{% endfor %}
+{% for _ in left %}
 focus prev
-focus prev
+{% endfor %}
+{% endif %}
 
-# start scheduler paused
-cd /app
-screen -t scheduler {{ app_label }} scheduler launch
-
-# start an interactive shell to test commands
+### start a window in each region
+{% for name in windows %}
+{% if not loop.first %}
 focus next
+{% endif %}
 cd /app
-screen -t shell sh
+screen -t {{ name }} {{ commands[name] }}
+{% endfor %}
 
-# start automation shell
-focus next
-cd /app
-screen -t automate {{ app_label }} automate shell
-
-# start grpc backend
-focus next
-cd /app
-screen -t grpc {{ app_label }} grpc serve
-
-# start dramatiq backend
-focus next
-cd /app
-screen -t dramatiq {{ app_label }} dramatiq serve --skip-logging
-
-# set focus
+### set the focus to the shell
+{% for _ in windows[windows.index("shell") + 1:] %}
 focus prev
-focus prev
-focus prev
+{% endfor %}

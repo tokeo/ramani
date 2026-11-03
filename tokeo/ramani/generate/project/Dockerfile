@@ -19,7 +19,7 @@ RUN apk add --update --no-cache \
     screen \
     && ln -s /usr/share/zoneinfo/UTC /etc/localtime \
     && pip install --upgrade pip \
-    && pip install --no-cache-dir -e .
+    && pip install --no-cache-dir .
 
 WORKDIR /app
 ENTRYPOINT ["{{ app_label }}"]
