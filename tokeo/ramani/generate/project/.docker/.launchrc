@@ -1,6 +1,6 @@
 # this is a ramp up script to use tokeocli/spiral:latest as
 # ready to test docker image for your tokeo application
-export {{ app_label | upper }}_ENV="dev"
+export {{ app_label | upper }}_ENV="development"
 export APP_LABEL="{{ app_label }}"
 
 # the prompt for login shell
