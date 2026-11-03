@@ -28,14 +28,13 @@ Where a docstring is written, it follows the form below.
 
 ## Module Docstrings
 
-A module docstring has a title after the pattern ```<App> <Topic> Module.```,
-a short description, and if needed the sections
-```### Features```, ```### Example``` and ```### Notes```, in this order:
+The first sentence of a module docstring says what the module does. No title
+of app and file name stands before it, pdoc shows the name of the module anyway.
+A short description and if needed the sections ```### Features```,
+```### Example``` and ```### Notes``` follow, in this order:
 
 ````python
 """
-{{ app_name }} Invoice Module.
-
 Builds the monthly invoices from the closed orders.
 
 ### Notes
@@ -160,7 +159,8 @@ An admonition is a line ```.. <kind>::```, a blank line, and the text indented
 by four spaces. The kinds are ```note```, ```tip```, ```important```,
 ```warning``` and ```caution```, and also ```info```, ```hint```, ```success```,
 ```danger```, ```error```, ```deprecated```, ```todo```, ```versionadded``` and
-```versionchanged```. The same form holds in the markdown files. The docs site shows them as coloured boxes:
+```versionchanged```. The same form holds in the markdown files. The docs site
+shows them as coloured boxes:
 
 ```
 ### Reminders
