@@ -104,6 +104,7 @@ ai:
       type: confirm
       options:
         tools: [append_file]
+        # max_retries: 5       # no_retry runs a stage again at most so often
     ### denies a call whose arguments contain a word; a confirm note
     ### "deny: word, ..." adds words (project example, core/ai/guards/words.py)
     words:

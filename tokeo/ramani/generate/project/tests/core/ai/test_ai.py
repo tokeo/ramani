@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 from tokeo.core.ai import Invocation, ChatResult, ChatMessage, TraceStep, TokeoAiError, TokeoAiContext
-from tokeo.core.ai.guards.confirm import CONFIRM_HOOK, TokeoAiConfirmAnswer
+from tokeo.core.ai.guards.confirm import GOVERNOR_CONFIRM_CHANNEL_HOOK, TokeoAiConfirmAnswer
 from tokeo.core.utils.date import utc_now
 from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.ai.linter import TokeoAiLinter
@@ -289,7 +289,7 @@ def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scra
     def channel(app, request):
         return next(answers)
 
-    with {{ app_class_name }}AiTestApp(hooks=[(CONFIRM_HOOK, channel)]) as app:
+    with {{ app_class_name }}AiTestApp(hooks=[(GOVERNOR_CONFIRM_CHANNEL_HOOK, channel)]) as app:
         result = app.ai.chat([{'role': 'user', 'content': 'append_file hello world'}], agent='careful', profile='mock')
     asked = [(c['answer'], c['state_before']['decision'], c['state_before']['reason']) for c in result.confirmations]
     assert asked == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]

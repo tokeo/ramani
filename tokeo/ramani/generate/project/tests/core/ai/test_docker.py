@@ -17,7 +17,7 @@ import subprocess
 import pytest
 from {{ app_label }}.main import {{ app_class_name }}Test
 
-FAKE_DOCKER = """#!{python}
+DOCKER_FAKE_SCRIPT = """#!{python}
 import os, sys, json
 args = sys.argv[1:]
 with open({log!r}, 'a') as log:
@@ -60,7 +60,7 @@ def test_{{ app_label }}_ai_docker_sandbox_runs_calc_hardened(tmp_path, monkeypa
     # container of the app's image, every hardening flag, python as entrypoint
     log = tmp_path / 'calls.log'
     fake = tmp_path / 'docker'
-    fake.write_text(FAKE_DOCKER.format(python=sys.executable, log=str(log), root=os.getcwd()))
+    fake.write_text(DOCKER_FAKE_SCRIPT.format(python=sys.executable, log=str(log), root=os.getcwd()))
     fake.chmod(0o755)
     monkeypatch.setenv('PATH', f'{tmp_path}{os.pathsep}{os.environ["PATH"]}')
     with {{ app_class_name }}DockerTestApp() as app:

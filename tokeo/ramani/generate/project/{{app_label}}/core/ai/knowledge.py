@@ -19,7 +19,7 @@ import threading
 from dataclasses import dataclass
 
 #: The file suffixes the index reads.
-SUFFIXES = ('.md', '.txt')
+KNOWLEDGE_FILE_SUFFIXES = ('.md', '.txt')
 
 #: The BM25 parameters: term saturation and length normalization.
 BM25_K1 = 1.5
@@ -104,7 +104,7 @@ class KnowledgeIndex:
         """
         found = []
         for root, _, names in os.walk(self.base_dir):
-            found += [os.path.join(root, name) for name in names if name.endswith(SUFFIXES)]
+            found += [os.path.join(root, name) for name in names if name.endswith(KNOWLEDGE_FILE_SUFFIXES)]
         return sorted(found)
 
     def build(self, files):
