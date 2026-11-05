@@ -291,7 +291,7 @@ def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scra
 
     with {{ app_class_name }}AiTestApp(hooks=[(CONFIRM_HOOK, channel)]) as app:
         result = app.ai.chat([{'role': 'user', 'content': 'append_file hello world'}], agent='careful', profile='mock')
-    asked = [(c['answer'], c['state_before']['decision'], c['state_before']['reason']) for c in result.loopdata.confirmations]
+    asked = [(c['answer'], c['state_before']['decision'], c['state_before']['reason']) for c in result.confirmations]
     assert asked == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]
     assert "denied: contains 'world'" in result.answer.text
     assert not (scratch / 'notes.txt').exists()
