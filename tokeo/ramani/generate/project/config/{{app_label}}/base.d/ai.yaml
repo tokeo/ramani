@@ -152,7 +152,9 @@ ai:
       type: {{ app_label }}.core.ai.conductors.today:{{ app_class_name }}AiTodayConductor
 
   ### sandboxes contain a tool's execution. an agent lists a chain; a tool runs
-  ### in the first sandbox whose "tools" contain it, else the call is denied
+  ### in the first sandbox whose "tools" contain it, else the call is denied.
+  ### each type offers only the limits it can enforce; all options, defaults
+  ### and what each type enforces: CONFIG.md of tokeo-fundi, section 5
   sandboxes:
     ### zero isolation, in-process; only trusted, quick tools, named one by one
     ### or by group (there is no catch-all, a new tool runs nowhere until named)
@@ -164,6 +166,8 @@ ai:
         - mathematics
         - answer42
         - knowledge
+      # options:
+      #   output_mb: 1         # stdout and stderr kept, larger values fail
     ### fault/resource isolation in a subprocess (timeout + optional memory cap);
     ### not a jail against hostile code
     jailed:
@@ -174,6 +178,7 @@ ai:
         timeout: 10            # wall-clock seconds, then SIGKILL
         # memory_mb: 256       # rlimit cap (linux; macos rejects small caps)
         cwd: tmp/sandbox
+        # output_mb: 1         # stdout and stderr kept, larger values fail
     ### real isolation for model code: a wasm guest, hard memory cap, no network.
     ### opt-in: needs the extra tokeo-fundi[wasm] (feature_ai_wasm) and a
     ### built python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
@@ -186,7 +191,9 @@ ai:
         stdlib: ./wasm/lib/python3.13
         memory_mb: 256
         timeout: 10
+        # disk_mb: 64          # MB the guest may write, its output included
         # watch_interval: 1.0  # seconds between the disk and file checks
+        # output_mb: 1         # stdout and stderr kept, larger values fail
 
 {% if feature_ai_docker == "Y" %}
     ### a hardened, throwaway container of the app's own image (make docker):
@@ -203,6 +210,8 @@ ai:
         timeout: 20
         # command: podman      # rootless instead of docker
         # reuse: true          # one container for the process, not per call
+        # disk_mb: 64          # size of the tmpfs /tmp
+        # output_mb: 1         # stdout and stderr kept, larger values fail
 
 {% endif %}
   ### agents are the composition root: they bind tools, governors and the sandbox
