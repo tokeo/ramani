@@ -185,6 +185,7 @@ ai:
         stdlib: ./wasm/lib/python3.13
         memory_mb: 256
         timeout: 10
+        # watch_interval: 1.0  # seconds between the disk and file checks
 
 {% if feature_ai_docker == "Y" %}
     ### a hardened, throwaway container of the app's own image (make docker):
