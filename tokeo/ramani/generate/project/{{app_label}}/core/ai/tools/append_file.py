@@ -101,13 +101,13 @@ class TokeoAiAppendFileTool(TokeoAiTool):
         # real creation time where the platform has it (mac/bsd), st_ctime the
         # best fallback elsewhere (on linux it is the inode change time)
         stat = target.stat()
-        created_at = getattr(stat, 'st_birthtime', stat.st_ctime)
+        created_time = getattr(stat, 'st_birthtime', stat.st_ctime)
         result = dict(
             file=self._config('file'),
             size_before=size_before,
             size_after=stat.st_size,
             created=created,
-            created_at=to_utc_timestring(to_utc(created_at)),
+            created_at=to_utc_timestring(to_utc(created_time)),
             updated_at=to_utc_timestring(to_utc(stat.st_mtime)),
         )
         # the model sees the success flag; the dict rides along for a follow-up
