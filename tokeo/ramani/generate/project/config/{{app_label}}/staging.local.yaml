@@ -1,6 +1,6 @@
 ### **The {{ app_name }} Staging Configuration Secrets**
 ###
-### - Secrets will be merged into Application Configuration.
+### - The secrets are merged into the app config.
 ### - This files should not be checked into source repos.
 ---
 

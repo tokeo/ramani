@@ -226,7 +226,7 @@ The model's whole language lives in ```{{ app_label }}/core/akili/AKILI-LEX.yaml
 
 #### Tools in a docker container
 
-The sandbox ```docked``` runs a tool in a throwaway container of your app's own image: no network, a read-only root, no capabilities, a memory, process and time cap, and a user that is not root. The agent ```contained``` runs ```calc``` there.
+The sandbox ```docked``` runs a tool in a throwaway container of your app's own image: no network, a read-only root, no capabilities, a memory, process and time limit, and a user that is not root. The agent ```contained``` runs ```calc``` there.
 
 ```bash
 # Build the image once, then ask through the container

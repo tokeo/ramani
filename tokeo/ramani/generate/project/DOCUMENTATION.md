@@ -7,7 +7,7 @@ pdoc and the tokeo theme (```make doc```).
 
 1. The app documents almost nothing. Internal functions get no docstring, the
    names carry the meaning. A comment stands only where the code does not show
-   the reason: a business rule, a security check, a workaround for a fault of a
+   the reason: a business rule, a security check, a workaround for an error of a
    dependency, a switch with an effect that is not obvious. A flow of several
    steps follows "Comments".
 2. A module whose role does not follow from its name starts with a short
@@ -50,7 +50,7 @@ with a verb, not a bold label:
 - Yes: ```- Runs commands locally or remotely over SSH```
 - No: ```- **Remote execution** via SSH or local shells```
 
-The text of a folder is the docstring of its ```__init__.py```, in a namespace
+The text of a directory is the docstring of its ```__init__.py```, in a namespace
 package an ```__init__.md```. A guide next to the code is embedded there with
 ```.. include:: ./FILE.md```.
 

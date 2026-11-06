@@ -1,13 +1,13 @@
-### **The {{ app_name }} Dramatiq Configuration Settings**
+### **The {{ app_name }} Dramatiq Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Dramatiq Task Queue Configuration
 ###
-### Settings for Dramatiq task processing system including workers,
+### Config for Dramatiq task processing system including workers,
 ### brokers, and queue management
 dramatiq:
   ### module and method to launch dramatiq serve service
@@ -59,7 +59,7 @@ dramatiq:
 
   ### broker to use for backend
   broker: rabbitmq
-  ### connection settings for rabbitmw
+  ### connection options of rabbitmq
   rabbitmq:
     ### connection url to rabbitmq server
     url: !vault:plain amqp://none:nonet@localhost:5672/

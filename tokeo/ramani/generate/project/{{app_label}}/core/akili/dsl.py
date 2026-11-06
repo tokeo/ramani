@@ -213,7 +213,7 @@ def _allowed(text, active):
     # which is easier to read (and to trust) than a parser generator.
     #
     # isolate the step being typed (everything after the last ';') and which
-    # step number it is (1-based), so we can enforce the plan-length cap and
+    # step number it is (1-based), so we can enforce the plan-length limit and
     # the @k reference range
     step = text.rsplit(';', 1)[-1]
     step_index = text.count(';') + 1
@@ -300,11 +300,11 @@ def _date_value(value, step_index, closers):
 
 
 def _int_value(value, closers):
-    # a small signed integer (days/months/years). the digit cap below is a
+    # a small signed integer (days/months/years). the digit limit below is a
     # real modelling choice: at most three digits means the grammar accepts
     # 0..999, enough for day shifts up to 365. raising it to four would let
     # the model emit four-digit counts, which it never learns, since the
-    # data caps counts well under 1000, so they would be pure noise
+    # data keeps counts well under 1000, so they would be pure noise
     digits = set('0123456789')
     # an empty value may start with a digit, or with '-' for a negative; a
     # lone '-' must then be followed by a digit
@@ -322,7 +322,7 @@ def _int_value(value, closers):
 
 def _after_close(text, step_index):
     # a closed step may chain into another (';') or end the line ('<eos>').
-    # the cap of three steps is the deepest plan the model is taught:
+    # the limit of three steps is the deepest plan the model is taught:
     # resolve a date, shift it, consume the result. it must agree with two
     # other places: the renderers never build longer plans, and infer.py's
     # PLAN_BUDGET reserves room for the longest line. raising it to four

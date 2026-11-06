@@ -52,7 +52,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
 
         ### Args
 
-        - **profile** (dict): The resolved profile (unused settings pass
+        - **profile** (dict): The resolved profile (unused options pass
             through untouched)
         - **messages** (list): Chat messages as plain OpenAI-style dicts
         - **tools** (list|None): OpenAI-style function specs; the decoder

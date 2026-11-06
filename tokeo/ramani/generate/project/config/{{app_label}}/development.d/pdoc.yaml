@@ -1,6 +1,6 @@
-### **The {{ app_name }} PDoc Development Configuration Settings**
+### **The {{ app_name }} PDoc Development Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 

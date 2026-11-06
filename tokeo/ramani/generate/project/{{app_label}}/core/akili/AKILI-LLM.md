@@ -32,7 +32,7 @@ calls over the project's calendar toolset, including nested requests like
 
 It complements the framework's built-in ```mock``` provider: ```mock``` is the
 neutral, deliberately dumb test double that proves the machinery (loop,
-guards, budgets, trace) without any prerequisite; ```akili``` is the content,
+guards, limits, trace) without any prerequisite; ```akili``` is the content,
 the proof that a generated project can own, train, and operate its model.
 The agents stay model-free compositions: the same ```audited``` or ```guarded```
 agent runs against ```mock```, ```akili```, or a remote profile unchanged.
@@ -376,7 +376,7 @@ what it was taught; the sample printer takes the same switch
 
 ### ```infer.py```, the runtime (plain NumPy)
 
-Loads ```weights.npz``` and reruns the exact forward pass in NumPy (verified
+Loads ```weights.npz``` and reruns the exact forward pass in NumPy (checked
 bit-compatible with torch). Decoding is greedy and constrained: from the
 model's ranking, the best *legal* character wins. A KV cache makes it fast
 (the sentence is processed once, every generated character is a single-step
@@ -647,7 +647,7 @@ So the distribution was changed where it was thin:
 the ```_render_shift``` helper re-rolls half of the minus shifts onto
 a composed pattern, multiplying exactly the starved class without
 touching any
-bucket share. The table verified the drill: the class became visible,
+bucket share. The table confirmed the drill: the class became visible,
 practised, and measurable, and the whole path from a miss to a drill
 stays two files short (read the table, strengthen the drill or add
 patterns, retrain).

@@ -3,7 +3,7 @@ Read-file tool for the {{ app_name }} ai agent.
 
 Reads a text file strictly below a configured base directory, so an agent can
 look things up without roaming the file system: the ```base_dir``` is a tool
-setting from the configuration, and any path that escapes it (an absolute
+option from the configuration, and any path that escapes it (an absolute
 path or a ```..``` traversal) is rejected before anything is opened. Reading is
 the harmless half of the file pair; the writing ```append_file``` tool is the
 one a policy guard typically denies.
@@ -35,14 +35,14 @@ class TokeoAiReadFileTool(TokeoAiTool):
     Tool that reads a text file below the configured base directory.
 
     The ```Meta``` description and parameters are what the model sees; they are
-    code, not config. The ```base_dir``` is the tool's own setting: it is declared
+    code, not config. The ```base_dir``` is the tool's own option: it is set
     in ```config_defaults``` (the tool's whole outward surface), overridden per
     item by its config ```options``` and read through ```_config```.
 
     """
 
     class Meta:
-        """Tool meta-data sent to the model, plus the tool's own settings."""
+        """Tool meta-data sent to the model, plus the tool's own options."""
 
         # Short description the model sees
         description = 'read a text file below the configured base directory'

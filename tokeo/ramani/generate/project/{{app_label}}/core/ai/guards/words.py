@@ -5,9 +5,9 @@ A policy guard that denies a tool call whose arguments contain a listed word.
 It also reads the notes of confirm answers (```ctx.notes```): a note
 ```deny: word, other``` adds words. So a person who answers ```no_retry``` with
 such a note gets a new judgment of the same call, and the next confirm shows
-the new state.
+the new decision.
 
-Put it before the confirm guard on the agent, so confirm sees its state.
+Put it before the confirm guard on the agent, so confirm sees its decision.
 
 This module is self-contained: it holds only the guard class. The project names
 it by its class path (module:Class) under ```ai.guards``` in the config, so it

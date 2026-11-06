@@ -1,13 +1,13 @@
-### **The {{ app_name }} PocketBase Configuration Settings**
+### **The {{ app_name }} PocketBase Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### PocketBase Database Configuration
 ###
-### Settings for PocketBase database connectivity
+### Config for PocketBase database connectivity
 pocketbase:
   ### connection string to database
   url: http://127.0.0.1:8090
@@ -33,7 +33,7 @@ pocketbase:
   # realtime_auth_check: 60
   ### the longest delay in seconds before a channel connects again
   # realtime_max_delay: 30
-  ### cap on concurrent http connections per process (httpx
+  ### max concurrent http connections per process (httpx
   ### max_connections); unset uses the httpx default and excess
   ### requests wait for a free connection
   max_connections: null

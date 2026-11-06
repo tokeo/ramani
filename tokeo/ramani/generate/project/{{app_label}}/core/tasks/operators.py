@@ -11,7 +11,7 @@ concerns rather than business logic.
 
 - Performs system maintenance such as database cleanup and optimization
 - Runs health checks on application components and dependencies
-- Verifies and repairs data integrity
+- Checks and repairs data integrity
 - Manages runtime application configuration
 - Collects and reports operational metrics
 
@@ -35,7 +35,7 @@ def scheduled_maintenance():
     app.log.info("Starting scheduled maintenance")
     operators.purge_expired_data()
     operators.optimize_database()
-    operators.verify_data_integrity()
+    operators.check_data_integrity()
 ```
 
 ### Notes

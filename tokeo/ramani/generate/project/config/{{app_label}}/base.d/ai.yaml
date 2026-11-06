@@ -1,13 +1,13 @@
-### **The {{ app_name }} AI Configuration Settings**
+### **The {{ app_name }} AI Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Fundi AI configuration
 ###
-### Settings for defining tools, guards, transformers, conductors, sandboxes,
+### Config for the tools, guards, transformers, conductors, sandboxes,
 ### agents, profiles etc. For the full ai config reference look at the documentation
 ### ships with module ```tokeo.core.ai.config```
 ai:
@@ -15,7 +15,7 @@ ai:
   ### read LICENSE.md of tokeo-fundi first and set true to prevent notice
   license_acknowledged: false
 
-  ### app-wide loop budgets (nearest wins: call arg > agent option > this base)
+  ### app-wide loop limits (nearest wins: call arg > agent option > this base)
   # max_steps: 0            # max tool rounds per request (0 = unlimited)
   # max_loops: 3            # consecutive rounds without a successful call
   # trace: true             # record the step history (result.trace)
@@ -98,7 +98,7 @@ ai:
       options:
         deny:
           - append_file
-    ### asks a person to confirm the state before append_file (ai ask / ai chat
+    ### asks a person to confirm the decision before append_file (ai ask / ai chat
     ### in a terminal); the readonly no stays a no, notes are recorded
     ask_write:
       type: confirm
@@ -111,7 +111,7 @@ ai:
       type: {{ app_label }}.core.ai.guards.words:{{ app_class_name }}AiWordFilterGuard
       options:
         words: [password]
-    ### logs every step at every stage, blocks nothing. the short form: a
+    ### logs every step at every stage, denies nothing. the short form: a
     ### string is the type of an item without options
     trace_audit: trace_audit
     ### masks secret-looking spans at the tool stages; "patterns" is required
@@ -126,7 +126,7 @@ ai:
   ### transformers reshape (mask, rewrite, enrich) but never deny. same item
   ### form as guards; the core ships no built-in type, so "type" is a class path
   transformers:
-    ### caps over-long text (project example, core/ai/transformers/truncate.py)
+    ### cuts over-long text (project example, core/ai/transformers/truncate.py)
     truncate:
       type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
@@ -168,7 +168,7 @@ ai:
         - knowledge
       # options:
       #   output_mb: 1         # stdout and stderr kept, larger values fail
-    ### fault/resource isolation in a subprocess (timeout + optional memory cap);
+    ### error/resource isolation in a subprocess (timeout + optional memory limit);
     ### not a jail against hostile code
     jailed:
       type: subprocess
@@ -176,10 +176,10 @@ ai:
         - mathematics
       options:
         timeout: 10            # wall-clock seconds, then SIGKILL
-        # memory_mb: 256       # rlimit cap (linux; macos rejects small caps)
+        # memory_mb: 256       # rlimit (linux; macos rejects small limits)
         cwd: tmp/sandbox
         # output_mb: 1         # stdout and stderr kept, larger values fail
-    ### real isolation for model code: a wasm guest, hard memory cap, no network.
+    ### real isolation for model code: a wasm guest, hard memory limit, no network.
     ### opt-in: needs the extra tokeo-fundi[wasm] (feature_ai_wasm) and a
     ### built python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
     coded:
@@ -215,8 +215,8 @@ ai:
 
 {% endif %}
   ### agents are the composition root: they bind tools, governors and the sandbox
-  ### chain and set the budget. the model is bound late via the profile. an item:
-  ### "type" ("fundi" or a class path), settings under "options"
+  ### chain and set the limits. the model is bound late via the profile. an item:
+  ### "type" ("fundi" or a class path), options under "options"
   agents:
     ### default agent (defaults.agent): governs nothing, audits everything
     audited:
@@ -230,11 +230,11 @@ ai:
         ### other options an agent may take:
         # tools: [mathematics]          # tools this agent contributes
         # deny: [append_file]           # hard ban, before any sandbox lookup
-        # max_steps: 0                  # override the base budgets for this agent
+        # max_steps: 0                  # override the base limits for this agent
         # max_loops: 3
 
     ### guarded project tools: read/calc/time yes, write denied; results
-    ### redacted and capped, every outcome audited. calc runs jailed.
+    ### redacted and truncated, every outcome audited. calc runs jailed.
     ###   {{ app_label }} ai ask "append_file hello" --agent guarded   # asks you
     guarded:
       type: fundi
@@ -406,7 +406,7 @@ ai:
       ### common keys:
       ###   temperature      randomness/creativity, ~0.0-2.0 (lower = focused)
       ###   top_p            nucleus sampling cutoff, 0.0-1.0
-      ###   max_tokens       cap on the generated answer length
+      ###   max_tokens       max length of the generated answer
       ###   frequency_penalty / presence_penalty   damp repetition, ~-2.0-2.0
       ###   stop             string or list that ends generation
       ###   seed             fixed value for (mostly) reproducible output

@@ -16,7 +16,7 @@ context managers, or wrappers that execute native NiceGUI ```ui.*``` commands
 must trigger the security guard (the ```guard_user_context()``` tripwire)
 before rendering.
 
-The guard verifies that the function is being called from safely inside an
+The guard checks that the function is being called from safely inside an
 active user's page route. It is implemented like this:
 
 ```python

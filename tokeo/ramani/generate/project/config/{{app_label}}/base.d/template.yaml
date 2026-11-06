@@ -1,13 +1,13 @@
-### **The {{ app_name }} Templating Configuration Settings**
+### **The {{ app_name }} Templating Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Jinja2 Template Configuration
 ###
-### Settings for Jinja2 templating engine behavior and template locations
+### Config for Jinja2 templating engine behavior and template locations
 jinja2:
   # preserve the trailing newline when rendering templates.
   keep_trailing_newline: true

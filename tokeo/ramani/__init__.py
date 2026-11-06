@@ -24,7 +24,7 @@ the framework itself while shipping as its own distribution.
 
 """
 
-# the templates are no modules of their own, pdoc skips the generate folder
+# the templates are no modules of their own, pdoc skips the generate directory
 __pdoc__ = {
     'generate': False,
 }

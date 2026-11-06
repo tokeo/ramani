@@ -1,13 +1,13 @@
-### **The {{ app_name }} Scheduler Configuration Settings**
+### **The {{ app_name }} Scheduler Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Scheduler Configuration
 ###
-### Settings for scheduled task execution using crontab-style scheduling
+### Config for scheduled task execution using crontab-style scheduling
 ###
 ### <p>
 ### <br/>

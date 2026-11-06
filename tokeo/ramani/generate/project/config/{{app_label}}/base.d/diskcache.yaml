@@ -1,13 +1,13 @@
-### **The {{ app_name }} DiskCache Configuration Settings**
+### **The {{ app_name }} DiskCache Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Disk Cache Configuration
 ###
-### Settings for persistent disk-based cache storage and locking mechanisms
+### Config for persistent disk-based cache storage and locking mechanisms
 diskcache:
   ### file path to store permanent data content
   directory: ./{{ app_label }}_diskcache

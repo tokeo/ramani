@@ -93,7 +93,7 @@ from {{ app_label }}.core.akili.infer import PLAN_BUDGET
 # - heads: parallel attention channels; each looks at the sequence a
 #   different way (here 96/4 = 24 dimensions per head)
 # - ff: the per-position MLP's hidden width, the usual 4x dim
-# - context: the maximum number of token positions; it caps request+plan
+# - context: the maximum number of token positions; it limits request+plan
 #   length and is the size of the position embedding table
 # - vocab: 259, fixed by the tokenizer (256 bytes + PAD/SEP/EOS)
 CONFIG = dict(dim=128, layers=3, heads=4, ff=512, context=184, vocab=tokenizer.VOCAB)
@@ -205,7 +205,7 @@ def encode_pair(request, dsl, context):
     """
     # layout: request bytes, the SEP boundary, the plan bytes, then EOS.
     # the request keeps its leading context-PLAN_BUDGET characters, leaving
-    # room for the plan; tokens[:context] is the final hard cap
+    # room for the plan; tokens[:context] is the final hard limit
     tokens = tokenizer.encode(request)[: context - PLAN_BUDGET] + [tokenizer.SEP] + tokenizer.encode(dsl) + [tokenizer.EOS]
     return tokens[:context]
 
@@ -429,7 +429,7 @@ def generate(model, request):
 
     This mirrors the runtime decoder in ```infer.py``` but without the grammar
     constraint and without the KV cache (clarity over speed; it is only
-    used for evaluation). The same ```PLAN_BUDGET``` bounds it, so a long plan
+    used for evaluation). The same ```PLAN_BUDGET``` limits it, so a long plan
     (a relative chain) is decoded in full instead of being cut off and
     wrongly counted as a miss.
 

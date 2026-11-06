@@ -1,13 +1,13 @@
-### **The {{ app_name }} Logging Configuration Settings**
+### **The {{ app_name }} Logging Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Logging Configuration
 ###
-### Settings for application logging using the colorlog package
+### Config for application logging using the colorlog package
 log.colorlog:
   ### Where the log file lives (no log file by default)
   file: null

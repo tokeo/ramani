@@ -92,7 +92,7 @@ def get_openapi_custom():
         return app.nicegui.fastapi_app.openapi_schema
     # prepare the openapi schema record
     openapi_schema = get_openapi(
-        # informational settings
+        # informational fields
         title='{{ app_name }} OpenAPI Documentation',
         summary=SUMMARY,
         description=DESCRIPTION,
@@ -117,7 +117,7 @@ def get_openapi_custom():
     openapi_schema['info']['x-logo'] = dict(
         url='/favicon.ico',
     )
-    # safe settings as cached data
+    # save the schema as cached data
     app.nicegui.fastapi_app.openapi_schema = openapi_schema
     # return the values
     return app.nicegui.fastapi_app.openapi_schema

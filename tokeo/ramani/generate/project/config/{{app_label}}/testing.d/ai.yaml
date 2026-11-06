@@ -1,6 +1,6 @@
-### ### The {{ app_name }} Testing Configuration Settings (ai)
+### ### The {{ app_name }} Testing Configuration (ai)
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 ai:

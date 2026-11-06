@@ -5,7 +5,7 @@ The model asks for knowledge itself: the tool ranks the sections of the text
 files below ```base_dir``` for a query (BM25, ```core/ai/knowledge.py```) and
 returns the best ones with their sources. Unlike the retrieve transformer, the
 retrieval is a tool call, so it passes the guards and the sandbox like any
-other: redact can mask, truncate can cap, the trace records the hits.
+other: redact can mask, truncate can cut, the trace records the hits.
 
 This module is self-contained: it holds only the tool class. The project names
 it by its class path (module:Class) under ```ai.tools``` in the config, so it needs

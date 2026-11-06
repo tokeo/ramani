@@ -22,7 +22,7 @@ a channel to the configured grpc url and calls the matching stub method.
     how to validate them. --user without --password sends an empty password,
     --password without --user is rejected
 - ping is a sync smoke test: round-trips a small PingResponse, never
-    dispatches a worker; useful to verify connectivity without Dramatiq
+    dispatches a worker; useful to check connectivity without Dramatiq
 - count_words dispatches the count_words actor on the server and returns an
     empty response right away
 - The stubs of the proto are imported by the commands, so the app and its

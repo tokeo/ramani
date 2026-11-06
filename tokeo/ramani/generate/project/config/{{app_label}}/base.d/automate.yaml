@@ -1,13 +1,13 @@
-### **The {{ app_name }} Automate Configuration Settings**
+### **The {{ app_name }} Automate Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### Automation Tasks Configuration
 ###
-### Settings for defining automation tasks that can be run on-demand
+### Config for automation tasks that can be run on-demand
 automate:
   ### list of hosts reference
   hosts:
@@ -20,7 +20,7 @@ automate:
   #     - web1
   #     - web2
   ### named connections, a host or task takes one by "use"; _defaults hold
-  ### the settings of all connections
+  ### the options of all connections
   # connections:
   #   _defaults:
   #     connect_timeout: 60
@@ -31,7 +31,7 @@ automate:
   #     known_hosts: null
   ### list of tasks
   tasks:
-    ### optional default settings
+    ### optional default options
     _defaults:
       ### default module for tasks implementations
       module: {{ app_label }}.core.tasks.automate

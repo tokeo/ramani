@@ -164,8 +164,8 @@ def dramatiq():
     """
     Entry point for Dramatiq worker processes.
 
-    This function initializes the application with Dramatiq configuration
-    and settings when the application is started as a Dramatiq worker.
+    This function initializes the application with its Dramatiq config
+    when the application is started as a Dramatiq worker.
     It sets up the necessary environment without running the full
     CLI application stack.
 

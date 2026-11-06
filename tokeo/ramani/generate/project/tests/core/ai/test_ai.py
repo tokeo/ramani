@@ -1,7 +1,7 @@
 """
 Real test cases for the {{ app_name }} ai setup.
 
-Verifies the project's own tools, the ```guarded``` agent, and the guard
+Checks the project's own tools, the ```guarded``` agent, and the guard
 pipeline against the real shipped configuration (the testing environment
 merges ```testing.d/ai.yaml``` over ```base.d/ai.yaml```, pointing the file tools
 below ```tmp/tests```). Run from the project root, for example with
@@ -156,7 +156,7 @@ def test_{{ app_label }}_ai_tool_schema_validator_denies_when_strict():
     # anything runs (here: the required "input" is missing)
     with {{ app_class_name }}AiTestApp() as app:
         guard = TokeoAiToolSchemaValidator(app)
-        # strict comes from the declaration's options, handed in by _setup
+        # strict comes from the item's options, handed in by _setup
         guard._setup(app, 'tool_schema_validate', {'options': {'strict': True}})
         invocation = Invocation(id='t1', name='calc', arguments={}, parameters=TokeoAiCalcTool.Meta.parameters)
         guard.on_call(None, invocation)
@@ -237,20 +237,20 @@ def test_{{ app_label }}_ai_redact_guard_raises_on_missing_pattern():
             guard.on_return(None, invocation)
 
 
-def test_{{ app_label }}_ai_truncate_transformer_caps_long_results():
+def test_{{ app_label }}_ai_truncate_transformer_cuts_long_results():
     # the project truncate transformer keeps the head of an over-long text and
-    # marks the cut, so a big blob cannot blow the budget. it acts at two
+    # marks the cut, so a big blob cannot overflow the context. it acts at two
     # stages: on_return (a tool result) and on_close (the final answer)
     with {{ app_class_name }}AiTestApp() as app:
         transformer = {{ app_class_name }}AiTruncateTransformer(app)
         transformer._setup(app, 'truncate', dict(options=dict(limit=10)))
-        # on_return caps the tool result text and notes the cut on reason
+        # on_return cuts the tool result text and notes the cut on reason
         invocation = Invocation(id='t1', name='read_file', arguments={})
         invocation.result = create_tool_result('x' * 50)
         transformer.on_return(None, invocation)
         assert invocation.result.value.as_str == 'x' * 10 + '... [truncated 40 chars]'
         assert 'truncated 40 chars' in (invocation.reason or '')
-        # on_close caps the run's final answer text
+        # on_close cuts the run's final answer text
         result = ChatResult(text='y' * 50)
         transformer.on_close(None, result)
         assert result.text == 'y' * 10 + '... [truncated 40 chars]'
@@ -319,17 +319,17 @@ def test_{{ app_label }}_ai_knowledge_index_ranks_sections_with_sources():
 
 def test_{{ app_label }}_ai_knowledge_index_is_built_again_after_a_change(scratch):
     # the index lives in memory and is built again when a file changes
-    folder = scratch / 'knowledge'
-    folder.mkdir(exist_ok=True)
-    (folder / 'a.md').write_text('apples are green')
+    knowledge_dir = scratch / 'knowledge'
+    knowledge_dir.mkdir(exist_ok=True)
+    (knowledge_dir / 'a.md').write_text('apples are green')
     try:
-        assert KnowledgeIndex.of(str(folder)).search('bananas', min_score=0) == []
-        (folder / 'a.md').write_text('apples are green\n\nbananas are yellow')
-        hits = KnowledgeIndex.of(str(folder)).search('bananas', min_score=0)
+        assert KnowledgeIndex.of(str(knowledge_dir)).search('bananas', min_score=0) == []
+        (knowledge_dir / 'a.md').write_text('apples are green\n\nbananas are yellow')
+        hits = KnowledgeIndex.of(str(knowledge_dir)).search('bananas', min_score=0)
         assert [(hit.source, hit.section) for hit in hits] == [('a.md', 2)]
     finally:
-        (folder / 'a.md').unlink()
-        folder.rmdir()
+        (knowledge_dir / 'a.md').unlink()
+        knowledge_dir.rmdir()
 
 
 def test_{{ app_label }}_ai_retrieve_transformer_puts_sources_before_the_question():

@@ -4,7 +4,7 @@ Wasm sandbox tests for the {{ app_name }} project's two python-exec tools.
 Proves that both built-in exec tools run through the wasm sandbox from inside a
 generated project: the untrusted tool runs model-style code with total
 isolation (no app mount), and the trusted tool is rebuilt in the guest from the
-mounted project source. The enforcement mechanics (hard memory cap) are shown
+mounted project source. The enforcement mechanics (hard memory limit) are shown
 with a tiny WAT guest so they run anywhere wasmtime is installed; the real
 guest runs need a user-supplied CPython-WASI build and skip without one; set
 ```TOKEO_TEST_PYTHON_WASM``` and ```TOKEO_TEST_WASI_STDLIB``` to run them.
@@ -22,7 +22,7 @@ wasmtime = pytest.importorskip('wasmtime')
 
 
 # a guest that grows memory forever, trapping once the store limit refuses;
-# proves the hard cap without needing a real interpreter
+# proves the hard limit without needing a real interpreter
 _GROW_WAT = r"""(module (memory (export "memory") 1)
   (func (export "_start")
     (loop $g (if (i32.eq (memory.grow (i32.const 1)) (i32.const -1))
@@ -64,7 +64,7 @@ _WASI_STDLIB = os.environ.get('TOKEO_TEST_WASI_STDLIB')
 _RUNTIME = _PYTHON_WASM or os.path.abspath('./wasm/python.wasm')
 _STDLIB = _WASI_STDLIB or os.path.abspath('./wasm/lib/python3.13')
 
-# the trusted tool is rebuilt in the guest from its dotted path
+# the trusted tool is rebuilt in the guest from its class path
 # (```tokeo.core.ai.tools...```), so the guest needs the tokeo source, the app
 # source, AND the dependencies the tool base class pulls in (cement). these may
 # live in three different trees (e.g. tokeo as a sibling checkout, the project

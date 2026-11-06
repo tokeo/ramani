@@ -85,7 +85,7 @@ async def api_example():
 
     This endpoint provides a simple example of how to define
     API routes in the application. It returns a basic message
-    to verify the API is functioning.
+    to check the API is functioning.
 
     ### Returns
 

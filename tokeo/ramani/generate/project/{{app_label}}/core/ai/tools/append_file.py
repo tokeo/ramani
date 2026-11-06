@@ -5,7 +5,7 @@ Appends a line of text to one configured file below a configured base
 directory: the writing half of the file pair, and so the natural target for
 a policy guard: an agent that may read should not silently write, and denying
 ```append_file``` by name shows action-level governance on a tool that really
-exists. The target ```file``` and the ```base_dir``` are tool settings from the
+exists. The target ```file``` and the ```base_dir``` are tool options from the
 configuration; the model only supplies the text.
 
 This module is self-contained: it holds only the tool class. The project names
@@ -37,15 +37,15 @@ class TokeoAiAppendFileTool(TokeoAiTool):
     Tool that appends a line of text to the configured file.
 
     The ```Meta``` description and parameters are what the model sees; the
-    ```base_dir``` and the target ```file``` are the tool's own settings: they
-    are declared in ```config_defaults``` (the tool's whole outward surface),
+    ```base_dir``` and the target ```file``` are the tool's own options: they
+    are set in ```config_defaults``` (the tool's whole outward surface),
     overridden per item by its config ```options``` and read through
     ```_config```.
 
     """
 
     class Meta:
-        """Tool meta-data sent to the model, plus the tool's own settings."""
+        """Tool meta-data sent to the model, plus the tool's own options."""
 
         # Short description the model sees
         description = 'append a line of text to the configured notes file'

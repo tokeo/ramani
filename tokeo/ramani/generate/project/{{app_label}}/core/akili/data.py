@@ -247,7 +247,7 @@ def _count(rng, unit):
     # numbers must be copied exactly ("2" stays "2", never becomes "26"),
     # so they are over-represented to drill exact copying. weeks stay small
     # (1-8) so the resulting day shift (count x 7) is realistic and well
-    # within the grammar's three-digit cap; months stay within a year
+    # within the grammar's three-digit limit; months stay within a year
     # (1-11) and years stay small (1-5), the ranges that actually occur
     if unit.get('factor', 1) > 1:
         return rng.randrange(1, 9)
@@ -391,7 +391,7 @@ def _render_date_daydiff_relative(rng, lang_en):
     # forward relative words are used, so the count is positive and the
     # phrasing natural ("from today until tomorrow"). two relative endpoints
     # ("from yesterday until tomorrow") would need four steps (a shift for
-    # each endpoint plus the diff), which exceeds the cap, so they are
+    # each endpoint plus the diff), which exceeds the limit, so they are
     # deliberately out of scope
     words = _LEXICON['relative_words'][_lang(lang_en)]
     forward = [(word, row['tool'], str(row['shift'])) for word, row in words.items() if row['shift'] > 0]

@@ -1,6 +1,6 @@
 # pdoc template overrides
 
-This folder overrides {{ app_name }}'s API documentation. It is listed before
+This directory overrides {{ app_name }}'s API documentation. It is listed before
 ```tokeo.templates.pdoc.html``` in ```config/{{ app_label }}/base.d/pdoc.yaml```,
 so any file you drop here shadows the same-named file from tokeo while tokeo
 supplies the rest.

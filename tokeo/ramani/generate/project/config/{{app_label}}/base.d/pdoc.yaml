@@ -1,13 +1,13 @@
-### **The {{ app_name }} PDoc Configuration Settings**
+### **The {{ app_name }} PDoc Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### PDoc Documentation Generator Configuration
 ###
-### Settings for the PDoc Python documentation generator and server
+### Config for the PDoc Python documentation generator and server
 pdoc:
   ### modules to render (str | list), app, test and tokeo as default
   modules: null

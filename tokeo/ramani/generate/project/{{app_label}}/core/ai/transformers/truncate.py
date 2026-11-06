@@ -1,14 +1,14 @@
 """
 Truncate transformer example for the {{ app_name }} ai agent.
 
-Caps over-long text so a large payload cannot blow the context budget or flood
+Cuts over-long text so a large payload cannot overflow the context or flood
 the trace and log. It keeps the head and appends a marker that records how much
-was cut; it blocks nothing and never changes a ```decision```.
+was cut; it denies nothing and never changes a ```decision```.
 
 This is a worked example, derived from the core ```TokeoAiTruncateTransformer```
-type. It acts at two stages: ```on_return``` caps a completed tool call's
+type. It acts at two stages: ```on_return``` cuts a completed tool call's
 ```result.value.as_str``` (a big file read, a large retrieval), and ```on_close```
-caps the run's final ```ChatResult.text```. Each stage reads its own settings via
+cuts the run's final ```ChatResult.text```. Each stage reads its own options via
 ```_config(stage)```, so the config can set a different ```limit```/```marker```
 per stage (an ```on_return```/```on_close``` options block) or one shared default.
 
@@ -23,7 +23,7 @@ ai:
     truncate:
       type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
-        # cap the model-facing text at this many characters; 0 disables the cap
+        # max characters of the model-facing text; 0 means unlimited
         limit: 2000
         # appended in place of the removed tail; "{n}" is the cut count
         marker: '... [truncated {n} chars]'
@@ -36,7 +36,7 @@ from tokeo.core.ai.transformers.truncate import TokeoAiTruncateTransformer
 
 class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
     """
-    A truncate transformer that caps over-long text at the tool and final stages.
+    A truncate transformer that cuts over-long text at the tool and final stages.
 
     When the text is longer than ```limit``` characters it keeps the head and
     appends ```marker``` (with the cut count), so the model (or the caller) still
@@ -53,8 +53,8 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
         # the configurable defaults, as one dict; an entry's options (and a
         # per-stage override) overlay this, read at runtime via _config. limit:
-        # the character cap, 0 disables it. marker: appended in place of the cut
-        # tail, "{n}" is the removed count
+        # the max characters, 0 means unlimited. marker: appended in place of
+        # the cut tail, "{n}" is the removed count
         config_defaults = dict(
             limit=2000,
             marker='... [truncated {n} chars]',
@@ -62,18 +62,18 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
     def _cap(self, text, stage):
         """
-        Return ```text``` capped at the stage's ```limit```, plus the cut count.
+        Return ```text``` cut to the stage's ```limit```, plus the cut count.
 
         ### Args
 
         - **text** (str): The text to shorten
-        - **stage** (str): The stage whose settings to read (```limit```,
+        - **stage** (str): The stage whose options to read (```limit```,
             ```marker```)
 
         ### Returns
 
         - **tuple**: ```(capped_text, cut)```; ```cut``` is 0 when nothing was
-            removed (the cap is off, or the text already fits), in which case
+            removed (the limit is 0, or the text already fits), in which case
             ```capped_text``` is the original text
 
         """
@@ -85,16 +85,16 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
     def on_return(self, ctx, invocation):
         """
-        Shorten an over-long tool result text in place; never blocks.
+        Shorten an over-long tool result text in place; never denies.
 
-        Runs at the tool-return station, after the tool ran. ```ctx``` is the
+        Runs at the tool-return stage, after the tool ran. ```ctx``` is the
         running state (unused here).
 
         ### Args
 
         - **ctx** (TokeoAiContext): The running state
         - **invocation** (Invocation): The completed tool call whose
-            ```result.value.as_str``` (the model-facing view) is capped when
+            ```result.value.as_str``` (the model-facing view) is cut when
             longer than ```limit```; the structured views are left untouched
 
         """
@@ -103,8 +103,8 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         capped, cut = self._cap(invocation.result.value.as_str or '', GOVERNOR_STAGE_ON_RETURN)
         if not cut:
             return
-        # cap only as_str, the model-facing view: truncate shrinks what the model
-        # reads to protect the budget, it hides nothing, so the structured views
+        # cut only as_str, the model-facing view: truncate shrinks what the model
+        # reads to protect the context, it hides nothing, so the structured views
         # (as_json, as_data) keep the full output for the trace. coherence across
         # the three views is not needed here, unlike a redact guard that must not
         # leave a secret in an unmasked view
@@ -114,7 +114,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
     def on_close(self, ctx, result):
         """
-        Shorten an over-long final answer text in place; never blocks.
+        Shorten an over-long final answer text in place; never denies.
 
         Runs once on the run's final result, after the loop. ```ctx``` is the
         running state (unused here).
@@ -122,7 +122,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         ### Args
 
         - **ctx** (TokeoAiContext): The running state
-        - **result** (ChatResult): The final answer whose ```text``` is capped
+        - **result** (ChatResult): The final answer whose ```text``` is cut
             when longer than ```limit```
 
         """

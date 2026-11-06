@@ -1,13 +1,13 @@
-### **The {{ app_name }} NiceGui Configuration Settings**
+### **The {{ app_name }} NiceGui Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### NiceGUI Web Interface Configuration
 ###
-### Settings for the NiceGUI web framework and interface behavior
+### Config for the NiceGUI web framework and interface behavior
 nicegui:
   ### serve the web service
   host: '127.0.0.1'

@@ -1,13 +1,13 @@
-### **The {{ app_name }} Smtp Configuration Settings**
+### **The {{ app_name }} Smtp Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
 
 ### ### SMTP Email Configuration
 ###
-### Settings for email delivery including server connectivity, message formatting,
+### Config for email delivery including server connectivity, message formatting,
 ### and default recipients
 smtp:
   ### define one or more standard recipients

@@ -291,9 +291,9 @@ def test_{{ app_label }}_akili_stays_apache_under_the_project_license():
     # akili is Apache-2.0 whatever license the project chose (here
     # {{ project_license }}): its LICENSE.txt ships next to it, the package data
     # takes it into the wheel, and every module names the license
-    folder = Path(akili.__file__).parent
-    license_text = (folder / 'LICENSE.txt').read_text()
+    akili_dir = Path(akili.__file__).parent
+    license_text = (akili_dir / 'LICENSE.txt').read_text()
     assert 'Apache License' in license_text and 'Version 2.0' in license_text
-    for module in sorted(folder.glob('*.py')):
+    for module in sorted(akili_dir.glob('*.py')):
         assert 'SPDX-License-Identifier: Apache-2.0' in module.read_text(), module.name
     assert '"{{ app_label }}.core.akili" = ["**/LICENSE.*"' in Path('pyproject.toml').read_text()

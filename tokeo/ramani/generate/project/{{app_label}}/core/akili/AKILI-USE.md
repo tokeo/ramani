@@ -119,7 +119,7 @@ model as text: deny-and-continue, no crash, no retry storm.
 
 Expected: a plain ```[mock] calc 2 + 3``` echo. The ```audited``` agent carries
 no tools, so the very same prompt executes nothing. Switching the agent
-swaps the whole composition: tools, guards, sandboxes, budgets.
+swaps the whole composition: tools, guards, sandboxes, limits.
 
 ### 6. Inspecting the trace
 
@@ -405,7 +405,7 @@ training data.
 
 Expected failure: a plan with a mangled count (three digits of the five)
 and a precisely computed, wrong date. Why: day counts were trained small
-on purpose, and the plan grammar caps a count at three digits (0..999);
+on purpose, and the plan grammar limits a count to three digits (0..999);
 a correct plan for 12345 is *syntactically impossible*, so the model must
 drop digits. The byte tokenizer reads any number, but the model has no
 concept of magnitude: digits are tokens, not quantities. Note the second
@@ -450,10 +450,10 @@ composition.
 The hallucinated plan is right there in the trace: arguments, schema,
 decision, result. And this closes the circle back to part 1: *because*
 models break like this, the fundi machinery exists. The validate guard
-checks arguments against the schema, deny and the sandbox chain bound
+checks arguments against the schema, deny and the sandbox chain limit
 what a wrong plan can touch, ```max_loops``` stops a model stuck on
 refusals, and the trace makes every step inspectable. The model may be
-wrong; the architecture makes the error visible, bounded, and cheap.
+wrong; the architecture makes the error visible, limited, and cheap.
 
 ### The per-class table shows the seam behind the average
 
@@ -467,7 +467,7 @@ looking at a broken model; you are looking at a thin class. The fix is
 never "more steps": it is more, or better-weighted, data for that class.
 The generator drills this seam on purpose (the re-roll inside
 the ```_render_shift``` helper of ```data.py```), and the table is how
-you verify the drill worked. One reading rule: on classes with fewer
+you check the drill worked. One reading rule: on classes with fewer
 than ~25 held-out examples read the absolute counts, not the
 percentages: two hits move a small class by ten points.
 

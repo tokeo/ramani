@@ -1,6 +1,6 @@
 ### **The {{ app_name }} Production Configuration Secrets**
 ###
-### - Secrets will be merged into Application Configuration.
+### - The secrets are merged into the app config.
 ### - This files should not be checked into source repos.
 ---
 
@@ -8,7 +8,7 @@
 
 {% if feature_dramatiq == "Y" %}
 dramatiq:
-  ### connection settings for rabbitmw
+  ### connection options of rabbitmq
   rabbitmq:
     ### connection url to rabbitmq server
     url: amqp://localhost:5672/

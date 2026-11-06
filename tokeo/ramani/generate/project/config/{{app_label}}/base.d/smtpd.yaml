@@ -1,6 +1,6 @@
-### **The {{ app_name }} Smtpd Configuration Settings**
+### **The {{ app_name }} Smtpd Configuration**
 ###
-### - Settings will be merged into Application Configuration.
+### - The config is merged into the app config.
 ---
 
 
@@ -11,11 +11,11 @@
 ### Each service binds one or more listeners and dispatches the SMTP dialog to
 ### your own handler class (a subclass of tokeo.ext.smtpd.TokeoSmtpdEvents).
 ###
-### Every setting below is shown with its default value and is commented out;
+### Every option below is shown with its default value and is commented out;
 ### uncomment and change only what you need. The listener host/port is kept
 ### active so the example service runs out of the box on 127.0.0.1:2525.
 smtpd:
-  ### global caps across all services (default: unlimited). A single service may
+  ### global limits across all services (default: unlimited). A single service may
   ### set a smaller value under its own server_options; the smaller value always wins.
   ### maximum connections processed at the same time over all services
   # max_processings: null
@@ -60,7 +60,7 @@ smtpd:
         ### line is answered by 554 and closes the connection
         # io_buffer_max_size: 1048576
         ### hard message size limit in bytes; null = no limit. A handler may
-        ### instead enforce a dynamic cap in on_message_data_receiving_event
+        ### instead enforce a dynamic limit in on_message_data_receiving_event
         ### by checking ctx.message.bytesize and raising Smtpd552Exception
         # data_size: null
 
