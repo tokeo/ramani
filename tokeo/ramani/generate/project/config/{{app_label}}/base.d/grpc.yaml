@@ -12,7 +12,7 @@ grpc:
   ### serve and connect to the grpc service
   url: localhost:50051
   ### Thread Pool max-workers for grpc service
-  max_worker: 2
+  max_workers: 2
   ### module and method to launch grpc server
   proto_add_servicer_to_server: {{ app_label }}.core.grpc.proto.{{ app_label }}_pb2_grpc:add_{{ app_class_name }}Servicer_to_server
   ### module and servicer for grpc implementations

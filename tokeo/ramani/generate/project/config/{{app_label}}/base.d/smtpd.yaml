@@ -16,7 +16,7 @@
 ### active so the example service runs out of the box on 127.0.0.1:2525.
 smtpd:
   ### global caps across all services (default: unlimited). A single service may
-  ### set a smaller value under its own settings; the smaller value always wins.
+  ### set a smaller value under its own server_options; the smaller value always wins.
   ### maximum connections processed at the same time over all services
   # max_processings: null
   ### maximum simultaneous open connections over all services
@@ -38,8 +38,8 @@ smtpd:
           port: 2525
       ### custom options handed to your handler as __init__(options=...)
       # options: {}
-      ### per-service settings; every value shown below is the default
-      settings:
+      ### the options of the server of this service; every value shown below is the default
+      server_options:
 
         ### --- concurrency & limits ---
         ### maximum messages processed at the same time (null = unlimited)
