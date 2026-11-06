@@ -20,6 +20,7 @@ Define timer agents as simple Python functions:
 
 ```python
 from tokeo.ext.appshare import app
+from {{ app_label }}.core import tasks
 
 def process_daily_report(report_type='summary'):
     '''
@@ -29,7 +30,7 @@ def process_daily_report(report_type='summary'):
     '''
     app.log.info(f'Starting daily {report_type} report generation')
     # Delegate actual processing to an asynchronous worker
-    app.dramatiq.actors.generate_report.send(report_type)
+    tasks.actors.generate_report.send(report_type)
 ```
 
 Configure scheduled execution in your application's config file:

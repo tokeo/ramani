@@ -1,7 +1,7 @@
 ### **The {{ app_name }} Production Configuration Secrets**
 ###
 ### - The secrets are merged into the app config.
-### - This files should not be checked into source repos.
+### - These files should not be checked into source repos.
 ---
 
 

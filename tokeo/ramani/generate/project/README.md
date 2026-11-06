@@ -157,7 +157,7 @@ Scheduler> tasks fire 1  # Fire task with ID 1 now
 {% if feature_pocketbase == "Y" %}
 ### Use PocketBase
 
-The connection, the service login and the realtime limits are set in ```config/{{ app_label }}/base.d/pocketbase.yaml```. In code the app reaches the server through ```app.pocketbase```, a nicegui page follows records live; ```POCKETBASE.md``` of tokeo-pocketbase walks through it.
+The connection, the service login and the realtime limits are set in ```config/{{ app_label }}/base.d/pocketbase.yaml```. In code the app reaches the server through ```app.db``` (the client ```app.db.pb```), a nicegui page follows records live; ```POCKETBASE.md``` of tokeo-pocketbase walks through it.
 
 {% endif %}
 {% if feature_smtpd == "Y" %}
@@ -197,7 +197,7 @@ smtp:
 {% if feature_ai == "Y" %}
 ### Ask an AI Agent
 
-Your application speaks to AI providers through one governed runtime. The model plans, the pipeline governs, the tools compute. Profiles and agents are plain YAML in ```config/```: ```audited``` records everything and forbids nothing, ```guarded``` adds validation and policy. The tools are your own plain functions in ```{{ app_label }}/core/ai/tools/```, activated in groups per profile.
+Your application speaks to AI providers through one governed runtime. The model plans, the pipeline governs, the tools compute. Profiles and agents are plain YAML in ```config/```: ```audited``` records everything and forbids nothing, ```guarded``` adds validation and policy. The tools are your own tool classes (```TokeoAiTool``` with an ```exec()```) in ```{{ app_label }}/core/ai/tools/```, activated in groups per profile.
 
 ```bash
 # The mock provider answers without any external service
@@ -310,7 +310,7 @@ Your project is organized into a clean, modular structure:
 - ```{{ app_label }}/core/logic``` - Space for your core application logic
 - ```{{ app_label }}/core/tasks/``` - Implementations of actors, agents, automations, operations, performers etc.
 {% if feature_ai == "Y" %}
-- ```{{ app_label }}/core/ai/``` - AI providers and plain-function tools behind the guarded contracts
+- ```{{ app_label }}/core/ai/``` - AI providers and tool classes behind the guarded contracts
 {% endif %}
 {% if feature_ai == "Y" and feature_ai_akili == "Y" %}
 - ```{{ app_label }}/core/akili/``` - The train-first micro LLM lab: model, lexicon (```AKILI-LEX.yaml```), teaching docs

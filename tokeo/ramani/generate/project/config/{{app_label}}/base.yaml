@@ -1,7 +1,7 @@
 ### **The {{ app_name }} Main Configuration**
 ###
 ### The tokeo.ext.appenv module handles the configuration loading and overriding mechanism for
-### Tokeo and derivated applications. Each configuration file is based on YAML files with a
+### Tokeo and derived applications. Each configuration file is based on YAML files with a
 ### hierarchical structure that supports environment-specific config and local overrides.
 ###
 ### ### Configuration File Hierarchy:
@@ -35,11 +35,11 @@
 ### - When running in production mode, ```smtp.host``` will be ```production.host.domain```
 ### - All other smtp keys from base.yaml remain unchanged
 ###
-### ### Extende Local Configuration Files:
+### ### Extend Local Configuration Files:
 ###
 ### Local configuration files (ending with ```.local.yaml```) are used for environment-specific
 ### secrets and config that should not be checked into source control. These files should
-### be left added to ```.gitignore```.
+### be added to ```.gitignore```.
 ---
 
 

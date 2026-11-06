@@ -8,8 +8,8 @@
 ### ### Fundi AI configuration
 ###
 ### Config for the tools, guards, transformers, conductors, sandboxes,
-### agents, profiles etc. For the full ai config reference look at the documentation
-### ships with module ```tokeo.core.ai.config```
+### agents, profiles etc. For the full ai config reference see CONFIG.md of
+### tokeo-fundi (module ```tokeo.core.ai.config```)
 ai:
   ### tokeo-fundi is source-available, not open source
   ### read LICENSE.md of tokeo-fundi first and set true to prevent notice
@@ -168,8 +168,8 @@ ai:
         - knowledge
       # options:
       #   max_output_mb: 1     # stdout and stderr kept, larger values fail
-    ### error/resource isolation in a subprocess (timeout + optional memory limit);
-    ### not a jail against hostile code
+    ### crash and resource isolation in a subprocess (timeout + optional memory
+    ### limit); not a jail against hostile code
     jailed:
       type: subprocess
       tools:

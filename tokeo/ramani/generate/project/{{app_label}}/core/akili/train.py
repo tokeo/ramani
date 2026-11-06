@@ -91,7 +91,7 @@ from {{ app_label }}.core.akili.infer import PLAN_BUDGET
 #: - layers: depth. more blocks = more rounds of "look around and combine",
 #:   which is what lets a three-step plan be reasoned about
 #: - heads: parallel attention channels; each looks at the sequence a
-#:   different way (here 96/4 = 24 dimensions per head)
+#:   different way (here 128/4 = 32 dimensions per head)
 #: - ff: the per-position MLP's hidden width, the usual 4x dim
 #: - context: the maximum number of token positions; it limits request+plan
 #:   length and is the size of the position embedding table

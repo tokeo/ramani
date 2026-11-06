@@ -26,7 +26,7 @@ dramatiq:
   ### The number of messages to prefetch from the queue for each worker.
   ### In-progress messages are included in the count. When set to "1",
   ### a new message is only fetched once a previous one is done. If not
-  ### or "0" provided, two times the number of configured worker threads
+  ### provided or "0", two times the number of configured worker threads
   ### are prefetched.
   queue_prefetch: 0
   ### The number of messages to prefetch from the delay queue for each worker.
