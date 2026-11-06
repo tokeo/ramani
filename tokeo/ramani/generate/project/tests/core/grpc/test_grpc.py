@@ -11,7 +11,7 @@ import signal
 
 from {{ app_label }}.core.exc import {{ app_class_name }}Error
 from {{ app_label }}.main import {{ app_class_name }}Test
-from tests.utils import free_port
+from tests.utils import find_free_port
 from tests.utils.process import SubProcess
 
 #: The probe that serves grpc in a process of its own
@@ -35,7 +35,7 @@ def _has_pong(url):
 
 def test_grpc_serve_answers_ping_and_ends_on_term():
     """The served app answers grpccall ping and ends by SIGTERM with 0."""
-    url = f'localhost:{free_port()}'
+    url = f'localhost:{find_free_port()}'
     env = {'{{ app_label | upper }}_GRPC_URL': url}
     with SubProcess.probe(PROBE, env=env) as process:
         process.wait_for(lambda: _has_pong(url))
