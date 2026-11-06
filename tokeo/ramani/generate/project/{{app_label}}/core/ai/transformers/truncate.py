@@ -9,7 +9,7 @@ This is a worked example, derived from the core ```TokeoAiTruncateTransformer```
 type. It acts at two stages: ```on_return``` cuts a completed tool call's
 ```result.value.as_str``` (a big file read, a large retrieval), and ```on_close```
 cuts the run's final ```ChatResult.text```. Each stage reads its own options via
-```_config(stage)```, so the config can set a different ```limit```/```marker```
+```_config(stage)```, so the config can set a different ```max_chars```/```marker```
 per stage (an ```on_return```/```on_close``` options block) or one shared default.
 
 This module is self-contained: it holds only the transformer class. The
@@ -24,7 +24,7 @@ ai:
       type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
         # max characters of the model-facing text; 0 means unlimited
-        limit: 2000
+        max_chars: 2000
         # appended in place of the removed tail; "{n}" is the cut count
         marker: '... [truncated {n} chars]'
 ```
@@ -38,7 +38,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
     """
     A truncate transformer that cuts over-long text at the tool and final stages.
 
-    When the text is longer than ```limit``` characters it keeps the head and
+    When the text is longer than ```max_chars``` characters it keeps the head and
     appends ```marker``` (with the cut count), so the model (or the caller) still
     sees the start of a large output without the whole blob entering the history.
     It never changes the ```decision``` and notes the cut on ```reason``` (at the
@@ -55,33 +55,33 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         # override) overlay them, read at runtime via _config
         config_defaults = dict(
             # the max characters, 0 means unlimited
-            limit=2000,
+            max_chars=2000,
             # appended in place of the cut tail, "{n}" is the removed count
             marker='... [truncated {n} chars]',
         )
 
     def _truncate_text(self, text, stage):
         """
-        Return ```text``` cut to the stage's ```limit```, plus the cut count.
+        Return ```text``` cut to the stage's ```max_chars```, plus the cut count.
 
         ### Args
 
         - **text** (str): The text to shorten
-        - **stage** (str): The stage whose options to read (```limit```,
+        - **stage** (str): The stage whose options to read (```max_chars```,
             ```marker```)
 
         ### Returns
 
         - **tuple**: ```(truncated_text, cut)```; ```cut``` is 0 when nothing was
-            removed (the limit is 0, or the text already fits), in which case
+            removed (max_chars is 0, or the text already fits), in which case
             ```truncated_text``` is the original text
 
         """
-        limit = self._config('limit', stage=stage)
-        if not limit or len(text or '') <= limit:
+        max_chars = self._config('max_chars', stage=stage)
+        if not max_chars or len(text or '') <= max_chars:
             return text, 0
-        cut = len(text) - limit
-        return text[:limit] + self._config('marker', stage=stage).format(n=cut), cut
+        cut = len(text) - max_chars
+        return text[:max_chars] + self._config('marker', stage=stage).format(n=cut), cut
 
     def on_return(self, ctx, invocation):
         """
@@ -95,7 +95,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         - **ctx** (TokeoAiContext): The running state
         - **invocation** (Invocation): The completed tool call whose
             ```result.value.as_str``` (the model-facing view) is cut when
-            longer than ```limit```; the structured views are left untouched
+            longer than ```max_chars```; the structured views are left untouched
 
         """
         if invocation.result is None or invocation.result.value is None:
@@ -123,7 +123,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
         - **ctx** (TokeoAiContext): The running state
         - **result** (ChatResult): The final answer whose ```text``` is cut
-            when longer than ```limit```
+            when longer than ```max_chars```
 
         """
         truncated_text, cut = self._truncate_text(result.text or '', GOVERNOR_STAGE_ON_CLOSE)

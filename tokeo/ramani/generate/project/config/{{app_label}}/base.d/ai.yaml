@@ -130,7 +130,7 @@ ai:
     truncate:
       type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
-        limit: 500
+        max_chars: 500
     ### puts today's date in front of the prompt (project example of the
     ### input pipeline at on_prompt, core/ai/transformers/today.py)
     today_prompt:
@@ -167,7 +167,7 @@ ai:
         - answer42
         - knowledge
       # options:
-      #   output_mb: 1         # stdout and stderr kept, larger values fail
+      #   max_output_mb: 1     # stdout and stderr kept, larger values fail
     ### error/resource isolation in a subprocess (timeout + optional memory limit);
     ### not a jail against hostile code
     jailed:
@@ -176,9 +176,9 @@ ai:
         - mathematics
       options:
         timeout: 10            # wall-clock seconds, then SIGKILL
-        # memory_mb: 256       # rlimit (linux; macos rejects small limits)
+        # max_memory_mb: 256   # rlimit (linux; macos rejects small limits)
         cwd: tmp/sandbox
-        # output_mb: 1         # stdout and stderr kept, larger values fail
+        # max_output_mb: 1     # stdout and stderr kept, larger values fail
     ### real isolation for model code: a wasm guest, hard memory limit, no network.
     ### opt-in: needs the extra tokeo-fundi[wasm] (feature_ai_wasm) and a
     ### built python.wasm (core/ai/sandboxes/WASM.md of tokeo-fundi)
@@ -189,11 +189,11 @@ ai:
       options:
         runtime: ./wasm/python.wasm
         stdlib: ./wasm/lib/python3.13
-        memory_mb: 256
+        max_memory_mb: 256
         timeout: 10
-        # disk_mb: 64          # MB the guest may write, its output included
+        # max_disk_mb: 64      # MB the guest may write, its output included
         # watch_interval: 1.0  # seconds between the disk and file checks
-        # output_mb: 1         # stdout and stderr kept, larger values fail
+        # max_output_mb: 1     # stdout and stderr kept, larger values fail
 
 {% if feature_ai_docker == "Y" %}
     ### a hardened, throwaway container of the app's own image (make docker):
@@ -206,12 +206,12 @@ ai:
         - mathematics
       options:
         image: {{ app_label }}:latest
-        memory_mb: 256
+        max_memory_mb: 256
         timeout: 20
         # command: podman      # rootless instead of docker
         # reuse: true          # one container for the process, not per call
-        # disk_mb: 64          # size of the tmpfs /tmp
-        # output_mb: 1         # stdout and stderr kept, larger values fail
+        # max_disk_mb: 64      # size of the tmpfs /tmp
+        # max_output_mb: 1     # stdout and stderr kept, larger values fail
 
 {% endif %}
   ### agents are the composition root: they bind tools, governors and the sandbox

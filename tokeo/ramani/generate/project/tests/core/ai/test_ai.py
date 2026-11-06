@@ -72,22 +72,22 @@ def test_{{ app_label }}_ai_tools_exec(scratch):
         # calc and read_file hand back a raw value; the date tools and the file
         # writer hand back a ToolResult whose as_str the model would see, so the
         # test reads each according to what the tool returns
-        assert app.ai._tool('calc').exec(input='2 + 3') == 5
-        assert len(app.ai._tool('current').exec().value.as_str) == 24  # YYYY-mm-dd HH:MM:SS.MMMZ
-        assert app.ai._tool('read_file').exec(path='sample.txt') == 'buy milk\n'
-        appended = app.ai._tool('append_file').exec(text='hello')
+        assert app.ai._get_tool('calc').exec(input='2 + 3') == 5
+        assert len(app.ai._get_tool('current').exec().value.as_str) == 24  # YYYY-mm-dd HH:MM:SS.MMMZ
+        assert app.ai._get_tool('read_file').exec(path='sample.txt') == 'buy milk\n'
+        appended = app.ai._get_tool('append_file').exec(text='hello')
         assert appended.value.as_str == 'true' and appended.value.as_data['file'] == 'notes.txt'
         # the date tools take a date-only string as utc, so the calendar step is
         # stable on every machine; clamping shows jan 31 + 1m -> feb 28,
         # jun 8 - 4m -> feb 8, feb 29 + 1y -> feb 28
-        assert app.ai._tool('add_months').exec(date='2026-01-31', months=1).value.as_str == '2026-02-28'
-        assert app.ai._tool('add_months').exec(date='2026-06-08', months=-4).value.as_str == '2026-02-08'
-        assert app.ai._tool('add_years').exec(date='2024-02-29', years=1).value.as_str == '2025-02-28'
+        assert app.ai._get_tool('add_months').exec(date='2026-01-31', months=1).value.as_str == '2026-02-28'
+        assert app.ai._get_tool('add_months').exec(date='2026-06-08', months=-4).value.as_str == '2026-02-08'
+        assert app.ai._get_tool('add_years').exec(date='2024-02-29', years=1).value.as_str == '2025-02-28'
         assert (scratch / 'notes.txt').read_text() == 'hello\n'
         with pytest.raises(TokeoAiError, match='escapes the tool base directory'):
-            app.ai._tool('read_file').exec(path='../../setup.py')
+            app.ai._get_tool('read_file').exec(path='../../setup.py')
         with pytest.raises(TokeoAiError, match='no such file'):
-            app.ai._tool('read_file').exec(path='missing.txt')
+            app.ai._get_tool('read_file').exec(path='missing.txt')
 
 
 def test_{{ app_label }}_ai_agent_guarded_runs_tools(scratch):
@@ -244,7 +244,7 @@ def test_{{ app_label }}_ai_truncate_transformer_cuts_long_results():
     # stages: on_return (a tool result) and on_close (the final answer)
     with {{ app_class_name }}AiTestApp() as app:
         transformer = {{ app_class_name }}AiTruncateTransformer(app)
-        transformer._setup(app, 'truncate', dict(options=dict(limit=10)))
+        transformer._setup(app, 'truncate', dict(options=dict(max_chars=10)))
         # on_return cuts the tool result text and notes the cut on reason
         invocation = Invocation(id='t1', name='read_file', arguments={})
         invocation.result = create_tool_result('x' * 50)

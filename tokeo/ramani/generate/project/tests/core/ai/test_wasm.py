@@ -139,7 +139,7 @@ def make_wasm_ai_config():
             wasm_untrusted=dict(
                 type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
                 tools=['run_untrusted'],
-                options=dict(runtime=_RUNTIME, stdlib=_STDLIB, memory_mb=256, timeout=10),
+                options=dict(runtime=_RUNTIME, stdlib=_STDLIB, max_memory_mb=256, timeout=10),
             ),
             wasm_trusted=dict(
                 type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
@@ -147,7 +147,7 @@ def make_wasm_ai_config():
                 options=dict(
                     runtime=_RUNTIME,
                     stdlib=_STDLIB,
-                    memory_mb=256,
+                    max_memory_mb=256,
                     timeout=10,
                     mounts=trusted_mounts,
                     env=dict(PYTHONPATH=trusted_pythonpath),
@@ -173,7 +173,7 @@ def test_{{ app_label }}_untrusted_exec_in_wasm_guest():
     # the untrusted tool runs the snippet directly in the guest (no app mount)
     # and the result crosses the file bridge back
     with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
-        agent = app.ai._agent('untrusted_coder')
+        agent = app.ai._get_agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_untrusted',
             dict(code='import statistics\nstatistics.median([5, 1, 9, 3, 7])'),
@@ -196,7 +196,7 @@ def test_{{ app_label }}_trusted_exec_in_wasm_guest():
     # the trusted tool is rebuilt in the guest from the mounted project source;
     # importing the app package confirms it is reachable there
     with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
-        agent = app.ai._agent('trusted_coder')
+        agent = app.ai._get_agent('trusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_trusted',
             dict(code='import {{ app_label }}\nbool({{ app_label }}.__name__)'),
@@ -220,7 +220,7 @@ def test_{{ app_label }}_untrusted_guest_cannot_import_the_app():
     # project fails there, recorded as a tool exception on the result (A) with
     # no value: the app stays invisible to untrusted code
     with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
-        agent = app.ai._agent('untrusted_coder')
+        agent = app.ai._get_agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_untrusted',
             dict(code='import {{ app_label }}\n1'),
