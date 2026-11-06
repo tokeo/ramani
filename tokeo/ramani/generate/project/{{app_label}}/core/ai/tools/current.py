@@ -26,7 +26,7 @@ class TokeoAiCurrentTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Current tool meta-data."""
 
         # Short description the model sees
         description = 'return the current date and time'

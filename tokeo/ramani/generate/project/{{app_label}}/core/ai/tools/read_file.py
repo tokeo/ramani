@@ -42,7 +42,7 @@ class TokeoAiReadFileTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model, plus the tool's own options."""
+        """Read file tool meta-data."""
 
         # Short description the model sees
         description = 'read a text file below the configured base directory'

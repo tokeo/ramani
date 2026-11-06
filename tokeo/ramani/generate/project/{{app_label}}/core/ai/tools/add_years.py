@@ -29,7 +29,7 @@ class TokeoAiAddYearsTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Add years tool meta-data."""
 
         # Short description the model sees
         description = 'add a number of years to a date'

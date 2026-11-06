@@ -27,7 +27,7 @@ class TokeoAiSearchDocsTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Search docs tool meta-data."""
 
         # Short description the model sees
         description = 'search the project documents and return the best sections with their sources'

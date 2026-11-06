@@ -24,7 +24,7 @@ class TokeoAiWeekdayTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Weekday tool meta-data."""
 
         # Short description the model sees
         description = 'name the weekday of a date'

@@ -27,7 +27,7 @@ class TokeoAiAnswer42Tool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Answer42 tool meta-data."""
 
         # the description the model sees; it tells the model the returned value
         # is authoritative, so the house answer is reported rather than recomputed

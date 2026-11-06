@@ -50,7 +50,7 @@ class TokeoAiCalcTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Calc tool meta-data."""
 
         # the description the model sees; it not only says what the tool does
         # but tells the model the returned value is authoritative, so a result

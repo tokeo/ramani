@@ -26,7 +26,7 @@ class TokeoAiAddDaysTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Add days tool meta-data."""
 
         # Short description the model sees
         description = 'add a number of days to a date'

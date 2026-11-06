@@ -43,7 +43,7 @@ class TokeoAiMoonPhaseTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Moon phase tool meta-data."""
 
         # Short description the model sees
         description = 'tell the moon phase of a date'

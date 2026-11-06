@@ -45,7 +45,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model, plus the tool's own options."""
+        """Append file tool meta-data."""
 
         # Short description the model sees
         description = 'append a line of text to the configured notes file'

@@ -22,7 +22,7 @@ class TokeoAiDateDayDiffTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Date day diff tool meta-data."""
 
         # Short description the model sees
         description = 'count the days between two dates'

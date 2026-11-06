@@ -23,7 +23,7 @@ class TokeoAiWeekNumberTool(TokeoAiTool):
     """
 
     class Meta:
-        """Tool meta-data sent to the model."""
+        """Week number tool meta-data."""
 
         # Short description the model sees
         description = 'tell the iso week number of a date'

@@ -198,7 +198,7 @@ lazily.
    ```config_defaults``` its comment above it:
 
         class Meta:
-            # the defaults of the config section
+            # Defaults of the config section
             config_defaults = dict(
                 # Default timeout for cache operations in seconds
                 timeout=60,
