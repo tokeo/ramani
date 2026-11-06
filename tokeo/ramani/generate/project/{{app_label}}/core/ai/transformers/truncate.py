@@ -21,7 +21,7 @@ the handler imports and instantiates it on demand.
 ai:
   transformers:
     truncate:
-      type: {{ app_label }}.core.ai.transformers.truncate.{{ app_class_name }}AiTruncateTransformer
+      type: {{ app_label }}.core.ai.transformers.truncate:{{ app_class_name }}AiTruncateTransformer
       options:
         # cap the model-facing text at this many characters; 0 disables the cap
         limit: 2000
