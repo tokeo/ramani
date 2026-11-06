@@ -107,7 +107,7 @@ Every ```project``` blueprint expands into a clean, modular layout:
 - ```config/``` - Configuration files for prod, stage, dev and test environments
 - ```your_app/core/logic``` - Space for your core application logic
 - ```your_app/core/tasks/``` - Implementations of actors, agents, automations, operations, performers etc.
-- ```your_app/core/ai/``` - AI providers and plain-function tools behind the guarded contracts (when the AI branch is selected)
+- ```your_app/core/ai/``` - AI providers and tool classes behind the guarded contracts (when the AI branch is selected)
 - ```your_app/core/akili/``` - The train-first micro LLM lab: model, lexicon (```AKILI-LEX.yaml```), teaching docs (when the AI branch is selected)
 - ```your_app/core/grpc/``` - gRPC service definitions and implementations
 - ```your_app/core/utils/``` - A place to put your overall tools and helper functions

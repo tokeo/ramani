@@ -40,7 +40,7 @@ scheduler:
   timezone: UTC
   tasks:
     process_daily_report:
-      module: myapp.core.tasks.agents
+      module: {{ app_label }}.core.tasks.agents
       name: Daily Report Generator
       coalesce: latest
       crontab: '0 1 * * *'  # Run at 1:00 AM daily
