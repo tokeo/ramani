@@ -46,7 +46,7 @@ class {{ app_class_name }}DockerTestApp({{ app_class_name }}Test):
         ]
 
 
-def image_ready():
+def is_image_ready():
     # docker is installed and the image of the app is built
     if not shutil.which('docker'):
         return False
@@ -77,7 +77,7 @@ def test_{{ app_label }}_ai_docker_sandbox_runs_calc_hardened(tmp_path, monkeypa
     assert args[start:] == ['--entrypoint', 'python3', '{{ app_label }}:latest', '-m', 'tokeo.core.ai.sandboxes.runner']
 
 
-@pytest.mark.skipif(not image_ready(), reason='needs docker and the image {{ app_label }}:latest (make docker)')
+@pytest.mark.skipif(not is_image_ready(), reason='needs docker and the image {{ app_label }}:latest (make docker)')
 def test_{{ app_label }}_ai_docker_sandbox_live():
     # with a real docker the calc tool answers from a container
     with {{ app_class_name }}DockerTestApp() as app:

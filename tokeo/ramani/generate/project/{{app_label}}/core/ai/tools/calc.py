@@ -28,14 +28,14 @@ _BINOPS = {
 _UNOPS = {ast.UAdd: operator.pos, ast.USub: operator.neg}
 
 
-def _eval(node):
+def _eval_expression(node):
     # walk a tiny, numbers-only expression tree; anything else is rejected
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
         return node.value
     if isinstance(node, ast.BinOp) and type(node.op) in _BINOPS:
-        return _BINOPS[type(node.op)](_eval(node.left), _eval(node.right))
+        return _BINOPS[type(node.op)](_eval_expression(node.left), _eval_expression(node.right))
     if isinstance(node, ast.UnaryOp) and type(node.op) in _UNOPS:
-        return _UNOPS[type(node.op)](_eval(node.operand))
+        return _UNOPS[type(node.op)](_eval_expression(node.operand))
     raise TokeoAiError('calc supports only numbers and + - * / % **')
 
 
@@ -86,7 +86,7 @@ class TokeoAiCalcTool(TokeoAiTool):
 
         """
         try:
-            number = _eval(ast.parse(str(input), mode='eval').body)
+            number = _eval_expression(ast.parse(str(input), mode='eval').body)
         except TokeoAiError:
             raise
         except Exception:

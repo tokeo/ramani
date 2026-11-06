@@ -202,7 +202,7 @@ def test_{{ app_label }}_ai_akili_model():
     # today-bridge, honest nomatch, and the guards still rule the loop
     with {{ app_class_name }}AiTestApp() as app:
 
-        def ask(text):
+        def ask_akili(text):
             return app.ai.ask(text, agent='guarded', profile='akili')
 
         # the quality bar first: the held-out exact-plan accuracy is recorded
@@ -218,13 +218,13 @@ def test_{{ app_label }}_ai_akili_model():
         )
 
         # exact copies and single-step tools
-        assert ask('weekday of 2026-12-24') == '[akili] weekday: Thursday'
-        assert ask('weekday of 2026-12-24 minus 2 days') == '[akili] weekday: Tuesday'
-        assert ask('weekday of 2026-12-24 plus 2 days') == '[akili] weekday: Saturday'
-        assert ask('add 2 months to 2026-06-08') == '[akili] add_months: 2026-08-08'
-        assert ask('die mondphase am 2000-01-06') == '[akili] moon_phase: new moon'
+        assert ask_akili('weekday of 2026-12-24') == '[akili] weekday: Thursday'
+        assert ask_akili('weekday of 2026-12-24 minus 2 days') == '[akili] weekday: Tuesday'
+        assert ask_akili('weekday of 2026-12-24 plus 2 days') == '[akili] weekday: Saturday'
+        assert ask_akili('add 2 months to 2026-06-08') == '[akili] add_months: 2026-08-08'
+        assert ask_akili('die mondphase am 2000-01-06') == '[akili] moon_phase: new moon'
         iso_week = date(2026, 12, 24).isocalendar()[1]
-        assert ask('the week number of 2026-12-24') == f'[akili] week_number: {iso_week}'
+        assert ask_akili('the week number of 2026-12-24') == f'[akili] week_number: {iso_week}'
 
         # a bare time word is the current date: today/now/heute/jetzt all
         # resolve to current(); the time part varies, so match the date head.
@@ -235,27 +235,27 @@ def test_{{ app_label }}_ai_akili_model():
         _today = utc_now().date()
         today = _today.isoformat()
         for word in ('today', 'now', 'heute', 'jetzt'):
-            out = ask(word)
+            out = ask_akili(word)
             assert out.startswith(f'[akili] current: {today}'), (word, out)
 
         # relative words and the today-bridge
         tomorrow = (_today + timedelta(days=1)).isoformat()
-        assert ask('welches datum ist morgen') == f'[akili] add_days: {tomorrow}'
+        assert ask_akili('welches datum ist morgen') == f'[akili] add_days: {tomorrow}'
 
         # a week is seven days (there is no add_weeks tool): a week shift
         # expands to add_days with a multiple of 7
-        assert ask('today minus 1 week') == f'[akili] add_days: {(_today - timedelta(days=7)).isoformat()}'
-        assert ask('2026-06-08 plus 3 weeks') == '[akili] add_days: 2026-06-29'
+        assert ask_akili('today minus 1 week') == f'[akili] add_days: {(_today - timedelta(days=7)).isoformat()}'
+        assert ask_akili('2026-06-08 plus 3 weeks') == '[akili] add_days: 2026-06-29'
 
         # date_daydiff between today and a date relative to today (three steps:
         # current, a forward shift, then the diff): today until tomorrow is
         # one day, today until next week is seven
-        assert ask('count the days from today until tomorrow') == '[akili] date_daydiff: 1'
-        assert ask('count the days from today until next week') == '[akili] date_daydiff: 7'
+        assert ask_akili('count the days from today until tomorrow') == '[akili] date_daydiff: 1'
+        assert ask_akili('count the days from today until next week') == '[akili] date_daydiff: 7'
 
         # a consumer reading a shifted date: the weekday of (today + 14)
         shifted = _today + timedelta(days=14)
-        assert ask('the weekday of today plus 14 days') == f'[akili] weekday: {_WEEKDAYS[shifted.weekday()]}'
+        assert ask_akili('the weekday of today plus 14 days') == f'[akili] weekday: {_WEEKDAYS[shifted.weekday()]}'
 
         # a relative chain: two shifts from today, day word then year word
         base = _today + timedelta(days=1)
@@ -264,17 +264,17 @@ def test_{{ app_label }}_ai_akili_model():
         except ValueError:
             # feb 29 clamps to feb 28 in a common year, like the tool does
             target = base.replace(year=base.year + 1, day=28)
-        assert ask('the date of tomorrow next year') == f'[akili] add_years: {target.isoformat()}'
+        assert ask_akili('the date of tomorrow next year') == f'[akili] add_years: {target.isoformat()}'
 
         # honest abstention: hard negative, greetings, and signed counts all
         # echo (no invented plan, no invented digit, no dropped shift)
-        assert ask('what date is my birthday') == '[akili] what date is my birthday'
+        assert ask_akili('what date is my birthday') == '[akili] what date is my birthday'
         for greeting in ('hello', 'hallo', 'moin'):
-            assert ask(greeting) == f'[akili] {greeting}'
-        assert ask('today plus -2 days') == '[akili] today plus -2 days'
+            assert ask_akili(greeting) == f'[akili] {greeting}'
+        assert ask_akili('today plus -2 days') == '[akili] today plus -2 days'
         wrapped = 'the weekday of today plus -2 days'
-        assert ask(wrapped) == f'[akili] {wrapped}'
-        assert ask('sing me a song') == '[akili] sing me a song'
+        assert ask_akili(wrapped) == f'[akili] {wrapped}'
+        assert ask_akili('sing me a song') == '[akili] sing me a song'
 
         # multi-turn chat still threads and the guards report the plan
         days = (date(2026, 12, 24) - _today).days

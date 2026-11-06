@@ -100,7 +100,7 @@ class {{ app_class_name }}WasmTestApp({{ app_class_name }}Test):
         ]
 
 
-def _trusted_mounts():
+def _build_trusted_mounts():
     # mount tokeo, the app, and the deps tree, each at its own guest path, but
     # dedup roots that coincide (e.g. an editable install where two live in the
     # same tree) so wasm never gets the same host path twice
@@ -122,11 +122,11 @@ def _trusted_mounts():
     return mounts, ':'.join(dict.fromkeys(pythonpath))
 
 
-def wasm_ai_config():
+def make_wasm_ai_config():
     # both built-in exec tools, each behind a wasm sandbox: the untrusted tool
     # runs directly in the guest (no app mount), the trusted tool is rebuilt there
     # from the mounted tokeo + project + dependency trees
-    trusted_mounts, trusted_pythonpath = _trusted_mounts()
+    trusted_mounts, trusted_pythonpath = _build_trusted_mounts()
     cfg = init_defaults('ai')
     cfg['ai'] = dict(
         license_acknowledged=False,
@@ -172,7 +172,7 @@ def wasm_ai_config():
 def test_{{ app_label }}_untrusted_exec_in_wasm_guest():
     # the untrusted tool runs the snippet directly in the guest (no app mount)
     # and the result crosses the file bridge back
-    with {{ app_class_name }}WasmTestApp(config_defaults=wasm_ai_config()) as app:
+    with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
         agent = app.ai._agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_untrusted',
@@ -195,7 +195,7 @@ def test_{{ app_label }}_untrusted_exec_in_wasm_guest():
 def test_{{ app_label }}_trusted_exec_in_wasm_guest():
     # the trusted tool is rebuilt in the guest from the mounted project source;
     # importing the app package confirms it is reachable there
-    with {{ app_class_name }}WasmTestApp(config_defaults=wasm_ai_config()) as app:
+    with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
         agent = app.ai._agent('trusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_trusted',
@@ -219,7 +219,7 @@ def test_{{ app_label }}_untrusted_guest_cannot_import_the_app():
     # the untrusted guest gets nothing of tokeo or the app, so importing the
     # project fails there, recorded as a tool exception on the result (A) with
     # no value: the app stays invisible to untrusted code
-    with {{ app_class_name }}WasmTestApp(config_defaults=wasm_ai_config()) as app:
+    with {{ app_class_name }}WasmTestApp(config_defaults=make_wasm_ai_config()) as app:
         agent = app.ai._agent('untrusted_coder')
         out = app.ai._exec_in_sandbox(
             'run_untrusted',

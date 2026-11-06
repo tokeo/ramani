@@ -287,10 +287,10 @@ def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scra
     first = TokeoAiConfirmAnswer('no_retry', by='human', note='deny: world')
     answers = iter([first, TokeoAiConfirmAnswer('yes', by='human')])
 
-    def channel(app, request):
+    def answer_confirm(app, request):
         return next(answers)
 
-    with {{ app_class_name }}AiTestApp(hooks=[(GOVERNOR_CONFIRM_CHANNEL_HOOK, channel)]) as app:
+    with {{ app_class_name }}AiTestApp(hooks=[(GOVERNOR_CONFIRM_CHANNEL_HOOK, answer_confirm)]) as app:
         result = app.ai.chat([{'role': 'user', 'content': 'append_file hello world'}], agent='careful', profile='mock')
     asked = [(c['answer'], c['previous_decision'], c['previous_reason']) for c in result.confirmations]
     assert asked == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]

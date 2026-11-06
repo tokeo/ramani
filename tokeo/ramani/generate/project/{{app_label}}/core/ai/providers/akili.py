@@ -69,27 +69,27 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
         - **TokeoAiError**: If no trained weights exist yet
 
         """
-        prompt, feedback = self._conversation(messages)
+        prompt, feedback = self._split_conversation(messages)
         # denied or failed feedback ends the run with the reason; the micro
         # model does not retry, so a stuck loop can never build up
         if feedback and feedback[-1].startswith('denied:'):
-            return self._result(f'[akili] not permitted: {feedback[-1][len("denied:"):].strip()}', prompt)
+            return self._build_result(f'[akili] not permitted: {feedback[-1][len("denied:"):].strip()}', prompt)
         if feedback and feedback[-1].startswith('error:'):
-            return self._result(f'[akili] failed: {feedback[-1][len("error:"):].strip()}', prompt)
-        plan = self._plan(prompt, tools or [])
+            return self._build_result(f'[akili] failed: {feedback[-1][len("error:"):].strip()}', prompt)
+        plan = self._get_plan(prompt, tools or [])
         done = len(feedback)
         if done < len(plan):
             name, arguments = plan[done]
             # a @k argument takes the date (or number) from the feedback of
             # step k, so a chained step works with what came before it
-            arguments = {key: self._resolve(value, feedback) for key, value in arguments.items()}
+            arguments = {key: self._resolve_value(value, feedback) for key, value in arguments.items()}
             call = ToolCall(id=f'call_{done + 1}', name=name, arguments=arguments)
-            return self._result('', prompt, tool_calls=[call], finish_reason='tool_calls', plan=plan)
+            return self._build_result('', prompt, tool_calls=[call], finish_reason='tool_calls', plan=plan)
         if plan:
-            return self._result(f'[akili] {plan[-1][0]}: {feedback[-1]}', prompt, plan=plan)
-        return self._result(f'[akili] {prompt}' if prompt else '[akili] (no prompt)', prompt)
+            return self._build_result(f'[akili] {plan[-1][0]}: {feedback[-1]}', prompt, plan=plan)
+        return self._build_result(f'[akili] {prompt}' if prompt else '[akili] (no prompt)', prompt)
 
-    def _plan(self, prompt, tools):
+    def _get_plan(self, prompt, tools):
         # the trained model (core/akili) emits the plan as constrained DSL
         # over the active tools; numpy and the weights load lazily, and a
         # missing asset turns into a clear, actionable error
@@ -116,16 +116,16 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
             steps.append((name, typed))
         return steps
 
-    def _resolve(self, value, feedback):
+    def _resolve_value(self, value, feedback):
         # a @k value takes the date, the number, or the trimmed text from
         # the feedback of step k
         if isinstance(value, str) and value.startswith('@') and value[1:].isdigit():
             index = int(value[1:]) - 1
             if 0 <= index < len(feedback):
-                return self._from_result(feedback[index])
+                return self._get_result_value(feedback[index])
         return value
 
-    def _from_result(self, text):
+    def _get_result_value(self, text):
         date = _ISO_DATE.search(text or '')
         if date:
             return date.group(0)
@@ -134,7 +134,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
             return int(number.group(0))
         return (text or '').strip()
 
-    def _conversation(self, messages):
+    def _split_conversation(self, messages):
         # the request is the last user message; the feedback is every tool
         # result that came back after it (the current run of the loop)
         prompt = ''
@@ -151,7 +151,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
                     feedback.append(str(message.get('content') or ''))
         return prompt, feedback
 
-    def _result(self, text, prompt, tool_calls=None, finish_reason='stop', plan=None):
+    def _build_result(self, text, prompt, tool_calls=None, finish_reason='stop', plan=None):
         # the raw payload carries the plan, so what the model decided stays
         # inspectable next to what it answered
         usage = Usage(

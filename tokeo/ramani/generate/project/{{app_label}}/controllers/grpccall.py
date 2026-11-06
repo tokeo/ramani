@@ -114,7 +114,7 @@ class GrpcCallController(Controller):
         # short help information
         help = 'call remote grpc methods manually'
 
-    def _grpc_channel(self):
+    def _build_grpc_channel(self):
         """
         Build a gRPC channel from the --tls/--cert/--key/--user/--insecure
         flags on self.app.pargs.
@@ -177,13 +177,13 @@ class GrpcCallController(Controller):
         )
         return grpc.secure_channel(target, creds)
 
-    def _grpc_metadata(self):
+    def _build_grpc_metadata(self):
         """
         Build per-call invocation metadata for basic-auth from --user and
         --password on self.app.pargs.
 
         Returns None when --user is not given so callers can pass
-        ```metadata=self._grpc_metadata()``` unconditionally.
+        ```metadata=self._build_grpc_metadata()``` unconditionally.
 
         ### Returns
 
@@ -216,12 +216,12 @@ class GrpcCallController(Controller):
         from ..core.grpc.proto import {{ app_label }}_pb2_grpc
 
         log_info_help(self)
-        with self._grpc_channel() as channel:
+        with self._build_grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
             try:
                 response = stub.Ping(
                     empty_pb2.Empty(),
-                    metadata=self._grpc_metadata(),
+                    metadata=self._build_grpc_metadata(),
                 )
             except grpc.RpcError as err:
                 raise {{ app_class_name }}Error(f'grpc ping failed: {err.code().name}: {err.details()}') from err
@@ -250,12 +250,12 @@ class GrpcCallController(Controller):
 
         log_info_help(self)
         self.app.log.info('  given url: ' + self.app.pargs.url)
-        with self._grpc_channel() as channel:
+        with self._build_grpc_channel() as channel:
             stub = {{ app_label }}_pb2_grpc.{{ app_class_name }}Stub(channel)
             try:
                 stub.CountWords(
                     {{ app_label }}_pb2.CountWordsRequest(url=self.app.pargs.url),
-                    metadata=self._grpc_metadata(),
+                    metadata=self._build_grpc_metadata(),
                 )
             except grpc.RpcError as err:
                 raise {{ app_class_name }}Error(f'grpc count-words failed: {err.code().name}: {err.details()}') from err

@@ -19,7 +19,7 @@ from pathlib import Path
 from tokeo.core.ai import TokeoAiError, TokeoAiTool
 
 
-def _resolve_below(base_dir, path):
+def _resolve_path_below(base_dir, path):
     # resolve the requested path strictly below the base directory; an
     # absolute path or a ```..``` traversal must never escape the sandbox the
     # configuration defines
@@ -80,7 +80,7 @@ class TokeoAiReadFileTool(TokeoAiTool):
             file does not exist
 
         """
-        target = _resolve_below(self._config('base_dir'), path)
+        target = _resolve_path_below(self._config('base_dir'), path)
         if not target.is_file():
             raise TokeoAiError(f'no such file: {str(path)!r}')
         # the value is the file content; as_str defaults to the same text

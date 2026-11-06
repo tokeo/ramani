@@ -21,7 +21,7 @@ from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.utils.date import to_utc, to_utc_timestring
 
 
-def _resolve_below(base_dir, path):
+def _resolve_path_below(base_dir, path):
     # resolve the requested path strictly below the base directory; an
     # absolute path or a ```..``` traversal must never escape the sandbox the
     # configuration defines
@@ -90,7 +90,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
         - **TokeoAiError**: If the configured file escapes the base directory
 
         """
-        target = _resolve_below(self._config('base_dir'), self._config('file'))
+        target = _resolve_path_below(self._config('base_dir'), self._config('file'))
         # check existence and size before the append: a missing file is created
         # by append mode, so this is the only point that can tell new from empty
         created = not target.is_file()

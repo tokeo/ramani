@@ -60,7 +60,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
             marker='... [truncated {n} chars]',
         )
 
-    def _cap(self, text, stage):
+    def _truncate_text(self, text, stage):
         """
         Return ```text``` cut to the stage's ```limit```, plus the cut count.
 
@@ -72,9 +72,9 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
 
         ### Returns
 
-        - **tuple**: ```(capped_text, cut)```; ```cut``` is 0 when nothing was
+        - **tuple**: ```(truncated_text, cut)```; ```cut``` is 0 when nothing was
             removed (the limit is 0, or the text already fits), in which case
-            ```capped_text``` is the original text
+            ```truncated_text``` is the original text
 
         """
         limit = self._config('limit', stage=stage)
@@ -100,7 +100,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         """
         if invocation.result is None or invocation.result.value is None:
             return
-        capped, cut = self._cap(invocation.result.value.as_str or '', GOVERNOR_STAGE_ON_RETURN)
+        truncated_text, cut = self._truncate_text(invocation.result.value.as_str or '', GOVERNOR_STAGE_ON_RETURN)
         if not cut:
             return
         # cut only as_str, the model-facing view: truncate shrinks what the model
@@ -108,7 +108,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         # (as_json, as_data) keep the full output for the trace. coherence across
         # the three views is not needed here, unlike a redact guard that must not
         # leave a secret in an unmasked view
-        invocation.result.value.as_str = capped
+        invocation.result.value.as_str = truncated_text
         note = f'truncated {cut} chars'
         invocation.reason = f'{invocation.reason}; {note}' if invocation.reason else note
 
@@ -126,6 +126,6 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
             when longer than ```limit```
 
         """
-        capped, cut = self._cap(result.text or '', GOVERNOR_STAGE_ON_CLOSE)
+        truncated_text, cut = self._truncate_text(result.text or '', GOVERNOR_STAGE_ON_CLOSE)
         if cut:
-            result.text = capped
+            result.text = truncated_text

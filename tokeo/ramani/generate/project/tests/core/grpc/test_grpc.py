@@ -18,7 +18,7 @@ from tests.utils.process import SubProcess
 PROBE = 'tests.core.grpc.grpc_tests_serve_probe'
 
 
-def _pong(url):
+def _has_pong(url):
     """True when grpccall ping gets its pong from the server at url."""
     logged = []
     argv = ['grpccall', 'ping'{% if feature_grpc_auto_certificates == "Y" %}, '--insecure'{% endif %}]
@@ -38,6 +38,6 @@ def test_grpc_serve_answers_ping_and_ends_on_term():
     url = f'localhost:{free_port()}'
     env = {'{{ app_label | upper }}_GRPC_URL': url}
     with SubProcess.probe(PROBE, env=env) as process:
-        process.wait_for(lambda: _pong(url))
+        process.wait_for(lambda: _has_pong(url))
         process.signal(signal.SIGTERM)
         assert process.wait() == 0
