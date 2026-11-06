@@ -28,6 +28,7 @@ from fastapi.openapi.docs import get_redoc_html
 from tokeo.ext.appshare import app
 from {{ app_label }}.core.version import get_version
 
+#: The summary at the top of the API documentation
 SUMMARY = """
 
 The {{ app_name }} API Reference
@@ -37,6 +38,7 @@ Complete OpenAPI documentation for {{ app_name }} services and endpoints.
 """
 
 
+#: The description of the API documentation
 DESCRIPTION = """
 ### About {{ app_name }} API
 

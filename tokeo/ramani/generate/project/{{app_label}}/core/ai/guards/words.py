@@ -43,10 +43,11 @@ class {{ app_class_name }}AiWordFilterGuard(TokeoAiPolicyGuard):
     class Meta:
         """Word filter guard meta-data."""
 
-        # words: always denied. note_prefix: a note starting with it adds the
-        # comma-separated words after it
+        # the defaults of the options
         config_defaults = dict(
+            # the words that are always denied
             words=[],
+            # a note starting with it adds the comma-separated words after it
             note_prefix='deny:',
         )
 

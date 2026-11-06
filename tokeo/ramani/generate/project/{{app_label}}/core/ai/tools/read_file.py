@@ -58,6 +58,7 @@ class TokeoAiReadFileTool(TokeoAiTool):
         # project overrides it per item under ```options```; nothing else of
         # this Meta is reachable from the config
         config_defaults = dict(
+            # the directory the tool reads below
             base_dir='tmp',
         )
 

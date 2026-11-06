@@ -4,8 +4,11 @@ from tokeo.ext.argparse import Controller
 from tokeo.core.version import get_version as tokeo_get_version
 from ..core.version import get_version
 
+#: The description of the app, shown at the top of --help
 DESCRIPTION = """{{ app_description }}"""
+#: The versions of cement, python and the os from the version banner of cement
 CEMENT_VERSION, PYTHON_VERSION, OS_VERSION = (cement_version_banner().split('\n') + ['unknown', 'unknown', 'unknown'])[:3]
+#: The banner shown by --version
 VERSION_BANNER = f"""
  
 ┃
@@ -24,6 +27,7 @@ VERSION_BANNER = f"""
 class BaseController(Controller):
 
     class Meta:
+        # the label of the controller, the base of all commands
         label = 'base'
 
         # disable the ugly curly command doubled listening

@@ -40,8 +40,9 @@ class {{ app_class_name }}AiTodayTransformer(TokeoAiTransformer):
     class Meta:
         """Today transformer meta-data."""
 
-        # text: the system message, "{date}" is today as YYYY-MM-DD (UTC)
+        # the defaults of the options
         config_defaults = dict(
+            # the system message, "{date}" is today as YYYY-MM-DD (UTC)
             text='Today is {date} (UTC).',
         )
 

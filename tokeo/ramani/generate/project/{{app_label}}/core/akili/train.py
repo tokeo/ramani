@@ -84,18 +84,18 @@ from {{ app_label }}.core.akili.dsl import NOMATCH
 # exactly as much room for the plan as inference does
 from {{ app_label }}.core.akili.infer import PLAN_BUDGET
 
-# the architecture, fixed and small. every value here is a lever on
-# capacity and parameter count; the comments say what each one buys:
-# - dim: the width of every token vector. more width = more capacity per
-#   token, but block parameters grow roughly with dim squared
-# - layers: depth. more blocks = more rounds of "look around and combine",
-#   which is what lets a three-step plan be reasoned about
-# - heads: parallel attention channels; each looks at the sequence a
-#   different way (here 96/4 = 24 dimensions per head)
-# - ff: the per-position MLP's hidden width, the usual 4x dim
-# - context: the maximum number of token positions; it limits request+plan
-#   length and is the size of the position embedding table
-# - vocab: 259, fixed by the tokenizer (256 bytes + PAD/SEP/EOS)
+#: The architecture, fixed and small. every value here is a lever on
+#: capacity and parameter count; the comments say what each one buys:
+#: - dim: the width of every token vector. more width = more capacity per
+#:   token, but block parameters grow roughly with dim squared
+#: - layers: depth. more blocks = more rounds of "look around and combine",
+#:   which is what lets a three-step plan be reasoned about
+#: - heads: parallel attention channels; each looks at the sequence a
+#:   different way (here 96/4 = 24 dimensions per head)
+#: - ff: the per-position MLP's hidden width, the usual 4x dim
+#: - context: the maximum number of token positions; it limits request+plan
+#:   length and is the size of the position embedding table
+#: - vocab: 259, fixed by the tokenizer (256 bytes + PAD/SEP/EOS)
 CONFIG = dict(dim=128, layers=3, heads=4, ff=512, context=184, vocab=tokenizer.VOCAB)
 
 
@@ -116,11 +116,15 @@ class Block(nn.Module):
         super().__init__()
         # normalize, then attend: every position mixes in information from
         # the positions it is allowed to see (its left context)
+        #: The layer norm before the attention
         self.ln1 = nn.LayerNorm(dim)
+        #: The attention over the left context
         self.attn = nn.MultiheadAttention(dim, heads, batch_first=True)
         # normalize, then transform each position on its own; GELU is the
         # smooth nonlinearity that gives the MLP its expressive power
+        #: The layer norm before the MLP
         self.ln2 = nn.LayerNorm(dim)
+        #: The MLP of each position
         self.mlp = nn.Sequential(nn.Linear(dim, ff), nn.GELU(), nn.Linear(ff, dim))
 
     def forward(self, hidden, mask):
@@ -150,15 +154,15 @@ class AkiliNet(nn.Module):
 
     def __init__(self, config):
         super().__init__()
-        # row v of this table is the learned meaning of byte id v
+        #: Row v of this table is the learned meaning of byte id v
         self.embed = nn.Embedding(config['vocab'], config['dim'])
-        # row p is the learned meaning of "being at position p in the line"
+        #: Row p is the learned meaning of "being at position p in the line"
         self.position = nn.Embedding(config['context'], config['dim'])
-        # the stack of transformer blocks (depth = config['layers'])
+        #: The stack of transformer blocks (depth = config['layers'])
         self.blocks = nn.ModuleList(Block(config['dim'], config['heads'], config['ff']) for _ in range(config['layers']))
-        # a final normalization before scoring stabilizes the logits
+        #: A final normalization before scoring stabilizes the logits
         self.ln = nn.LayerNorm(config['dim'])
-        # the output head: vector -> one score per byte id, no bias
+        #: The output head: vector -> one score per byte id, no bias
         self.head = nn.Linear(config['dim'], config['vocab'], bias=False)
         # tie the head to the embedding: same matrix, used both directions
         self.head.weight = self.embed.weight

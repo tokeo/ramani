@@ -68,15 +68,15 @@ except ImportError:  # pragma: no cover
         return function if function is not None else (lambda inner: inner)
 
 
-# the trained weights live next to this module
+#: The trained weights, next to this module
 WEIGHTS = pathlib.Path(__file__).parent / 'weights.npz'
 
-# room reserved for the generated plan: the prompt is trimmed to leave at
-# least this many positions free, and the decoder may emit up to this many
-# characters. the longest plan the grammar can produce (a three-step
-# relative chain) is 65 chars, so this carries headroom for both, and the
-# same constant is used by train.py, so training, evaluation, and inference
-# all reserve identical room and can never disagree
+#: The room reserved for the generated plan: the prompt is trimmed to leave
+#: at least this many positions free, and the decoder may emit up to this
+#: many characters. the longest plan the grammar can produce (a three-step
+#: relative chain) is 65 chars, so this carries headroom for both, and the
+#: same constant is used by train.py, so training, evaluation, and inference
+#: all reserve identical room and can never disagree
 PLAN_BUDGET = 80
 
 

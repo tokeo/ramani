@@ -14,6 +14,7 @@ from {{ app_label }}.main import {{ app_class_name }}Test
 from tests.utils import free_port
 from tests.utils.process import SubProcess
 
+#: The probe that serves grpc in a process of its own
 PROBE = 'tests.core.grpc.grpc_tests_serve_probe'
 
 

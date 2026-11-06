@@ -43,8 +43,9 @@ class {{ app_class_name }}AiTodayConductor(TokeoAiConductor):
     class Meta:
         """Today conductor meta-data."""
 
-        # tool: the tool that returns the current date
+        # the defaults of the options
         config_defaults = dict(
+            # the tool that returns the current date
             tool='current',
         )
 

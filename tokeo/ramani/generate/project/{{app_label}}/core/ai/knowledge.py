@@ -21,8 +21,10 @@ from dataclasses import dataclass
 #: The file suffixes the index reads.
 KNOWLEDGE_FILE_SUFFIXES = ('.md', '.txt')
 
-#: The BM25 parameters: term saturation and length normalization.
+#: The BM25 parameter of the term saturation.
 BM25_K1 = 1.5
+
+#: The BM25 parameter of the length normalization.
 BM25_B = 0.75
 
 
@@ -62,11 +64,18 @@ class KnowledgeIndex:
     _lock = threading.Lock()
 
     def __init__(self, base_dir):
+        #: The absolute directory the index reads
         self.base_dir = os.path.abspath(base_dir)
+        #: (list[tuple]) The path, change time and size of each file the index
+        #: was built from, None before the first build
         self.signature = None
+        #: (list[tuple]) The sections as ```(source, number, text)```
         self.sections = []
+        #: (list[int]) The word count of each section
         self.lengths = []
+        #: (list[dict]) The count of each word in each section
         self.counts = []
+        #: (dict) The inverse document frequency of each word
         self.idf = {}
 
     @classmethod

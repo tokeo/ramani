@@ -51,12 +51,12 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
     class Meta:
         """Truncate transformer meta-data."""
 
-        # the configurable defaults, as one dict; an entry's options (and a
-        # per-stage override) overlay this, read at runtime via _config. limit:
-        # the max characters, 0 means unlimited. marker: appended in place of
-        # the cut tail, "{n}" is the removed count
+        # the defaults of the options; an entry's options (and a per-stage
+        # override) overlay them, read at runtime via _config
         config_defaults = dict(
+            # the max characters, 0 means unlimited
             limit=2000,
+            # appended in place of the cut tail, "{n}" is the removed count
             marker='... [truncated {n} chars]',
         )
 

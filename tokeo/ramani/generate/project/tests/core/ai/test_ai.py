@@ -43,7 +43,8 @@ class {{ app_class_name }}AiTestApp({{ app_class_name }}Test):
         ]
 
 
-# the file tools' scratch area in the testing environment (testing.d/ai.yaml)
+#: The scratch area of the file tools in the testing environment
+#: (testing.d/ai.yaml)
 TESTS_DIR = Path('tmp/tests')
 
 

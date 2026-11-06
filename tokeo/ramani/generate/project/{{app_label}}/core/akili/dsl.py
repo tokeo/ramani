@@ -40,16 +40,16 @@ activate. The model supplies *judgement* (which legal continuation), the
 automaton supplies the *fence* (what is legal at all).
 """
 
-# the sentinel a request outside the calendar domain maps to; it is also a
-# legal "plan", so the model can honestly abstain instead of inventing one
+#: The sentinel a request outside the calendar domain maps to; it is also a
+#: legal "plan", so the model can honestly abstain instead of inventing one
 NOMATCH = '<nomatch>'
 
-# the closed domain akili is trained for: the calendar toolset, each tool
-# mapped to its ordered list of argument slots. this ordering is load-
-# bearing: render writes slots in this order, parse checks the keys come
-# back in exactly this order, and the Constrainer fills them one by one in
-# this order. adding a tool here (and to the lexicon + the project's tool
-# classes) is how the language grows; the slot list is the tool's schema
+#: The closed domain akili is trained for: the calendar toolset, each tool
+#: mapped to its ordered list of argument slots. this ordering is load-
+#: bearing: render writes slots in this order, parse checks the keys come
+#: back in exactly this order, and the Constrainer fills them one by one in
+#: this order. adding a tool here (and to the lexicon + the project's tool
+#: classes) is how the language grows; the slot list is the tool's schema
 DOMAIN = {
     'current': [],  # zero args: just "what day is it"
     'date_daydiff': ['start', 'end'],  # two dates in, a day count out

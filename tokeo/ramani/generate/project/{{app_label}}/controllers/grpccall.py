@@ -96,7 +96,9 @@ _GRPC_AUTH_ARGS = [
 class GrpcCallController(Controller):
 
     class Meta:
+        # the label of the controller, also its command
         label = 'grpccall'
+        # nested below the base controller as a command of its own
         stacked_type = 'nested'
         stacked_on = 'base'
 

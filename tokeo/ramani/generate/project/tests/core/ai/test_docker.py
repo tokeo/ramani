@@ -17,6 +17,8 @@ import subprocess
 import pytest
 from {{ app_label }}.main import {{ app_class_name }}Test
 
+#: A fake docker command: it logs its arguments and runs the python command of
+#: the container on the host
 DOCKER_FAKE_SCRIPT = """#!{python}
 import os, sys, json
 args = sys.argv[1:]

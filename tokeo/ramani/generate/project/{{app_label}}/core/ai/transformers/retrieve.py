@@ -41,15 +41,17 @@ class {{ app_class_name }}AiRetrieveTransformer(TokeoAiTransformer):
     class Meta:
         """Retrieve transformer meta-data."""
 
-        # base_dir: the knowledge files. top_k: the most sections. min_score:
-        # the lowest BM25 score a section needs. max_chars: the most characters
-        # of context, 0 = no limit. text: the system message, "{sources}" are
-        # the numbered sections
+        # the defaults of the options
         config_defaults = dict(
+            # the directory of the knowledge files
             base_dir='docs/knowledge',
+            # the max count of sections
             top_k=3,
+            # the lowest BM25 score a section needs
             min_score=1.0,
+            # the max characters of context, 0 means unlimited
             max_chars=2000,
+            # the system message, "{sources}" are the numbered sections
             text='Answer from these sources and name the source by its number:\n\n{sources}',
         )
 

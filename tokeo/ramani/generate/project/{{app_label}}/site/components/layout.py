@@ -56,7 +56,7 @@ ui = app.nicegui.ui
 ux = app.nicegui.ux
 
 
-# defalut coloring, can be overwritten
+#: The default colors of the layout, can be overwritten
 COLORS = dict(
     bg='bg-neutral-50',
     sidebar_bg='bg-neutral-50',

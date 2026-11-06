@@ -55,12 +55,15 @@ embedding and head by one row and break old weights.
 
 # the three control ids live just past the 256 byte values, so a single
 # comparison (token < 256) cleanly separates "real text" from "control"
+#: The id that pads a batch to one length
 PAD = 256
+#: The id between the request and the plan
 SEP = 257
+#: The id at the end of the plan
 EOS = 258
 
-# the embedding table and the output head both have exactly this many rows;
-# it is part of the saved architecture, not a free runtime knob
+#: The embedding table and the output head both have exactly this many rows;
+#: it is part of the saved architecture, not a free runtime knob
 VOCAB = 259
 
 

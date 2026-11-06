@@ -61,7 +61,9 @@ class TokeoAiAppendFileTool(TokeoAiTool):
         # a project overrides them per item under ```options```; nothing else of
         # this Meta is reachable from the config
         config_defaults = dict(
+            # the directory the tool writes below
             base_dir='tmp',
+            # the file below base_dir the tool appends to
             file='notes.txt',
         )
 

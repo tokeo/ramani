@@ -39,11 +39,13 @@ class TokeoAiSearchDocsTool(TokeoAiTool):
             required=['query'],
         )
 
-        # base_dir: the knowledge files. top_k: the most sections. min_score:
-        # the lowest BM25 score a section needs
+        # the defaults of the options
         config_defaults = dict(
+            # the directory of the knowledge files
             base_dir='docs/knowledge',
+            # the max count of sections
             top_k=3,
+            # the lowest BM25 score a section needs
             min_score=1.0,
         )
 

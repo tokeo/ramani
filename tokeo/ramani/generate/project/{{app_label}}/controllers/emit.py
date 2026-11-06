@@ -12,7 +12,9 @@ from ..core import tasks
 class EmitController(Controller):
 
     class Meta:
+        # the label of the controller, also its command
         label = 'emit'
+        # nested below the base controller as a command of its own
         stacked_type = 'nested'
         stacked_on = 'base'
 
