@@ -30,9 +30,9 @@ pocketbase:
   ### so PocketBase never holds events for it
   # realtime_max_pending: 1000
   ### seconds between two confirmations of the login of a channel
-  # realtime_auth_check: 60
+  # realtime_auth_check_seconds: 60
   ### the longest delay in seconds before a channel connects again
-  # realtime_max_delay: 30
+  # realtime_max_delay_seconds: 30
   ### max concurrent http connections per process (httpx
   ### max_connections); unset uses the httpx default and excess
   ### requests wait for a free connection
@@ -43,4 +43,4 @@ pocketbase:
   ### the check (chain still checked)
   tls_verify_hostname: true
   ### path to a CA bundle to trust instead of the system store
-  tls_ca: null
+  tls_ca_path: null
