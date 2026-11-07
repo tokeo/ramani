@@ -22,7 +22,7 @@ dramatiq:
   worker_shutdown_timeout: 600_000
   ### number of milliseconds before restarting consumers
   ### after a connection error
-  restart_delay: 3000
+  restart_delay_ms: 3000
   ### The number of messages to prefetch from the queue for each worker.
   ### In-progress messages are included in the count. When set to "1",
   ### a new message is only fetched once a previous one is done. If not
@@ -35,7 +35,7 @@ dramatiq:
   ### threads are prefetched.
   delay_queue_prefetch: 0
   ### worker poll interval in milliseconds (null: dramatiq default)
-  # worker_poll_interval: null
+  # worker_poll_interval_ms: null
   ### start the worker processes by spawn instead of forkserver
   # use_spawn: false
   ### time limit per message in milliseconds
@@ -53,7 +53,7 @@ dramatiq:
   ### send a heartbeat of each worker process for the monitor
   # monitoring: false
   ### seconds between two heartbeats
-  # monitoring_interval: 5
+  # monitoring_interval_seconds: 5
   ### send task arguments and error texts: off, on or debug (with --debug)
   # monitoring_with_details: debug
 
@@ -73,10 +73,10 @@ dramatiq:
     ### verify the certificate chain (amqps only); False disables it
     tls_verify_cert: true
     ### path to a CA bundle to trust instead of the system store
-    tls_ca: null
+    tls_ca_path: null
   ### mark lock keys by tag
   locks_tag: dramatiq_locks
   ### mark lock keys with prefix
   locks_key_prefix: dq_
   ### seconds between two checks of a waiting lock or temper call
-  locks_sleep_time: 0.1
+  locks_sleep_seconds: 0.1
