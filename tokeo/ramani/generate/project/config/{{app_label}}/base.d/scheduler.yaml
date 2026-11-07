@@ -42,9 +42,9 @@ scheduler:
       ### maximum number of seconds the scheduled job's actual run time is allowed to be late
       misfire_grace_time: null
       ### number of seconds to add to the scheduled time for each job
-      delay: null
+      delay_seconds: null
       ### maximum number of seconds to randomly add to the scheduled time for each job
-      max_jitter: null
+      max_jitter_seconds: null
       ###  maximum number of instances of the task that are allowed to run concurrently
       max_running_jobs: null
       ### one or multiple entries in crontab style when to run the task
