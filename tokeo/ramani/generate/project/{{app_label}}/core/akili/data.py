@@ -445,7 +445,7 @@ def _typo(rng, request):
     return request[:i] + request[i + 1] + request[i] + request[i + 2 :]  # noqa E203
 
 
-def dataset(count, seed=7, minus=True):
+def build_dataset(count, seed=7, minus=True):
     """
     Generate a deduplicated list of (request, dsl) pairs.
 
@@ -479,5 +479,5 @@ def dataset(count, seed=7, minus=True):
 if __name__ == '__main__':
     import sys
 
-    for request, dsl in dataset(12, minus='--no-minus' not in sys.argv):
+    for request, dsl in build_dataset(12, minus='--no-minus' not in sys.argv):
         print(f'{request!r:80s} -> {dsl}')

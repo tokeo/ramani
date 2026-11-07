@@ -69,10 +69,10 @@ def test_{{ app_label }}_akili_lexicon_loads():
     # the longest plan the data can produce must fit the decoder budget,
     # with room for the closing EOS step; a longer pattern group would
     # otherwise be silently truncated at inference time
-    from {{ app_label }}.core.akili.data import dataset
+    from {{ app_label }}.core.akili.data import build_dataset
     from {{ app_label }}.core.akili.infer import PLAN_BUDGET
 
-    longest = max(len(d) for _, d in dataset(8000, seed=7) if d != '<nomatch>')
+    longest = max(len(d) for _, d in build_dataset(8000, seed=7) if d != '<nomatch>')
     assert longest + 1 <= PLAN_BUDGET, (longest, PLAN_BUDGET)
 
 
@@ -81,10 +81,10 @@ def test_{{ app_label }}_akili_data_contract():
     # these assert what the synthetic data contains, so a lexicon or mixture
     # edit that would change the trained behaviour fails here, before a
     # training run, and without needing any weights
-    from {{ app_label }}.core.akili.data import dataset, _LEXICON
+    from {{ app_label }}.core.akili.data import build_dataset, _LEXICON
     from {{ app_label }}.core.akili.dsl import DOMAIN, NOMATCH, Constrainer, parse
 
-    pairs = dataset(12000, seed=7)
+    pairs = build_dataset(12000, seed=7)
 
     # a bare time word, standing on its own, must resolve to current(); the
     # request ends with exactly the time word and the plan is current().
@@ -114,9 +114,9 @@ def test_{{ app_label }}_akili_data_contract():
             continue
         constrainer = Constrainer()
         for character in d:
-            assert character in constrainer.allowed(), (d, character)
+            assert character in constrainer.get_allowed_chars(), (d, character)
             constrainer.feed(character)
-        assert '<eos>' in constrainer.allowed(), d
+        assert '<eos>' in constrainer.get_allowed_chars(), d
         parse(d)
 
     # the consumer-of-today composition still resolves through current as
@@ -147,11 +147,11 @@ def test_{{ app_label }}_akili_data_contract():
     assert exercised == set(DOMAIN), set(DOMAIN) - exercised
 
     # the generator is deterministic for a fixed seed
-    assert dataset(4000, seed=7)[:60] == dataset(4000, seed=7)[:60]
+    assert build_dataset(4000, seed=7)[:60] == build_dataset(4000, seed=7)[:60]
 
     # the --no-minus ablation removes every backward wording: no plan in the
     # minus-free dataset carries a negative count, while the normal data does
-    assert not any('=-' in d for _, d in dataset(8000, seed=7, minus=False))
+    assert not any('=-' in d for _, d in build_dataset(8000, seed=7, minus=False))
     assert any('=-' in d for _, d in pairs)
 
 

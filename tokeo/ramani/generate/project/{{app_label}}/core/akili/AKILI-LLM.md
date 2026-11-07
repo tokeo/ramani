@@ -524,7 +524,7 @@ flowchart TD
         LP("<b>3. patterns</b><br/>five groups: single, shift, shift_minus,<br/>relative, relative_chain --<br/>one rule: a consumer slot<br/>in a pattern reads the result")
     end
 
-    GEN("<b>data.dataset(30000, seed=7)</b><br/>the mixture: 15% nomatch, 12% relative words,<br/>45% shifts plain and composed, 28% single-step<br/>example pair:<br/>'der wochentag von heute plus 2 tagen'<br/>current();add_days(date=@1,days=2);weekday(date=@2)")
+    GEN("<b>data.build_dataset(30000, seed=7)</b><br/>the mixture: 15% nomatch, 12% relative words,<br/>45% shifts plain and composed, 28% single-step<br/>example pair:<br/>'der wochentag von heute plus 2 tagen'<br/>current();add_days(date=@1,days=2);weekday(date=@2)")
     HELD("<b>600 held-out pairs</b><br/>never trained on")
     TRAIN("<b>29400 training pairs</b>")
     TOK("<b>tokenizer: one fixed row of bytes</b><br/>'heute' becomes 104 101 117 116 101,<br/>then SEP=257, the plan bytes, EOS=258,<br/>padded with PAD=256 to 184 positions")

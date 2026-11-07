@@ -69,7 +69,7 @@ except ImportError:  # pragma: no cover
 
 
 #: The trained weights, next to this module
-WEIGHTS = pathlib.Path(__file__).parent / 'weights.npz'
+WEIGHTS_PATH = pathlib.Path(__file__).parent / 'weights.npz'
 
 #: The room reserved for the generated plan: the prompt is trimmed to leave
 #: at least this many positions free, and the decoder may emit up to this
@@ -111,7 +111,7 @@ class AkiliModel:
     """
 
     def __init__(self, path=None):
-        bundle = numpy.load(path or WEIGHTS)
+        bundle = numpy.load(path or WEIGHTS_PATH)
         # every named array except the metadata is a model parameter
         self._weights = {name: bundle[name] for name in bundle.files if name != '__config__'}
         # the metadata json carries dim/layers/heads/context plus provenance
@@ -151,7 +151,7 @@ class AkiliModel:
         out = []
         for _ in range(PLAN_BUDGET):
             # ask the grammar what may come next at this point of the plan
-            allowed = constrainer.allowed()
+            allowed = constrainer.get_allowed_chars()
             # stop if the plan is complete (only EOS legal) or context is full
             if allowed == {'<eos>'} or len(tokens) >= context - 1:
                 break

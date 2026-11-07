@@ -177,7 +177,7 @@ class Constrainer:
         """Accept one decoded character and extend the partial line."""
         self._text += byte
 
-    def allowed(self):
+    def get_allowed_chars(self):
         """
         Return the set of legal next characters.
 

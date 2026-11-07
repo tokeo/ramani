@@ -29,7 +29,7 @@ root; the weights land in ```{{ app_label }}/core/akili/weights.npz```.
 
 The pipeline, step by step:
 
-1. ```data.dataset()``` generates the synthetic (request, plan) pairs; a
+1. ```data.build_dataset()``` generates the synthetic (request, plan) pairs; a
     fixed leading slice is held back for the final evaluation and never
     trained on.
 2. ```encode_pair```/```tensorize``` turn every pair into one fixed-length row
@@ -76,7 +76,7 @@ import torch
 from torch import nn
 
 from {{ app_label }}.core.akili import tokenizer
-from {{ app_label }}.core.akili.data import dataset
+from {{ app_label }}.core.akili.data import build_dataset
 from {{ app_label }}.core.akili.dsl import NOMATCH
 
 # one source of truth for the plan-length budget: the same constant the
@@ -268,7 +268,7 @@ def main():
     minus = not arguments.no_minus
     # build the dataset, then split off a fixed held-out slice that the loop
     # never sees, the only honest place to read accuracy from
-    examples = dataset(int(os.environ.get('AKILI_DATA', '60000')), minus=minus)
+    examples = build_dataset(int(os.environ.get('AKILI_DATA', '60000')), minus=minus)
     held = examples[:600]
     train = examples[600:]
     data = tensorize(train, CONFIG['context'])
