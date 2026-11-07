@@ -12,7 +12,7 @@ pdoc:
   ### modules to render (str | list), app, test and tokeo as default
   modules: null
   ### module prefixes to skip in the discovery
-  # exclude: []
+  # excludes: []
   ### render content into output directory
   output_dir: html
   ### serve the pdoc service
@@ -20,7 +20,7 @@ pdoc:
   ### port for serving the pdoc service
   port: 9999
   ### relative project path of the favicon, copied into the root of the docs
-  favicon: public/favicon.ico
+  favicon_path: public/favicon.ico
   ### add html lang tag
   lang: 'en'
   ### suffix shown in the html <title>
@@ -36,7 +36,7 @@ pdoc:
   #   - {{ app_label }}.templates.pdoc.docstrings
   #   - tokeo.templates.pdoc.docstrings
   ### render the yaml configuration
-  show_config: true
+  config_page: true
   ### how many levels of the class hierarchy above a documented class to
   ### list. pdoc itself only exposes the direct bases; 0 disables the list.
   ancestors_max_depth: 2
@@ -45,6 +45,6 @@ pdoc:
   ### glob patterns never to react to. `.*` covers hidden scratch files
   watch_excludes: '.*'
   ### seconds between two checks of the change flag
-  watch_interval: 2.0
+  watch_interval_seconds: 2.0
   ### seconds of quiet required before restarting
-  watch_settle: 1.5
+  watch_settle_seconds: 1.5

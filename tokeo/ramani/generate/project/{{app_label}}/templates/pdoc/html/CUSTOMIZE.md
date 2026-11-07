@@ -9,7 +9,7 @@ supplies the rest.
 
 Set these in ```config/{{ app_label }}/base.d/pdoc.yaml``` under ```pdoc:```
 
-- ```favicon```: path/URL of the favicon (default ```public/favicon.ico```)
+- ```favicon_path```: project path of the favicon (default ```public/favicon.ico```)
 - ```title```: suffix in the page title (renders as "module dot Title")
 - ```brand```: sidebar label; leave null to use "rocket <app label>"
 
