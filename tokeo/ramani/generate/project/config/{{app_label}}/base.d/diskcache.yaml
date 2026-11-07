@@ -18,4 +18,4 @@ diskcache:
   ### mark lock keys with prefix
   locks_key_prefix: dc_
   ### seconds between two checks of a waiting lock or temper call
-  locks_sleep_time: 0.1
+  locks_sleep_seconds: 0.1
