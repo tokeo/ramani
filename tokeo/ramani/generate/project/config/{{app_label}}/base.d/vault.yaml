@@ -22,7 +22,7 @@ vault:
     ### secrets in shared files
     plain:
       type: plain
-{% if feature_vault_crypted == "Y" %}
+{% if feature_vault_encrypted == "Y" %}
 
     ### profile encrypting directly with a ready Fernet key from the environment
     easy:

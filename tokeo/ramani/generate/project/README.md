@@ -176,7 +176,7 @@ The example service accepts mail to ```tokeo@local``` and counts the words of th
 {% endif %}
 ### Keep Secrets in the Config
 
-A secret in a config file is a ```!vault:``` value. The ```plain``` profile keeps it readable but masks it in pdoc and dumps{% if feature_vault_crypted == "Y" %}, the profiles ```easy``` and ```human``` encrypt it{% endif %}:
+A secret in a config file is a ```!vault:``` value. The ```plain``` profile keeps it readable but masks it in pdoc and dumps{% if feature_vault_encrypted == "Y" %}, the profiles ```easy``` and ```human``` encrypt it{% endif %}:
 
 ```yaml
 smtp:
@@ -186,7 +186,7 @@ smtp:
 ```bash
 # Read a value of the config, decrypted
 {{ app_label }} vault decrypt --config smtp.auth_password
-{% if feature_vault_crypted == "Y" %}
+{% if feature_vault_encrypted == "Y" %}
 
 # Scaffold a profile with fresh key material, then encrypt a value for it
 {{ app_label }} vault create --type scrypt human

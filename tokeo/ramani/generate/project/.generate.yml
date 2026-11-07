@@ -57,8 +57,8 @@ variables:
     case: "upper"
     default: "Y"
 
-  - name: feature_vault_crypted
-    prompt: "Enable crypted vaults (enc, scrypt; needs cryptography) [(Y)es/(N)o]"
+  - name: feature_vault_encrypted
+    prompt: "Enable encrypted vaults (enc, scrypt; needs cryptography) [(Y)es/(N)o]"
     validate: "^[YN]$"
     case: "upper"
     default: "Y"
