@@ -99,7 +99,7 @@ make proto
 # Execute a task using the gRPC client
 {{ app_label }} grpccall count-words --url https://github.com
 
-# When server uses TLS (grpc.tls_enabled) the client needs --tls
+# When server uses TLS (grpc.tls) the client needs --tls
 {{ app_label }} grpccall count-words --tls --url https://github.com
 ```
 

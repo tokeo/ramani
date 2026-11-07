@@ -3,17 +3,17 @@ gRPC client controller for the {{ app_class_name }} service.
 
 GrpcCallController exposes the remote gRPC methods as nested CLI commands
 (stacked on the base controller). Each command parses its arguments, opens
-a channel to the configured grpc url and calls the matching stub method.
+a channel to the configured grpc address and calls the matching stub method.
 
 ### Notes
 
-- The channel target is read from the grpc config section (grpc.url), the
-    same url the server binds to
+- The channel target is read from the grpc config section (grpc.address),
+    the same address the server binds to
 - By default the channel is plain (grpc.insecure_channel); pass --tls to
     switch to a TLS channel. --cert/--key, --user or --insecure imply --tls
 - Server cert validation: when TLS is active, the server PEM at config
-    grpc.tls_certificate is used as the root CA. With --insecure (or when
-    grpc.tls_certificate is null) a one-off TOFU probe via the stdlib ssl
+    grpc.tls_cert_path is used as the root CA. With --insecure (or when
+    grpc.tls_cert_path is null) a one-off TOFU probe via the stdlib ssl
     module fetches whatever cert the server presents and accepts it
 - --cert and --key together enable mTLS (client cert auth); both must be
     given or neither
@@ -121,8 +121,8 @@ class GrpcCallController(Controller):
 
         Returns a plain insecure channel unless TLS was requested explicitly
         or implied by --cert/--key, --user or --insecure. With TLS the root
-        CA comes from grpc.tls_certificate; --insecure or a null
-        tls_certificate falls back to a TOFU probe via ssl.
+        CA comes from grpc.tls_cert_path; --insecure or a null
+        tls_cert_path falls back to a TOFU probe via ssl.
 
         ### Returns
 
@@ -133,7 +133,7 @@ class GrpcCallController(Controller):
         - **{{ app_class_name }}Error**: When only one of --cert/--key is set
 
         """
-        target = self.app.config.get('grpc', 'url')
+        target = self.app.config.get('grpc', 'address')
         pargs = self.app.pargs
 
         # cert and key are paired for mTLS
@@ -141,13 +141,13 @@ class GrpcCallController(Controller):
             raise {{ app_class_name }}Error('--cert and --key must both be given for mTLS')
 
         # any of these turns tls on; --tls alone is plain tls without mTLS/auth
-        tls_enabled = pargs.tls or pargs.insecure or pargs.cert is not None or pargs.user is not None
+        is_tls = pargs.tls or pargs.insecure or pargs.cert is not None or pargs.user is not None
 
-        if not tls_enabled:
+        if not is_tls:
             return grpc.insecure_channel(target)
 
         # pick the root ca: server PEM from config, or TOFU probe
-        server_pem = self.app.config.get('grpc', 'tls_certificate')
+        server_pem = self.app.config.get('grpc', 'tls_cert_path')
         if pargs.insecure or server_pem is None:
             # split host:port, ssl.get_server_certificate connects and returns
             # the cert pem; this is the trust-on-first-use moment

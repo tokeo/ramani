@@ -10,7 +10,7 @@
 ### Config for gRPC API service connectivity and implementation
 grpc:
   ### serve and connect to the grpc service
-  url: localhost:50051
+  address: localhost:50051
   ### Thread Pool max-workers for grpc service
   max_workers: 2
   ### module and method to launch grpc server
@@ -20,20 +20,20 @@ grpc:
   ### module and interceptor chain for grpc implementations
   grpc_interceptor: {{ app_label }}.core.grpc.{{ app_label }}_interceptor:{{ app_label }}_interceptor
   ### tls is optional, on with the auto certificate of the project template
-  tls_enabled: {{ 'true' if feature_grpc_auto_certificates == 'Y' else 'false' }}
+  tls: {{ 'true' if feature_grpc_auto_certificates == 'Y' else 'false' }}
   ### custom cert: paths to pem files for cert and key (both or none)
-  tls_certificate: null
-  tls_key: null
+  tls_cert_path: null
+  tls_key_path: null
   ### validity for the in-memory auto cert when no custom cert is set
   tls_valid_days: 90
-  ### auto cert subject common name, if not given taken from url host
-  tls_cn: null
-  ### auto cert extra names/ips for SAN (url host is always included)
-  tls_sans: null
+  ### auto cert subject common name, if not given taken from address host
+  tls_cert_cn: null
+  ### auto cert extra names/ips for SAN (address host is always included)
+  tls_cert_sans: null
   ### auto cert key: 'rsa' (size in bits) or 'ec' (size = curve 256/384),
   ### grpc does no tls handshake with a P-521 key
   tls_key_type: ec
   tls_key_size: 384
   ### client ca: when set, only clients with a valid cert of this ca pass the
   ### tls handshake, the interceptors still decide each call
-  tls_client_ca: null
+  tls_client_ca_path: null
