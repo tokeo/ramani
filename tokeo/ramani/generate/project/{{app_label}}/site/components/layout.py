@@ -15,18 +15,18 @@ in this file.
 
 To protect the framework, all newly created layout functions, root-level
 context managers, or wrappers that execute native NiceGUI ```ui.*``` commands
-must trigger the security guard (the ```guard_user_context()``` tripwire)
+must trigger the security guard (the ```check_user_context()``` tripwire)
 before rendering.
 
 The guard checks that the function is being called from safely inside an
 active user's page route. It is implemented like this:
 
 ```python
-from tokeo.ext.nicegui import guard_user_context
+from tokeo.ext.nicegui import check_user_context
 
 def my_new_layout_block():
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     # add additional elements
     ui.label('This element is now safe from global leaks')
@@ -50,7 +50,7 @@ startup, intentionally preventing the memory leak from ever reaching production.
 
 from contextlib import contextmanager
 from tokeo.ext.appshare import app
-from tokeo.ext.nicegui import guard_user_context
+from tokeo.ext.nicegui import check_user_context
 
 ui = app.nicegui.ui
 ux = app.nicegui.ux
@@ -113,7 +113,7 @@ def page(
     footer=None,
 ):
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     # update some nicegui / quasar basics
     css_inject()
@@ -160,7 +160,7 @@ def nav_item(
     icon_classes='text-2xl',
 ):
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     with ux.li().classes(f'hover:!{COLORS["nav_hover"]} hover:{COLORS["nav_hover_bg"]} rounded flex items-center {height}').style():
         if href:
@@ -183,7 +183,7 @@ def nav_item(
 @contextmanager
 def nav():
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     with ux.div().classes(f'p-4 {COLORS["nav"]} {COLORS["nav_bg"]} rounded-xl w-full'):
         with ux.ul().classes('flex sm:flex-col overflow-hidden content-center justify-between'):
@@ -193,7 +193,7 @@ def nav():
 @contextmanager
 def footer(footer_info=None, footer_copyright='{{ app_copyright }}'):
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     # sticky footer
     with ux.footer().classes(f'{COLORS["footer_bg"]} mt-auto'):

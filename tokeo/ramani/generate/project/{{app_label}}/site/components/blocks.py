@@ -13,18 +13,18 @@ Developers should import this module into their isolated page functions (inside
 
 To protect the framework, all newly created layout functions, root-level
 context managers, or wrappers that execute native NiceGUI ```ui.*``` commands
-must trigger the security guard (the ```guard_user_context()``` tripwire)
+must trigger the security guard (the ```check_user_context()``` tripwire)
 before rendering.
 
 The guard checks that the function is being called from safely inside an
 active user's page route. It is implemented like this:
 
 ```python
-from tokeo.ext.nicegui import guard_user_context
+from tokeo.ext.nicegui import check_user_context
 
 def my_new_layout_block():
     # ensure multi-user safety
-    guard_user_context()
+    check_user_context()
 
     # add additional elements
     ui.label('This element is now safe from global leaks')
