@@ -401,7 +401,7 @@ ai:
         base_url: http://localhost:8000/v1
         # key: ${OPENAI_API_KEY}     # env/vault resolution; never clear text
         # timeout: 120
-      ### passed unchecked to the endpoint; per call --model_param key=value
+      ### passed unchecked to the endpoint; per call --model-param key=value
       ### (see tokeo CONFIG.md section 8)
       ### common keys:
       ###   temperature      randomness/creativity, ~0.0-2.0 (lower = focused)
