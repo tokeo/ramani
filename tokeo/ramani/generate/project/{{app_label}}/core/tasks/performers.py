@@ -39,7 +39,10 @@ def process_order(order_id, notify_customer=True):
         app.log.warning(
             f"Cannot process order {order_id} with status {order.status}"
         )
-        return {'success': False, 'reason': f"Invalid order status: {order.status}"}
+        return {
+            'is_successful': False,
+            'error': f"Invalid order status: {order.status}",
+        }
 
     # Update order status in database
     app.db.update('orders', order_id, {'status': 'processing'})
@@ -51,7 +54,7 @@ def process_order(order_id, notify_customer=True):
     if notify_customer:
         actors.send_order_status_notification.send(order_id, 'processing')
 
-    return {'success': True, 'order_id': order_id}
+    return {'is_successful': True, 'order_id': order_id}
 ```
 
 Invoke performers from controllers:
@@ -61,10 +64,10 @@ Invoke performers from controllers:
 def process(self):
     order_id = self.app.pargs.id
     result = self.app.{{app_label}}.performers.process_order(order_id)
-    if result['success']:
+    if result['is_successful']:
         self.app.log.info(f"Order {order_id} processing initiated")
     else:
-        self.app.log.error(f"Order processing failed: {result['reason']}")
+        self.app.log.error(f"Order processing failed: {result['error']}")
 ```
 
 ### Notes

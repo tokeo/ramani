@@ -22,7 +22,7 @@ An example of adding a new page dynamically:
 ```python
 from .pages import page_catalog
 
-def pages_map():
+def map_pages():
     pages = {
         '/': page_root,
         '/catalog': page_catalog,  # Newly mapped route
@@ -37,7 +37,7 @@ def pages_map():
 
 - ```ui.page()``` and ```fastapi_app.get()``` are used as programmatic wrappers in a
   loop, not as decorators
-- The ```routes()``` function is invoked by the ```TokeoNicegui``` engine during
+- The ```map_routes()``` function is invoked by the ```TokeoNicegui``` engine during
   startup
 
 ### Reminders
@@ -58,7 +58,7 @@ ui = app.nicegui.ui
 fa = app.nicegui.fastapi_app
 
 
-def apis_map():
+def map_apis():
     """
     Programmatically register all FastAPI REST endpoints.
 
@@ -70,7 +70,7 @@ def apis_map():
     fa.get('/_/api/example')(api_example)
 
 
-def pages_map():
+def map_pages():
     """
     Programmatically register all NiceGUI web pages.
 
@@ -93,7 +93,7 @@ def pages_map():
         ui.page(path, title=f'{title} - {path[1:]}' if path != '/' else title)(method)
 
 
-def routes():
+def map_routes():
     """
     Activate the routes for APIs and pages.
 
@@ -101,5 +101,5 @@ def routes():
     to finalize the routing map before the web server binds to the port.
 
     """
-    apis_map()
-    pages_map()
+    map_apis()
+    map_pages()

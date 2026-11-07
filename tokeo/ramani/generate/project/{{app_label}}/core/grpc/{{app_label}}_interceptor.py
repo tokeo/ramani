@@ -4,8 +4,8 @@ gRPC server interceptor(s) for the {{ app_class_name }} service.
 Interceptors run as a cross-cutting layer in front of every rpc, before the
 request reaches the servicer. They are the place for auth, logging or tracing.
 The tokeo grpc extension wires them in via the grpc_interceptor config
-(module:method), which is resolved to the {{ app_label }}_interceptor
-factory below.
+(module:method), which is resolved to the build_interceptors factory
+below.
 
 ### Notes
 
@@ -68,7 +68,7 @@ class AuthInterceptor(grpc.ServerInterceptor):
         return continuation(handler_call_details)
 
 
-def {{ app_label }}_interceptor():
+def build_interceptors():
     """
     Factory for the gRPC server interceptor chain.
 

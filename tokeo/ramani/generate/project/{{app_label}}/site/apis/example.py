@@ -64,7 +64,7 @@ async def search_products(request: ProductRequest):
 ##### register it in ```site/routes.py```
 
 ```python
-def apis_map():
+def map_apis():
     fa.post('/_/api/products/search')(search_products)
 ```
 

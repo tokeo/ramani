@@ -18,7 +18,7 @@ grpc:
   ### module and servicer for grpc implementations
   grpc_servicer: {{ app_label }}.core.grpc.{{ app_label }}_servicer:{{ app_class_name }}Servicer
   ### module and interceptor chain for grpc implementations
-  grpc_interceptor: {{ app_label }}.core.grpc.{{ app_label }}_interceptor:{{ app_label }}_interceptor
+  grpc_interceptor: {{ app_label }}.core.grpc.{{ app_label }}_interceptor:build_interceptors
   ### tls is optional, on with the auto certificate of the project template
   tls: {{ 'true' if feature_grpc_auto_certificates == 'Y' else 'false' }}
   ### custom cert: paths to pem files for cert and key (both or none)

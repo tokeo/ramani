@@ -59,14 +59,14 @@ def generate_pdf_from_html(html_content, output_path, options=None):
         os.unlink(temp_html)
 
         return {
-            'success': True,
+            'is_successful': True,
             'path': output_path,
             'size': os.path.getsize(output_path)
         }
     except subprocess.CalledProcessError as e:
         app.log.error(f"PDF generation failed: {e.stderr}")
         return {
-            'success': False,
+            'is_successful': False,
             'error': e.stderr
         }
 ```

@@ -14,7 +14,7 @@ nicegui:
   ### port for serving the web service
   port: 8080
   ### function that maps the pages and apis, as module:function
-  routes: {{ app_label }}.site.routes:routes
+  routes: {{ app_label }}.site.routes:map_routes
   ### web page title
   title: {{ app_name }} Site
   ### relative project path of the favicon

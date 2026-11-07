@@ -83,7 +83,7 @@ app.nicegui.fastapi_app.config.quasar_config['screen'] = {
 }
 
 
-def css_inject():
+def inject_css():
     ui.add_head_html("""
         <style>
             .nicegui-content {
@@ -116,7 +116,7 @@ def page(
     check_user_context()
 
     # update some nicegui / quasar basics
-    css_inject()
+    inject_css()
 
     # app container
     with ux.div().classes(f'flex flex-col h-screen overflow-hidden {COLORS["bg"]}'):
@@ -151,13 +151,13 @@ def page(
 
 def nav_item(
     label='Label',
-    height='h-auto',
-    classes='',
     href=None,
-    new_tab=False,
     on_click=None,
     icon='link',
     icon_classes='text-2xl',
+    classes='',
+    height='h-auto',
+    new_tab=False,
 ):
     # ensure multi-user safety
     check_user_context()
