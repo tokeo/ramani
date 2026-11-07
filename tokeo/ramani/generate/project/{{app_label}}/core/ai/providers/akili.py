@@ -46,15 +46,15 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
 
     _engine = None
 
-    def chat(self, profile, messages, tools=None, model_params=None):
+    def chat(self, messages, profile, tools=None, model_params=None):
         """
         Run one deterministic model turn.
 
         ### Args
 
+        - **messages** (list): Chat messages as plain OpenAI-style dicts
         - **profile** (dict): The resolved profile (unused options pass
             through untouched)
-        - **messages** (list): Chat messages as plain OpenAI-style dicts
         - **tools** (list|None): OpenAI-style function specs; the decoder
             is constrained to these active tools
         - **model_params** (dict|None): Ignored; the micro model has no
