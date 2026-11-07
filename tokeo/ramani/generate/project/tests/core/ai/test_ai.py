@@ -17,7 +17,7 @@ from tokeo.core.ai.guards.confirm import GOVERNOR_CONFIRM_CHANNEL_HOOK, TokeoAiC
 from tokeo.core.utils.date import get_utc_now
 from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.ai.linter import TokeoAiLinter
-from tokeo.core.ai.guards.validate import TokeoAiToolSchemaValidator
+from tokeo.core.ai.guards.validate import TokeoAiToolSchemaValidateGuard
 from tokeo.core.ai.guards.redact import TokeoAiRegexRedactGuard, TokeoAiRedactGuardError
 from {{ app_label }}.core.ai.transformers.truncate import {{ app_class_name }}AiTruncateTransformer
 from {{ app_label }}.core.ai.transformers.today import {{ app_class_name }}AiTodayTransformer
@@ -152,13 +152,13 @@ def test_{{ app_label }}_ai_agent_guarded_denies_writing(scratch):
         assert any('ai trace' in message and 'denied' in message for message in logs)
 
 
-def test_{{ app_label }}_ai_tool_schema_validator_denies_when_strict():
-    # strict mode denies a malformed call against the tool's real schema before
+def test_{{ app_label }}_ai_tool_schema_validate_guard_denies_with_schema_enforce():
+    # schema_enforce denies a malformed call against the tool's real schema before
     # anything runs (here: the required "input" is missing)
     with {{ app_class_name }}AiTestApp() as app:
-        guard = TokeoAiToolSchemaValidator(app)
-        # strict comes from the item's options, handed in by _setup
-        guard._setup(app, 'tool_schema_validate', {'options': {'strict': True}})
+        guard = TokeoAiToolSchemaValidateGuard(app)
+        # schema_enforce comes from the item's options, handed in by _setup
+        guard._setup(app, 'tool_schema_validate', {'options': {'schema_enforce': True}})
         invocation = Invocation(id='t1', name='calc', arguments={}, parameters=TokeoAiCalcTool.Meta.parameters)
         guard.on_call(None, invocation)
         assert invocation.decision == 'deny'
@@ -166,16 +166,17 @@ def test_{{ app_label }}_ai_tool_schema_validator_denies_when_strict():
         assert "missing required argument 'input'" in invocation.reason
 
 
-def test_{{ app_label }}_ai_tool_schema_validator_flags_when_not_strict():
-    # the default (strict false) only flags a malformed call: the reason is set
-    # (so it shows on the trace) and a warning is logged, but the call still runs
+def test_{{ app_label }}_ai_tool_schema_validate_guard_flags_without_schema_enforce():
+    # the default (schema_enforce false) only flags a malformed call: the
+    # reason is set (so it shows on the trace) and a warning is logged, but
+    # the call still runs
     logs = []
     handler = logging.Handler()
     handler.emit = lambda record: logs.append(record.getMessage())
     with {{ app_class_name }}AiTestApp() as app:
         app.log.backend.addHandler(handler)
         app.log.backend.setLevel(logging.WARNING)
-        guard = TokeoAiToolSchemaValidator(app)
+        guard = TokeoAiToolSchemaValidateGuard(app)
         # a setup without a config: the guard runs on its class defaults
         guard._setup(app)
         invocation = Invocation(id='t1', name='calc', arguments={}, parameters=TokeoAiCalcTool.Meta.parameters)
