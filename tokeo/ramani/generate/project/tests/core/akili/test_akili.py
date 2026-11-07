@@ -14,7 +14,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
-from tokeo.core.utils.date import utc_now
+from tokeo.core.utils.date import get_utc_now
 from {{ app_label }}.main import {{ app_class_name }}Test
 from {{ app_label }}.core import akili
 
@@ -181,7 +181,7 @@ def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeyp
     from {{ app_label }}.core.ai.tools.current import TokeoAiCurrentTool
 
     frozen = datetime(2026, 7, 3, 23, 30, tzinfo=timezone.utc)
-    monkeypatch.setattr('{{ app_label }}.core.ai.tools.current.utc_now', lambda: frozen)
+    monkeypatch.setattr('{{ app_label }}.core.ai.tools.current.get_utc_now', lambda: frozen)
 
     with {{ app_class_name }}AiTestApp() as app:
         out = TokeoAiCurrentTool(app).exec().value.as_str
@@ -228,11 +228,12 @@ def test_{{ app_label }}_ai_akili_model():
 
         # a bare time word is the current date: today/now/heute/jetzt all
         # resolve to current(); the time part varies, so match the date head.
-        # every akili date tool reports UTC (current -> utc_now, add_* -> to_utc),
-        # so build the expected days on that same utc basis and compute it once:
+        # every akili date tool reports UTC (current -> get_utc_now,
+        # add_* -> to_utc), so build the expected days on that same utc basis
+        # and compute it once:
         # a naive date.today() compares a local day against a utc day and diverges
         # near utc midnight in a timezone ahead of utc
-        _today = utc_now().date()
+        _today = get_utc_now().date()
         today = _today.isoformat()
         for word in ('today', 'now', 'heute', 'jetzt'):
             out = ask_akili(word)

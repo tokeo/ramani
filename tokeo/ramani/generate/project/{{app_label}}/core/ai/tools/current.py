@@ -13,7 +13,7 @@ instantiates it on demand.
 
 from tokeo.core.ai import TokeoAiTool
 from tokeo.core.ai.tool import create_tool_result
-from tokeo.core.utils.date import utc_now, to_utc_timestring
+from tokeo.core.utils.date import get_utc_now, to_utc_timestring
 
 
 class TokeoAiCurrentTool(TokeoAiTool):
@@ -47,7 +47,7 @@ class TokeoAiCurrentTool(TokeoAiTool):
             timestring ```YYYY-MM-DD HH:MM:SS.MMMZ```
 
         """
-        now = utc_now()
+        now = get_utc_now()
         # the value is the datetime itself, so the trace keeps the full instant;
         # the model sees the UTC timestring as the as_str
         return create_tool_result(now, as_str=to_utc_timestring(now))

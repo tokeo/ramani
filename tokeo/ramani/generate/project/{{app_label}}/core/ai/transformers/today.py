@@ -25,7 +25,7 @@ ai:
 
 from tokeo.core.ai import TokeoAiTransformer
 from tokeo.core.ai.governor import GOVERNOR_STAGE_ON_PROMPT
-from tokeo.core.utils.date import utc_now
+from tokeo.core.utils.date import get_utc_now
 
 
 class {{ app_class_name }}AiTodayTransformer(TokeoAiTransformer):
@@ -60,5 +60,5 @@ class {{ app_class_name }}AiTodayTransformer(TokeoAiTransformer):
         if ctx.turndata.get(mark):
             return
         ctx.turndata[mark] = True
-        text = self._config('text', stage=GOVERNOR_STAGE_ON_PROMPT).format(date=utc_now().date().isoformat())
+        text = self._config('text', stage=GOVERNOR_STAGE_ON_PROMPT).format(date=get_utc_now().date().isoformat())
         ctx.messages.insert(0, dict(role='system', content=text))

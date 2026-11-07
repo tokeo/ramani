@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 from tokeo.core.ai import Invocation, ChatResult, ChatMessage, TraceStep, TokeoAiError, TokeoAiContext
 from tokeo.core.ai.guards.confirm import GOVERNOR_CONFIRM_CHANNEL_HOOK, TokeoAiConfirmAnswer
-from tokeo.core.utils.date import utc_now
+from tokeo.core.utils.date import get_utc_now
 from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.ai.linter import TokeoAiLinter
 from tokeo.core.ai.guards.validate import TokeoAiToolSchemaValidator
@@ -267,7 +267,7 @@ def test_{{ app_label }}_ai_today_transformer_puts_the_date_in_front_once():
         transformer.on_prompt(ctx)
         transformer.on_prompt(ctx)
         assert [m['role'] for m in ctx.messages] == ['system', 'user']
-        assert ctx.messages[0]['content'] == f'Today is {utc_now().date().isoformat()} (UTC).'
+        assert ctx.messages[0]['content'] == f'Today is {get_utc_now().date().isoformat()} (UTC).'
 
 
 def test_{{ app_label }}_ai_today_conductor_adds_the_date_call(scratch):
@@ -277,7 +277,7 @@ def test_{{ app_label }}_ai_today_conductor_adds_the_date_call(scratch):
         result = app.ai.chat([{'role': 'user', 'content': 'welcher tag ist heute'}], agent='dated', profile='mock')
     calls = [step.object for step in result.trace if isinstance(step.object, Invocation)]
     assert {(call.name, call.id[:4]) for call in calls} == {('current', 'inj_')}
-    assert utc_now().date().isoformat() in result.answer.text
+    assert get_utc_now().date().isoformat() in result.answer.text
 
 
 def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scratch):
