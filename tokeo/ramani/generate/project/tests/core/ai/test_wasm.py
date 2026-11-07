@@ -139,14 +139,14 @@ def make_wasm_ai_config():
             wasm_untrusted=dict(
                 type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
                 tools=['run_untrusted'],
-                options=dict(runtime=_RUNTIME, stdlib=_STDLIB, max_memory_mb=256, timeout=10),
+                options=dict(runtime_path=_RUNTIME, stdlib_dir=_STDLIB, max_memory_mb=256, timeout=10),
             ),
             wasm_trusted=dict(
                 type='tokeo.core.ai.sandboxes:TokeoAiWasmSandbox',
                 tools=['run_trusted'],
                 options=dict(
-                    runtime=_RUNTIME,
-                    stdlib=_STDLIB,
+                    runtime_path=_RUNTIME,
+                    stdlib_dir=_STDLIB,
                     max_memory_mb=256,
                     timeout=10,
                     mounts=trusted_mounts,

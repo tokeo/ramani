@@ -187,12 +187,12 @@ ai:
       tools:
         - coding
       options:
-        runtime: ./wasm/python.wasm
-        stdlib: ./wasm/lib/python3.13
+        runtime_path: ./wasm/python.wasm
+        stdlib_dir: ./wasm/lib/python3.13
         max_memory_mb: 256
         timeout: 10
         # max_disk_mb: 64      # MB the guest may write, its output included
-        # watch_interval: 1.0  # seconds between the disk and file checks
+        # watch_interval_seconds: 1.0  # seconds between the disk and file checks
         # max_output_mb: 1     # stdout and stderr kept, larger values fail
 
 {% if feature_ai_docker == "Y" %}
