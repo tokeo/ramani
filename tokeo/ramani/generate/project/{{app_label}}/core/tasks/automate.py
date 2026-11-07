@@ -125,7 +125,7 @@ def count_words(runner, verbose=False, **kwargs):
     return True
 
 
-def uname(runner, verbose=False, flags=None, **kwargs):
+def uname(runner, flags=None, verbose=False, **kwargs):
     """
     Execute the uname command on a target system with specified flags.
 
@@ -136,10 +136,10 @@ def uname(runner, verbose=False, flags=None, **kwargs):
 
     - **runner** (from invoke): SSH or local shell connection
         to execute commands
-    - **verbose** (bool, optional): Whether to show command output.
-        Defaults to False.
     - **flags** (list, optional): List of flags to pass to
         the uname command
+    - **verbose** (bool, optional): Whether to show command output.
+        Defaults to False.
     - **kwargs** (dict, kwargs): Additional arguments for task and runner.
         Standards are 'pty', 'env', 'encoding', 'timeout' and others.
 
