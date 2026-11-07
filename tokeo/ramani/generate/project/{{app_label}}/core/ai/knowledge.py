@@ -79,7 +79,7 @@ class KnowledgeIndex:
         self.idf = {}
 
     @classmethod
-    def of(cls, base_dir):
+    def get_index(cls, base_dir):
         """
         Return the up-to-date index of a directory.
 
@@ -95,14 +95,14 @@ class KnowledgeIndex:
         """
         with cls._lock:
             index = cls._indexes.setdefault(os.path.abspath(base_dir), cls(base_dir))
-            files = index.files()
+            files = index.find_files()
             signature = [(path, os.stat(path).st_mtime_ns, os.stat(path).st_size) for path in files]
             if signature != index.signature:
                 index.build(files)
                 index.signature = signature
             return index
 
-    def files(self):
+    def find_files(self):
         """
         List the text files below the directory, sorted.
 
@@ -153,14 +153,14 @@ class KnowledgeIndex:
                 df[word] = df.get(word, 0) + 1
         self.idf = {word: math.log(1 + (total - n + 0.5) / (n + 0.5)) for word, n in df.items()}
 
-    def search(self, query, top_k=3, min_score=1.0):
+    def search(self, query, max_sections=3, min_score=1.0):
         """
         Rank the sections for a query by BM25.
 
         ### Args
 
         - **query** (str): The words to look for
-        - **top_k** (int): The most sections to return
+        - **max_sections** (int): The most sections to return
         - **min_score** (float): The lowest score a section needs; a section
             without any word of the query never counts
 
@@ -182,7 +182,7 @@ class KnowledgeIndex:
             if score > 0 and score >= min_score:
                 hits.append(KnowledgeHit(source, number, round(score, 2), text))
         hits.sort(key=lambda hit: (-hit.score, hit.source, hit.section))
-        return hits[:top_k]
+        return hits[:max_sections]
 
 
 def format_hits(hits, max_chars=2000):

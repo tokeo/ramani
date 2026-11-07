@@ -64,17 +64,17 @@ class TokeoAiCalcTool(TokeoAiTool):
         # JSON-schema object describing the arguments
         parameters = dict(
             type='object',
-            properties=dict(input=dict(type='string', description='the expression, e.g. 2 + 3')),
-            required=['input'],
+            properties=dict(expression=dict(type='string', description='the expression, e.g. 2 + 3')),
+            required=['expression'],
         )
 
-    def exec(self, input):
+    def exec(self, expression):
         """
         Evaluate the expression and return the result.
 
         ### Args
 
-        - **input** (str): The expression to evaluate, for example ```2 + 3```
+        - **expression** (str): The expression to evaluate, for example ```2 + 3```
 
         ### Returns
 
@@ -86,11 +86,11 @@ class TokeoAiCalcTool(TokeoAiTool):
 
         """
         try:
-            number = _eval_expression(ast.parse(str(input), mode='eval').body)
+            number = _eval_expression(ast.parse(str(expression), mode='eval').body)
         except TokeoAiError:
             raise
         except Exception:
-            raise TokeoAiError(f'calc cannot evaluate {input!r}')
+            raise TokeoAiError(f'calc cannot evaluate {expression!r}')
         # return the number itself: the loop wraps a plain value into a result,
         # so the number stays the structured value and its text the as_str
         return number

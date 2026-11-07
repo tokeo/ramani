@@ -13,4 +13,4 @@ ai:
     append_file:
       options:
         base_dir: tmp/tests
-        file: notes.txt
+        file_path: notes.txt

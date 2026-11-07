@@ -72,11 +72,11 @@ def test_{{ app_label }}_ai_tools_exec(scratch):
         # calc and read_file hand back a raw value; the date tools and the file
         # writer hand back a ToolResult whose as_str the model would see, so the
         # test reads each according to what the tool returns
-        assert app.ai._get_tool('calc').exec(input='2 + 3') == 5
+        assert app.ai._get_tool('calc').exec(expression='2 + 3') == 5
         assert len(app.ai._get_tool('current').exec().value.as_str) == 24  # YYYY-mm-dd HH:MM:SS.MMMZ
         assert app.ai._get_tool('read_file').exec(path='sample.txt') == 'buy milk\n'
         appended = app.ai._get_tool('append_file').exec(text='hello')
-        assert appended.value.as_str == 'true' and appended.value.as_data['file'] == 'notes.txt'
+        assert appended.value.as_str == 'true' and appended.value.as_data['file_path'] == 'notes.txt'
         # the date tools take a date-only string as utc, so the calendar step is
         # stable on every machine; clamping shows jan 31 + 1m -> feb 28,
         # jun 8 - 4m -> feb 8, feb 29 + 1y -> feb 28
@@ -154,7 +154,7 @@ def test_{{ app_label }}_ai_agent_guarded_denies_writing(scratch):
 
 def test_{{ app_label }}_ai_tool_schema_validate_guard_denies_with_schema_enforce():
     # schema_enforce denies a malformed call against the tool's real schema before
-    # anything runs (here: the required "input" is missing)
+    # anything runs (here: the required "expression" is missing)
     with {{ app_class_name }}AiTestApp() as app:
         guard = TokeoAiToolSchemaValidateGuard(app)
         # schema_enforce comes from the item's options, handed in by _setup
@@ -163,7 +163,7 @@ def test_{{ app_label }}_ai_tool_schema_validate_guard_denies_with_schema_enforc
         guard.on_call(None, invocation)
         assert invocation.decision == 'deny'
         assert invocation.decision == Invocation.DENY
-        assert "missing required argument 'input'" in invocation.reason
+        assert "missing required argument 'expression'" in invocation.reason
 
 
 def test_{{ app_label }}_ai_tool_schema_validate_guard_flags_without_schema_enforce():
@@ -184,8 +184,8 @@ def test_{{ app_label }}_ai_tool_schema_validate_guard_flags_without_schema_enfo
         # not denied: the call is allowed to run
         assert invocation.decision == Invocation.ALLOW
         # but flagged: the reason carries the problem, on the trace and in the log
-        assert "missing required argument 'input'" in invocation.reason
-        assert any("missing required argument 'input'" in line for line in logs)
+        assert "missing required argument 'expression'" in invocation.reason
+        assert any("missing required argument 'expression'" in line for line in logs)
 
 
 def test_{{ app_label }}_ai_redact_guard_masks_secrets():
@@ -311,7 +311,7 @@ def test_{{ app_label }}_ai_the_word_filter_denies_its_configured_words(scratch)
 def test_{{ app_label }}_ai_knowledge_index_ranks_sections_with_sources():
     # BM25 over the sections of docs/knowledge: the vacation section ranks
     # first, its heading stays with its text, a word nowhere finds nothing
-    index = KnowledgeIndex.of('docs/knowledge')
+    index = KnowledgeIndex.get_index('docs/knowledge')
     hits = index.search('how many vacation days per year')
     assert (hits[0].source, hits[0].section) == ('vacation.md', 1)
     assert hits[0].text.startswith('# Vacation\nEvery employee gets 30 vacation days')
@@ -325,9 +325,9 @@ def test_{{ app_label }}_ai_knowledge_index_is_built_again_after_a_change(scratc
     knowledge_dir.mkdir(exist_ok=True)
     (knowledge_dir / 'a.md').write_text('apples are green')
     try:
-        assert KnowledgeIndex.of(str(knowledge_dir)).search('bananas', min_score=0) == []
+        assert KnowledgeIndex.get_index(str(knowledge_dir)).search('bananas', min_score=0) == []
         (knowledge_dir / 'a.md').write_text('apples are green\n\nbananas are yellow')
-        hits = KnowledgeIndex.of(str(knowledge_dir)).search('bananas', min_score=0)
+        hits = KnowledgeIndex.get_index(str(knowledge_dir)).search('bananas', min_score=0)
         assert [(hit.source, hit.section) for hit in hits] == [('a.md', 2)]
     finally:
         (knowledge_dir / 'a.md').unlink()
@@ -339,7 +339,7 @@ def test_{{ app_label }}_ai_retrieve_transformer_puts_sources_before_the_questio
     # message right before the question, numbered with their sources
     with {{ app_class_name }}AiTestApp() as app:
         transformer = {{ app_class_name }}AiRetrieveTransformer(app)
-        transformer._setup(app, 'retrieve', dict(options=dict(base_dir='docs/knowledge', top_k=2)))
+        transformer._setup(app, 'retrieve', dict(options=dict(base_dir='docs/knowledge', max_sections=2)))
         ctx = TokeoAiContext(messages=[{'role': 'user', 'content': 'which hotel price per night'}])
         transformer.on_prompt(ctx)
         transformer.on_prompt(ctx)

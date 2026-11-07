@@ -5,8 +5,8 @@ Appends a line of text to one configured file below a configured base
 directory: the writing half of the file pair, and so the natural target for
 a policy guard: an agent that may read should not silently write, and denying
 ```append_file``` by name shows action-level governance on a tool that really
-exists. The target ```file``` and the ```base_dir``` are tool options from the
-configuration; the model only supplies the text.
+exists. The target ```file_path``` and the ```base_dir``` are tool options from
+the configuration; the model only supplies the text.
 
 This module is self-contained: it holds only the tool class. The project names
 it by its class path (module:Class) under ```ai.tools``` in the config, so it needs
@@ -18,7 +18,7 @@ from pathlib import Path
 
 from tokeo.core.ai import TokeoAiError, TokeoAiTool
 from tokeo.core.ai.tool import create_tool_result
-from tokeo.core.utils.date import to_utc, to_utc_timestring
+from tokeo.core.utils.date import to_utc
 
 
 def _resolve_path_below(base_dir, path):
@@ -37,7 +37,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
     Tool that appends a line of text to the configured file.
 
     The ```Meta``` description and parameters are what the model sees; the
-    ```base_dir``` and the target ```file``` are the tool's own options: they
+    ```base_dir``` and the target ```file_path``` are the tool's own options: they
     are set in ```config_defaults``` (the tool's whole outward surface),
     overridden per item by its config ```options``` and read through
     ```_config```.
@@ -64,7 +64,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
             # the directory the tool writes below
             base_dir='tmp',
             # the file below base_dir the tool appends to
-            file='notes.txt',
+            file_path='notes.txt',
         )
 
     def exec(self, text):
@@ -81,20 +81,21 @@ class TokeoAiAppendFileTool(TokeoAiTool):
 
         ### Returns
 
-        - **ToolResult**: A dict value with the file name, size_before and
-            size_after in bytes, created (true if the file was new),
-            created_at and updated_at as UTC timestrings; as_str is true/false
+        - **ToolResult**: A dict value with the file_path,
+            previous_size_bytes and size_bytes, is_created (true if the file
+            was new), created_at and updated_at as UTC datetimes (ISO-8601 in
+            the export); as_str is true/false
 
         ### Raises
 
         - **TokeoAiError**: If the configured file escapes the base directory
 
         """
-        target = _resolve_path_below(self._config('base_dir'), self._config('file'))
+        target = _resolve_path_below(self._config('base_dir'), self._config('file_path'))
         # check existence and size before the append: a missing file is created
         # by append mode, so this is the only point that can tell new from empty
-        created = not target.is_file()
-        size_before = 0 if created else target.stat().st_size
+        is_created = not target.is_file()
+        previous_size_bytes = 0 if is_created else target.stat().st_size
         with open(target, 'a') as handle:
             handle.write(str(text).rstrip('\n') + '\n')
         # read the filesystem timestamps after the write; st_birthtime is the
@@ -103,12 +104,12 @@ class TokeoAiAppendFileTool(TokeoAiTool):
         stat = target.stat()
         created_time = getattr(stat, 'st_birthtime', stat.st_ctime)
         result = dict(
-            file=self._config('file'),
-            size_before=size_before,
-            size_after=stat.st_size,
-            created=created,
-            created_at=to_utc_timestring(to_utc(created_time)),
-            updated_at=to_utc_timestring(to_utc(stat.st_mtime)),
+            file_path=self._config('file_path'),
+            previous_size_bytes=previous_size_bytes,
+            size_bytes=stat.st_size,
+            is_created=is_created,
+            created_at=to_utc(created_time),
+            updated_at=to_utc(stat.st_mtime),
         )
         # the model sees the success flag; the dict rides along for a follow-up
         return create_tool_result(result, as_str='true')

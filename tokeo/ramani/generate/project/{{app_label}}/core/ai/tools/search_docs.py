@@ -44,7 +44,7 @@ class TokeoAiSearchDocsTool(TokeoAiTool):
             # the directory of the knowledge files
             base_dir='docs/knowledge',
             # the max count of sections
-            top_k=3,
+            max_sections=3,
             # the lowest BM25 score a section needs
             min_score=1.0,
         )
@@ -63,7 +63,7 @@ class TokeoAiSearchDocsTool(TokeoAiTool):
             sources, or says that nothing was found
 
         """
-        index = KnowledgeIndex.of(self._config('base_dir'))
-        hits = index.search(query, top_k=self._config('top_k'), min_score=self._config('min_score'))
+        index = KnowledgeIndex.get_index(self._config('base_dir'))
+        hits = index.search(query, max_sections=self._config('max_sections'), min_score=self._config('min_score'))
         data = [dict(source=hit.source, section=hit.section, score=hit.score, text=hit.text) for hit in hits]
         return create_tool_result(data, as_str=format_hits(hits, max_chars=0) or 'nothing found')

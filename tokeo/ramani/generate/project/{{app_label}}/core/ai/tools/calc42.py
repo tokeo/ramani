@@ -40,17 +40,17 @@ class TokeoAiAnswer42Tool(TokeoAiTool):
         # JSON-schema object describing the arguments
         parameters = dict(
             type='object',
-            properties=dict(input=dict(type='string', description='the expression, e.g. 2 + 3')),
-            required=['input'],
+            properties=dict(expression=dict(type='string', description='the expression, e.g. 2 + 3')),
+            required=['expression'],
         )
 
-    def exec(self, input):
+    def exec(self, expression):
         """
         Return the house answer (always 42), ignoring the expression.
 
         ### Args
 
-        - **input** (str): The expression the model passed (unused; the answer
+        - **expression** (str): The expression the model passed (unused; the answer
             is always the same)
 
         ### Returns

@@ -19,7 +19,7 @@ ai:
       type: {{ app_label }}.core.ai.transformers.retrieve:{{ app_class_name }}AiRetrieveTransformer
       options:
         base_dir: docs/knowledge
-        top_k: 3
+        max_sections: 3
 ```
 """
 
@@ -46,7 +46,7 @@ class {{ app_class_name }}AiRetrieveTransformer(TokeoAiTransformer):
             # the directory of the knowledge files
             base_dir='docs/knowledge',
             # the max count of sections
-            top_k=3,
+            max_sections=3,
             # the lowest BM25 score a section needs
             min_score=1.0,
             # the max characters of context, 0 means unlimited
@@ -74,8 +74,12 @@ class {{ app_class_name }}AiRetrieveTransformer(TokeoAiTransformer):
         if not users:
             return
         question = ctx.messages[users[-1]].get('content') or ''
-        index = KnowledgeIndex.of(self._config('base_dir', stage=stage))
-        hits = index.search(question, top_k=self._config('top_k', stage=stage), min_score=self._config('min_score', stage=stage))
+        index = KnowledgeIndex.get_index(self._config('base_dir', stage=stage))
+        hits = index.search(
+            question,
+            max_sections=self._config('max_sections', stage=stage),
+            min_score=self._config('min_score', stage=stage),
+        )
         if not hits:
             return
         sources = format_hits(hits, max_chars=self._config('max_chars', stage=stage))
