@@ -36,10 +36,15 @@ smtp:
   # ssl: false
   ### enable TLS on connection, available for SSL and non SSL connections
   tls: true
-  ### verify certificate chain and hostname for ssl and tls
-  # host_cert_verify: false
-  ### CA for the verify: a single line is a file path, more lines PEM text
-  # host_cert_ca: null
+  ### verify the certificate chain for ssl and tls
+  # tls_verify_cert: false
+  ### verify the hostname of the certificate for ssl and tls, needs
+  ### tls_verify_cert
+  # tls_verify_hostname: false
+  ### path of a CA file to verify against instead of the system CAs
+  # tls_ca_path: null
+  ### PEM text of a CA to verify against, not together with tls_ca_path
+  # tls_ca: null
   ### enable authentication for service
   # auth: false
   ### auth username or identity
