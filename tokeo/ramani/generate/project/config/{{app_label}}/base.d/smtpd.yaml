@@ -62,7 +62,7 @@ smtpd:
         ### hard message size limit in bytes; null = no limit. A handler may
         ### instead enforce a dynamic limit in on_message_data_receiving_event
         ### by checking ctx.message.bytesize and raising Smtpd552Exception
-        # data_size: null
+        # max_data_bytes: null
 
         ### --- line endings (crlf_mode and crlf_data_mode in SMTPD.md) ---
         ### CRLF_ENSURE ends each line with CRLF and drops a bare CR or LF;
@@ -84,8 +84,8 @@ smtpd:
         ### ctx.message.spooler owns the file, complete at
         ### on_message_data_event and deleted right after it; take it over
         ### via spooler.keep(path) or spooler.keep() (debug keeps all files)
-        # spool: null
-        ###   spool: /var/spool/inbound/mx1-   # -> .../mx1-YYYYMMDD-HHMMSS-....eml
+        # spool_path_prefix: null
+        ###   spool_path_prefix: /var/spool/inbound/mx1-   # -> .../mx1-YYYYMMDD-HHMMSS-....eml
 
         ### --- authentication ---
         ### AUTH_FORBIDDEN | AUTH_OPTIONAL | AUTH_REQUIRED. The credential check
@@ -108,7 +108,7 @@ smtpd:
         ### the self-signed certificate derives its CN and SAN from the
         ### listener hosts; set them here if you need other names
         # tls_cert_cn: null
-        # tls_cert_san: null
+        # tls_cert_sans: null
         ### certificate + key from files on disk ...
         # tls_cert_path: null
         # tls_key_path: null
