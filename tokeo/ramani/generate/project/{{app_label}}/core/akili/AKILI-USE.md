@@ -169,7 +169,7 @@ never asked you for Python.
 ```
 
 Expected: the result plus the full trace, and in it the synthesized
-```code``` argument and ```sandbox: coded```, so you can read exactly what
+```code``` argument and ```sandbox_name: coded```, so you can read exactly what
 ran and where it ran.
 
 ### 7c. A length, where the value comes from a computation

@@ -231,4 +231,4 @@ def test_{{ app_label }}_untrusted_guest_cannot_import_the_app():
             None,
         )
         assert out.value is None
-        assert 'ModuleNotFoundError' in (out.state.exception or '')
+        assert 'ModuleNotFoundError' in (out.state.error or '')
