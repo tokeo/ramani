@@ -22,7 +22,7 @@ from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.utils.date import to_utc, to_utc_datestring, to_utc_timestring
 
 
-class TokeoAiAddMonthsTool(TokeoAiTool):
+class {{ app_class_name }}AiAddMonthsTool(TokeoAiTool):
     """
     Tool that adds a number of months to an ISO date or timestring.
 

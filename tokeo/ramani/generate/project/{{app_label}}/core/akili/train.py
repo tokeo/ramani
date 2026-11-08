@@ -99,7 +99,7 @@ from {{ app_label }}.core.akili.infer import PLAN_BUDGET
 CONFIG = dict(dim=128, layers=3, heads=4, ff=512, context=184, vocab=tokenizer.VOCAB)
 
 
-class Block(nn.Module):
+class AkiliBlock(nn.Module):
     """
     One transformer block: attention, then a small per-position MLP.
 
@@ -159,7 +159,7 @@ class AkiliNet(nn.Module):
         #: Row p is the learned meaning of "being at position p in the line"
         self.position = nn.Embedding(config['context'], config['dim'])
         #: The stack of transformer blocks (depth = config['layers'])
-        self.blocks = nn.ModuleList(Block(config['dim'], config['heads'], config['ff']) for _ in range(config['layers']))
+        self.blocks = nn.ModuleList(AkiliBlock(config['dim'], config['heads'], config['ff']) for _ in range(config['layers']))
         #: A final normalization before scoring stabilizes the logits
         self.ln = nn.LayerNorm(config['dim'])
         #: The output head: vector -> one score per byte id, no bias

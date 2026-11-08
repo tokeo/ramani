@@ -16,7 +16,7 @@ from tokeo.core.ai import TokeoAiTool
 from tokeo.core.utils.date import to_utc
 
 
-class TokeoAiWeekNumberTool(TokeoAiTool):
+class {{ app_class_name }}AiWeekNumberTool(TokeoAiTool):
     """
     Tool that tells the ISO week number of an ISO date.
 

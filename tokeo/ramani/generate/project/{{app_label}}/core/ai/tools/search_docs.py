@@ -17,7 +17,7 @@ from tokeo.core.ai.tool import create_tool_result
 from {{ app_label }}.core.ai.knowledge import KnowledgeIndex, format_hits
 
 
-class TokeoAiSearchDocsTool(TokeoAiTool):
+class {{ app_class_name }}AiSearchDocsTool(TokeoAiTool):
     """
     Tool that returns the sections of the knowledge files that fit a query.
 

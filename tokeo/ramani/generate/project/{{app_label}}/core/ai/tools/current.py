@@ -16,7 +16,7 @@ from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.utils.date import get_utc_now, to_utc_timestring
 
 
-class TokeoAiCurrentTool(TokeoAiTool):
+class {{ app_class_name }}AiCurrentTool(TokeoAiTool):
     """
     Tool that returns the current UTC date and time.
 

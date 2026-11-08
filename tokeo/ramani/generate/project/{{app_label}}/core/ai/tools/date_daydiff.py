@@ -15,7 +15,7 @@ from tokeo.core.ai import TokeoAiTool
 from tokeo.core.utils.date import to_utc
 
 
-class TokeoAiDateDayDiffTool(TokeoAiTool):
+class {{ app_class_name }}AiDateDayDiffTool(TokeoAiTool):
     """
     Tool that counts the days between two ISO dates.
 

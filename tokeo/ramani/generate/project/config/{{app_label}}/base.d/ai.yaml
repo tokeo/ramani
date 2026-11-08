@@ -29,20 +29,20 @@ ai:
   ### profile/agent can activate by name
   tools:
     calc:
-      type: {{ app_label }}.core.ai.tools.calc:TokeoAiCalcTool
+      type: {{ app_label }}.core.ai.tools.calc:{{ app_class_name }}AiCalcTool
     ### always answers 42; its description marks the result authoritative
     answer42:
-      type: {{ app_label }}.core.ai.tools.calc42:TokeoAiAnswer42Tool
+      type: {{ app_label }}.core.ai.tools.calc42:{{ app_class_name }}AiAnswer42Tool
     current:
-      type: {{ app_label }}.core.ai.tools.current:TokeoAiCurrentTool
+      type: {{ app_label }}.core.ai.tools.current:{{ app_class_name }}AiCurrentTool
     ### reads text files strictly below base_dir
     read_file:
-      type: {{ app_label }}.core.ai.tools.read_file:TokeoAiReadFileTool
+      type: {{ app_label }}.core.ai.tools.read_file:{{ app_class_name }}AiReadFileTool
       options:
         base_dir: tmp
     ### the writing tool, denied by the "readonly" policy guard below
     append_file:
-      type: {{ app_label }}.core.ai.tools.append_file:TokeoAiAppendFileTool
+      type: {{ app_label }}.core.ai.tools.append_file:{{ app_class_name }}AiAppendFileTool
       options:
         base_dir: tmp
         file_path: notes.txt
@@ -50,19 +50,19 @@ ai:
       - calc
     ### calendar tools with strict iso dates
     date_daydiff:
-      type: {{ app_label }}.core.ai.tools.date_daydiff:TokeoAiDateDayDiffTool
+      type: {{ app_label }}.core.ai.tools.date_daydiff:{{ app_class_name }}AiDateDayDiffTool
     add_days:
-      type: {{ app_label }}.core.ai.tools.add_days:TokeoAiAddDaysTool
+      type: {{ app_label }}.core.ai.tools.add_days:{{ app_class_name }}AiAddDaysTool
     add_months:
-      type: {{ app_label }}.core.ai.tools.add_months:TokeoAiAddMonthsTool
+      type: {{ app_label }}.core.ai.tools.add_months:{{ app_class_name }}AiAddMonthsTool
     add_years:
-      type: {{ app_label }}.core.ai.tools.add_years:TokeoAiAddYearsTool
+      type: {{ app_label }}.core.ai.tools.add_years:{{ app_class_name }}AiAddYearsTool
     weekday:
-      type: {{ app_label }}.core.ai.tools.weekday:TokeoAiWeekdayTool
+      type: {{ app_label }}.core.ai.tools.weekday:{{ app_class_name }}AiWeekdayTool
     week_number:
-      type: {{ app_label }}.core.ai.tools.week_number:TokeoAiWeekNumberTool
+      type: {{ app_label }}.core.ai.tools.week_number:{{ app_class_name }}AiWeekNumberTool
     moon_phase:
-      type: {{ app_label }}.core.ai.tools.moon_phase:TokeoAiMoonPhaseTool
+      type: {{ app_label }}.core.ai.tools.moon_phase:{{ app_class_name }}AiMoonPhaseTool
     filesystem:
       - read_file
       - append_file
@@ -77,7 +77,7 @@ ai:
       - moon_phase
     ### searches the knowledge files (docs/knowledge) by BM25, with sources
     search_docs:
-      type: {{ app_label }}.core.ai.tools.search_docs:TokeoAiSearchDocsTool
+      type: {{ app_label }}.core.ai.tools.search_docs:{{ app_class_name }}AiSearchDocsTool
       options:
         base_dir: docs/knowledge
     knowledge:
@@ -375,7 +375,7 @@ ai:
     ###   python -m {{ app_label }}.core.akili.train
     ###   {{ app_label }} ai ask "wochentag von heute plus 14 tage" --profile akili
     akili:
-      type: {{ app_label }}.core.ai.providers.akili:TokeoAiAkiliProvider
+      type: {{ app_label }}.core.ai.providers.akili:{{ app_class_name }}AiAkiliProvider
       purpose: calendar
       ### shares the guarded agent but denies the tools it does not need
       agent: guarded

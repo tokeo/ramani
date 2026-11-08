@@ -22,7 +22,7 @@ below.
 import grpc
 
 
-class AuthInterceptor(grpc.ServerInterceptor):
+class {{ app_class_name }}GrpcAuthInterceptor(grpc.ServerInterceptor):
     """
     Server interceptor that gates every rpc before it reaches the servicer.
 
@@ -86,4 +86,4 @@ def build_interceptors():
         list keeps the order explicit and lets the chain grow
 
     """
-    return [AuthInterceptor()]
+    return [{{ app_class_name }}GrpcAuthInterceptor()]

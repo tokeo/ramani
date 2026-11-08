@@ -82,7 +82,7 @@ def test_{{ app_label }}_akili_data_contract():
     # edit that would change the trained behaviour fails here, before a
     # training run, and without needing any weights
     from {{ app_label }}.core.akili.data import build_dataset, _LEXICON
-    from {{ app_label }}.core.akili.dsl import DOMAIN, NOMATCH, Constrainer, parse
+    from {{ app_label }}.core.akili.dsl import DOMAIN, NOMATCH, AkiliConstrainer, parse
 
     pairs = build_dataset(12000, seed=7)
 
@@ -112,7 +112,7 @@ def test_{{ app_label }}_akili_data_contract():
     for r, d in pairs[:3000]:
         if d == NOMATCH:
             continue
-        constrainer = Constrainer()
+        constrainer = AkiliConstrainer()
         for character in d:
             assert character in constrainer.get_allowed_chars(), (d, character)
             constrainer.feed(character)
@@ -178,13 +178,13 @@ def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeyp
     # exact divergence a real run hit (utc 2026-07-03 23:40, local 2026-07-04).
     # no weights needed: the tool reads the clock, it does not plan
     from datetime import datetime, timezone
-    from {{ app_label }}.core.ai.tools.current import TokeoAiCurrentTool
+    from {{ app_label }}.core.ai.tools.current import {{ app_class_name }}AiCurrentTool
 
     frozen = datetime(2026, 7, 3, 23, 30, tzinfo=timezone.utc)
     monkeypatch.setattr('{{ app_label }}.core.ai.tools.current.get_utc_now', lambda: frozen)
 
     with {{ app_class_name }}AiTestApp() as app:
-        out = TokeoAiCurrentTool(app).exec().value.as_str
+        out = {{ app_class_name }}AiCurrentTool(app).exec().value.as_str
 
     # the tool reports the UTC day of the frozen instant ...
     assert out.startswith('2026-07-03'), out

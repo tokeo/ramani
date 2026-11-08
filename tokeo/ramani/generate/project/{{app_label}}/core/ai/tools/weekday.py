@@ -17,7 +17,7 @@ from tokeo.core.ai import TokeoAiTool
 from tokeo.core.utils.date import to_utc
 
 
-class TokeoAiWeekdayTool(TokeoAiTool):
+class {{ app_class_name }}AiWeekdayTool(TokeoAiTool):
     """
     Tool that names the weekday of an ISO date.
 

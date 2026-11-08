@@ -32,7 +32,7 @@ _ISO_DATE = re.compile(r'\b\d{4}-\d{2}-\d{2}\b')
 _INTEGER = re.compile(r'(?<![\d-])-?\d+(?![\d-])')
 
 
-class TokeoAiAkiliProvider(TokeoAiProvider):
+class {{ app_class_name }}AiAkiliProvider(TokeoAiProvider):
     """
     The project's own trained micro language model.
 

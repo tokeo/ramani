@@ -30,7 +30,7 @@ def _resolve_path_below(base_dir, path):
     return target
 
 
-class TokeoAiReadFileTool(TokeoAiTool):
+class {{ app_class_name }}AiReadFileTool(TokeoAiTool):
     """
     Tool that reads a text file below the configured base directory.
 

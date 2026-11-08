@@ -32,7 +32,7 @@ outside the domain becomes ```<nomatch>```::
 
 This module has three jobs. ```render``` serializes a plan to that line,
 ```parse``` reads a line back into steps (validating as it goes), and the
-```Constrainer``` (the important one) is a byte-level grammar automaton:
+```AkiliConstrainer``` (the important one) is a byte-level grammar automaton:
 during decoding it answers, character by character, which next bytes are
 legal. The decoder may only emit accepted bytes, so the model can never
 produce a malformed plan, an unknown tool, or a tool the runtime did not
@@ -47,7 +47,7 @@ NOMATCH = '<nomatch>'
 #: The closed domain akili is trained for: the calendar toolset, each tool
 #: mapped to its ordered list of argument slots. this ordering is load-
 #: bearing: render writes slots in this order, parse checks the keys come
-#: back in exactly this order, and the Constrainer fills them one by one in
+#: back in exactly this order, and the AkiliConstrainer fills them one by one in
 #: this order. adding a tool here (and to the lexicon + the project's tool
 #: classes) is how the language grows; the slot list is the tool's schema
 DOMAIN = {
@@ -63,7 +63,7 @@ DOMAIN = {
 
 # slots whose value is a date (iso YYYY-MM-DD or an @k back-reference); every
 # other slot (days/months/years) holds a small signed integer. the
-# Constrainer branches on this set to know which value grammar to enforce
+# AkiliConstrainer branches on this set to know which value grammar to enforce
 _DATE_SLOTS = {'start', 'end', 'date'}
 
 
@@ -149,7 +149,7 @@ def parse(text):
     return plan
 
 
-class Constrainer:
+class AkiliConstrainer:
     """
     Byte-level grammar automaton for constrained greedy decoding.
 

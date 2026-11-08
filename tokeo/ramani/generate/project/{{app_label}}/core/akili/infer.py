@@ -38,7 +38,7 @@ A plan is decoded in three steps:
 
 1. The request bytes plus the ```SEP``` token run through the net once; the
     keys and values of every layer are kept (the KV cache).
-2. The output logits rank all bytes; the ```Constrainer``` says which
+2. The output logits rank all bytes; the ```AkiliConstrainer``` says which
     characters are legal at this point of the plan grammar; the best
     legal one wins (greedy), so the result is deterministic.
 3. The chosen byte runs as a single-position forward against the cache,
@@ -55,7 +55,7 @@ import pathlib
 import numpy
 
 from {{ app_label }}.core.akili import tokenizer
-from {{ app_label }}.core.akili.dsl import Constrainer
+from {{ app_label }}.core.akili.dsl import AkiliConstrainer
 
 try:
     # optional acceleration: if numba is present the attention loop is
@@ -142,7 +142,7 @@ class AkiliModel:
         # that planning begins right after SEP
         tokens = tokenizer.encode(request.lower())[: context - PLAN_BUDGET] + [tokenizer.SEP]
         # the grammar fence, restricted to the tools the runtime activated
-        constrainer = Constrainer(active=active)
+        constrainer = AkiliConstrainer(active=active)
         # one empty key/value list per layer: the KV cache the prefill fills
         cache = [[] for _ in range(self._config['layers'])]
         # prefill: run the whole prompt once; this populates the cache and
@@ -212,7 +212,7 @@ class AkiliModel:
         return hidden[-1] @ weights['embed.weight'].T
 
     def _block(self, hidden, layer, cache=None, step=False):
-        # one transformer block, the numpy twin of train.py's Block:
+        # one transformer block, the numpy twin of train.py's AkiliBlock:
         # pre-norm attention (residual), then pre-norm MLP (residual)
         weights = self._weights
         config = self._config

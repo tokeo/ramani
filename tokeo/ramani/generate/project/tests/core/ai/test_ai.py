@@ -23,7 +23,7 @@ from {{ app_label }}.core.ai.transformers.truncate import {{ app_class_name }}Ai
 from {{ app_label }}.core.ai.transformers.today import {{ app_class_name }}AiTodayTransformer
 from {{ app_label }}.core.ai.transformers.retrieve import {{ app_class_name }}AiRetrieveTransformer
 from {{ app_label }}.core.ai.knowledge import KnowledgeIndex
-from {{ app_label }}.core.ai.tools.calc import TokeoAiCalcTool
+from {{ app_label }}.core.ai.tools.calc import {{ app_class_name }}AiCalcTool
 from {{ app_label }}.main import {{ app_class_name }}Test
 
 
@@ -159,7 +159,7 @@ def test_{{ app_label }}_ai_tool_schema_validate_guard_denies_with_schema_enforc
         guard = TokeoAiToolSchemaValidateGuard(app)
         # schema_enforce comes from the item's options, handed in by _setup
         guard._setup(app, 'tool_schema_validate', {'options': {'schema_enforce': True}})
-        invocation = Invocation(id='t1', name='calc', arguments={}, parameters=TokeoAiCalcTool.Meta.parameters)
+        invocation = Invocation(id='t1', name='calc', arguments={}, parameters={{ app_class_name }}AiCalcTool.Meta.parameters)
         guard.on_call(None, invocation)
         assert invocation.decision == 'deny'
         assert invocation.decision == Invocation.DENY
@@ -179,7 +179,7 @@ def test_{{ app_label }}_ai_tool_schema_validate_guard_flags_without_schema_enfo
         guard = TokeoAiToolSchemaValidateGuard(app)
         # a setup without a config: the guard runs on its class defaults
         guard._setup(app)
-        invocation = Invocation(id='t1', name='calc', arguments={}, parameters=TokeoAiCalcTool.Meta.parameters)
+        invocation = Invocation(id='t1', name='calc', arguments={}, parameters={{ app_class_name }}AiCalcTool.Meta.parameters)
         guard.on_call(None, invocation)
         # not denied: the call is allowed to run
         assert invocation.decision == Invocation.ALLOW

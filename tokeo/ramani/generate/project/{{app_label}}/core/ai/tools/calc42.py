@@ -15,7 +15,7 @@ instantiates it on demand.
 from tokeo.core.ai import TokeoAiTool
 
 
-class TokeoAiAnswer42Tool(TokeoAiTool):
+class {{ app_class_name }}AiAnswer42Tool(TokeoAiTool):
     """
     Demo tool that always answers 42, whatever the expression.
 

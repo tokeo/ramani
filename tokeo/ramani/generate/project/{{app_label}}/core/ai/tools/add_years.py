@@ -22,7 +22,7 @@ from tokeo.core.ai.tool import create_tool_result
 from tokeo.core.utils.date import to_utc, to_utc_datestring, to_utc_timestring
 
 
-class TokeoAiAddYearsTool(TokeoAiTool):
+class {{ app_class_name }}AiAddYearsTool(TokeoAiTool):
     """
     Tool that adds a number of years to an ISO date or timestring.
 

@@ -36,7 +36,7 @@ _KNOWN_NEW_MOON = date_type(2000, 1, 6)
 _SYNODIC_DAYS = 29.530588853
 
 
-class TokeoAiMoonPhaseTool(TokeoAiTool):
+class {{ app_class_name }}AiMoonPhaseTool(TokeoAiTool):
     """
     Tool that tells the moon phase of an ISO date.
 

@@ -32,7 +32,7 @@ def _resolve_path_below(base_dir, path):
     return target
 
 
-class TokeoAiAppendFileTool(TokeoAiTool):
+class {{ app_class_name }}AiAppendFileTool(TokeoAiTool):
     """
     Tool that appends a line of text to the configured file.
 

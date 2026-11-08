@@ -227,7 +227,7 @@ flowchart TD
     IN("<b>the request</b><br/>'der wochentag von heute plus 2 tagen'<br/>as bytes, plus the SEP token")
     PRE("<b>prefill, once</b><br/>the whole prompt runs through the net,<br/>the keys and values of every layer<br/>are kept: the KV cache")
     LOG("<b>259 scores</b><br/>the tied head turns the last hidden state<br/>into one score per possible next byte")
-    GRAM("<b>the grammar automaton (dsl.Constrainer)</b><br/>which characters are LEGAL here?<br/>only active tool names, only their slots,<br/>dates as YYYY-MM-DD or @k, at most 3 steps")
+    GRAM("<b>the grammar automaton (dsl.AkiliConstrainer)</b><br/>which characters are LEGAL here?<br/>only active tool names, only their slots,<br/>dates as YYYY-MM-DD or @k, at most 3 steps")
     PICK("<b>greedy pick</b><br/>the best-scored LEGAL character wins --<br/>deterministic: same request, same plan")
     STEP("<b>one-position forward</b><br/>only the chosen byte runs through the net,<br/>against the KV cache: cheap")
     DONE{"grammar allows<br/>the line to end?"}
@@ -278,7 +278,7 @@ for example
 where ```@k``` means "the result of step k", and ```<nomatch>``` marks a request
 outside the domain. The module holds ```DOMAIN``` (which tool has which slots,
 the single place that knows the toolset), ```render```/```parse``` (plan to line and
-back), and the ```Constrainer```: a byte-level automaton that answers, for any
+back), and the ```AkiliConstrainer```: a byte-level automaton that answers, for any
 partial line, which characters are legal next: only active tool names,
 only their slots, dates only as ```YYYY-MM-DD``` or ```@k```, at most three steps.
 The decoder may only pick what the automaton allows, so the model can never
@@ -484,7 +484,7 @@ The lab fails loud rather than wrong. Every guard, and what it catches:
 - lexicon validation (```data._load_lexicon```, at import): an unknown
     tool or a pattern missing a required placeholder raises immediately;
     a typo in ```AKILI-LEX.yaml``` can never train silently.
-- grammar legality (```dsl.Constrainer```): a generated plan can only be
+- grammar legality (```dsl.AkiliConstrainer```): a generated plan can only be
     legal DSL over the active tools; a malformed plan is impossible to emit.
 - the decoder budget guard (a weight-free test): the longest plan the
     data can produce must fit ```PLAN_BUDGET```, with room for EOS, so a new,

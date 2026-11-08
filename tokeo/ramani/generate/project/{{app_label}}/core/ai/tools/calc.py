@@ -39,7 +39,7 @@ def _eval_expression(node):
     raise TokeoAiError('calc supports only numbers and + - * / % **')
 
 
-class TokeoAiCalcTool(TokeoAiTool):
+class {{ app_class_name }}AiCalcTool(TokeoAiTool):
     """
     Demo tool that evaluates a simple arithmetic expression.
 
