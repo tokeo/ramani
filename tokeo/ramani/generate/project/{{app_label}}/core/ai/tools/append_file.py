@@ -82,7 +82,7 @@ class {{ app_class_name }}AiAppendFileTool(TokeoAiTool):
         ### Returns
 
         - **ToolResult**: A dict value with the file_path,
-            previous_size_bytes and size_bytes, is_created (true if the file
+            previous_size_bytes and size_bytes, created (true if the file
             was new), created_at and updated_at as UTC datetimes (RFC 3339 in
             the export); as_str is true/false
 
@@ -94,8 +94,8 @@ class {{ app_class_name }}AiAppendFileTool(TokeoAiTool):
         target = _resolve_path_below(self._config('base_dir'), self._config('file_path'))
         # check existence and size before the append: a missing file is created
         # by append mode, so this is the only point that can tell new from empty
-        is_created = not target.is_file()
-        previous_size_bytes = 0 if is_created else target.stat().st_size
+        created = not target.is_file()
+        previous_size_bytes = 0 if created else target.stat().st_size
         with open(target, 'a') as handle:
             handle.write(str(text).rstrip('\n') + '\n')
         # read the filesystem timestamps after the write; st_birthtime is the
@@ -107,7 +107,7 @@ class {{ app_class_name }}AiAppendFileTool(TokeoAiTool):
             file_path=self._config('file_path'),
             previous_size_bytes=previous_size_bytes,
             size_bytes=stat.st_size,
-            is_created=is_created,
+            created=created,
             created_at=to_utc(created_time),
             updated_at=to_utc(stat.st_mtime),
         )

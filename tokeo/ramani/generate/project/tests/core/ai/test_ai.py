@@ -121,7 +121,7 @@ def test_{{ app_label }}_ai_trace_records_the_whole_run(scratch):
         assert invocation.decision == Invocation.ALLOW
         # each guard that ran is an attributable step (the loop tracked the call,
         # then policy/validate/redact/truncate/audit each left their step)
-        guard_steps = [step for step in invocation_steps if step.origin is not None and step.is_changed is False]
+        guard_steps = [step for step in invocation_steps if step.origin is not None and step.changed is False]
         assert len(guard_steps) >= 1
         # the trace is chronological: the user turn's step precedes the call's
         objects = [step.object for step in result.trace]

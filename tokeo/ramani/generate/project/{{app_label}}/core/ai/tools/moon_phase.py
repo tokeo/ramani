@@ -74,7 +74,7 @@ class {{ app_class_name }}AiMoonPhaseTool(TokeoAiTool):
 
         - **ToolResult**: A dict value with the phase name, its index (0-7),
             the moon's age in days, the cycle fraction and lit fraction (both
-            0-1), and is_waxing, whether it is waxing; as_str is the phase name
+            0-1), and waxing, whether it is waxing; as_str is the phase name
 
         """
         d = to_utc(date, auto_type=False)
@@ -92,7 +92,7 @@ class {{ app_class_name }}AiMoonPhaseTool(TokeoAiTool):
             age_days=round(age, 4),
             fraction=round(fraction, 4),
             illumination=round(illumination, 4),
-            is_waxing=fraction < 0.5,
+            waxing=fraction < 0.5,
         )
         # the model sees the phase name; the dict rides along for the trace or
         # a follow-up step
