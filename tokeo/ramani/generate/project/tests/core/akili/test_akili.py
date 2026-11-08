@@ -143,8 +143,8 @@ def test_{{ app_label }}_akili_data_contract():
         assert d.startswith('current();') and '=-' not in d, (r, d)
 
     # every tool in the domain is actually exercised by the data
-    exercised = {tool for _, d in pairs for tool in DOMAIN if tool + '(' in d}
-    assert exercised == set(DOMAIN), set(DOMAIN) - exercised
+    exercised_tools = {tool for _, d in pairs for tool in DOMAIN if tool + '(' in d}
+    assert exercised_tools == set(DOMAIN), set(DOMAIN) - exercised_tools
 
     # the generator is deterministic for a fixed seed
     assert build_dataset(4000, seed=7)[:60] == build_dataset(4000, seed=7)[:60]
@@ -165,8 +165,8 @@ def test_{{ app_label }}_akili_domain_covers_calendar_tools():
 
     with {{ app_class_name }}AiTestApp() as app:
         calendar = set(app.ai._resolve_tools(['calendar']))
-    missing = calendar - set(DOMAIN)
-    assert not missing, f'calendar tools missing from akili DOMAIN: {sorted(missing)}'
+    missing_tools = calendar - set(DOMAIN)
+    assert not missing_tools, f'calendar tools missing from akili DOMAIN: {sorted(missing_tools)}'
 
 
 def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeypatch):
@@ -180,8 +180,8 @@ def test_{{ app_label }}_akili_current_reports_utc_not_local_at_midnight(monkeyp
     from datetime import datetime, timezone
     from {{ app_label }}.core.ai.tools.current import {{ app_class_name }}AiCurrentTool
 
-    frozen = datetime(2026, 7, 3, 23, 30, tzinfo=timezone.utc)
-    monkeypatch.setattr('{{ app_label }}.core.ai.tools.current.get_utc_now', lambda: frozen)
+    frozen_now = datetime(2026, 7, 3, 23, 30, tzinfo=timezone.utc)
+    monkeypatch.setattr('{{ app_label }}.core.ai.tools.current.get_utc_now', lambda: frozen_now)
 
     with {{ app_class_name }}AiTestApp() as app:
         out = {{ app_class_name }}AiCurrentTool(app).exec().value.as_str
@@ -255,8 +255,8 @@ def test_{{ app_label }}_ai_akili_model():
         assert ask_akili('count the days from today until next week') == '[akili] date_daydiff: 7'
 
         # a consumer reading a shifted date: the weekday of (today + 14)
-        shifted = _today + timedelta(days=14)
-        assert ask_akili('the weekday of today plus 14 days') == f'[akili] weekday: {_WEEKDAYS[shifted.weekday()]}'
+        shifted_date = _today + timedelta(days=14)
+        assert ask_akili('the weekday of today plus 14 days') == f'[akili] weekday: {_WEEKDAYS[shifted_date.weekday()]}'
 
         # a relative chain: two shifts from today, day word then year word
         base = _today + timedelta(days=1)
@@ -273,19 +273,19 @@ def test_{{ app_label }}_ai_akili_model():
         for greeting in ('hello', 'hallo', 'moin'):
             assert ask_akili(greeting) == f'[akili] {greeting}'
         assert ask_akili('today plus -2 days') == '[akili] today plus -2 days'
-        wrapped = 'the weekday of today plus -2 days'
-        assert ask_akili(wrapped) == f'[akili] {wrapped}'
+        wrapped_request = 'the weekday of today plus -2 days'
+        assert ask_akili(wrapped_request) == f'[akili] {wrapped_request}'
         assert ask_akili('sing me a song') == '[akili] sing me a song'
 
         # multi-turn chat still threads and the guards report the plan
         days = (date(2026, 12, 24) - _today).days
-        chained = app.ai.chat(
+        chained_result = app.ai.chat(
             [{'role': 'user', 'content': 'count the days from today until 2026-12-24'}],
             agent='guarded',
             profile='akili',
         )
-        assert chained.answer.text == f'[akili] date_daydiff: {days}'
-        assert chained.answer.raw['plan'] == ['current', 'date_daydiff']
+        assert chained_result.answer.text == f'[akili] date_daydiff: {days}'
+        assert chained_result.answer.raw['plan'] == ['current', 'date_daydiff']
 
 
 def test_{{ app_label }}_akili_stays_apache_under_the_project_license():

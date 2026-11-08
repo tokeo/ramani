@@ -75,8 +75,8 @@ def test_{{ app_label }}_ai_tools_exec(scratch):
         assert app.ai._get_tool('calc').exec(expression='2 + 3') == 5
         assert len(app.ai._get_tool('current').exec().value.as_str) == 24  # YYYY-mm-dd HH:MM:SS.MMMZ
         assert app.ai._get_tool('read_file').exec(path='sample.txt') == 'buy milk\n'
-        appended = app.ai._get_tool('append_file').exec(text='hello')
-        assert appended.value.as_str == 'true' and appended.value.as_data['file_path'] == 'notes.txt'
+        appended_result = app.ai._get_tool('append_file').exec(text='hello')
+        assert appended_result.value.as_str == 'true' and appended_result.value.as_data['file_path'] == 'notes.txt'
         # the date tools take a date-only string as utc, so the calendar step is
         # stable on every machine; clamping shows jan 31 + 1m -> feb 28,
         # jun 8 - 4m -> feb 8, feb 29 + 1y -> feb 28
@@ -293,8 +293,8 @@ def test_{{ app_label }}_ai_a_confirm_note_makes_the_word_filter_judge_anew(scra
 
     with {{ app_class_name }}AiTestApp(hooks=[(GOVERNOR_CONFIRM_CHANNEL_HOOK, answer_confirm)]) as app:
         result = app.ai.chat([{'role': 'user', 'content': 'append_file hello world'}], agent='careful', profile='mock')
-    asked = [(c['answer'], c['previous_decision'], c['previous_reason']) for c in result.confirmations]
-    assert asked == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]
+    asked_confirmations = [(c['answer'], c['previous_decision'], c['previous_reason']) for c in result.confirmations]
+    assert asked_confirmations == [('no_retry', 'allow', None), ('yes', 'deny', "contains 'world'")]
     assert "denied: contains 'world'" in result.answer.text
     assert not (scratch / 'notes.txt').exists()
 

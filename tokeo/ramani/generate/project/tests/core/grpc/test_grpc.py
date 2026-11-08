@@ -20,17 +20,17 @@ PROBE = 'tests.core.grpc.grpc_tests_serve_probe'
 
 def _has_pong(address):
     """True when grpccall ping gets its pong from the server at address."""
-    logged = []
+    logged_lines = []
     argv = ['grpccall', 'ping'{% if feature_grpc_auto_certificates == "Y" %}, '--insecure'{% endif %}]
     with {{ app_class_name }}Test(argv=argv) as app:
         app.config.set('grpc', 'address', address)
-        app.log.info = lambda msg, **kwargs: logged.append(msg)
+        app.log.info = lambda msg, **kwargs: logged_lines.append(msg)
         try:
             app.run()
         except {{ app_class_name }}Error:
             # not served yet, grpccall names why
             return False
-    return '  response: pong' in logged
+    return '  response: pong' in logged_lines
 
 
 def test_grpc_serve_answers_ping_and_ends_on_term():

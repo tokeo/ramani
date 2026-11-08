@@ -110,13 +110,13 @@ def _build_trusted_mounts():
         + [('/app', _PROJECT_ROOT), ('/deps', _DEPS_ROOT)]
     )
     mounts = {}
-    seen = {}
+    seen_host_paths = {}
     pythonpath = []
     for guest, host in roots:
-        if host in seen:
-            pythonpath.append(seen[host])
+        if host in seen_host_paths:
+            pythonpath.append(seen_host_paths[host])
             continue
-        seen[host] = guest
+        seen_host_paths[host] = guest
         mounts[guest] = host
         pythonpath.append(guest)
     return mounts, ':'.join(dict.fromkeys(pythonpath))
