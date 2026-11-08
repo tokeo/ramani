@@ -148,7 +148,7 @@ the wasm execution path and the audit trail, not language understanding.
 
 It is opt-in: it needs the wasm extra and a user-built ```python.wasm``` (the
 one-time ```./wasm``` install is in ```core/ai/sandboxes/WASM.md```). Without
-that build the call returns a clear "wasm runtime path does not exist" error
+that build the call returns a clear "the wasm ... path does not exist" error
 instead of a result; the synthesis and the audit still run, only the guest
 does not.
 

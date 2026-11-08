@@ -83,7 +83,7 @@ class TokeoAiAppendFileTool(TokeoAiTool):
 
         - **ToolResult**: A dict value with the file_path,
             previous_size_bytes and size_bytes, is_created (true if the file
-            was new), created_at and updated_at as UTC datetimes (ISO-8601 in
+            was new), created_at and updated_at as UTC datetimes (RFC 3339 in
             the export); as_str is true/false
 
         ### Raises
