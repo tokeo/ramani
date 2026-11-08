@@ -12,7 +12,7 @@ import logging
 from pathlib import Path
 
 import pytest
-from tokeo.core.ai import Invocation, ChatResult, ChatMessage, TraceStep, TokeoAiError, TokeoAiContext
+from tokeo.core.ai import Invocation, TokeoAiChatResult, TokeoAiChatMessage, TraceStep, TokeoAiError, TokeoAiContext
 from tokeo.core.ai.guards.confirm import GOVERNOR_CONFIRM_CHANNEL_HOOK, TokeoAiConfirmAnswer
 from tokeo.core.utils.date import get_utc_now
 from tokeo.core.ai.tool import create_tool_result
@@ -109,7 +109,7 @@ def test_{{ app_label }}_ai_trace_records_the_whole_run(scratch):
         assert result.answer.text == 'Done. The tool returned: 5'
         assert all(isinstance(step, TraceStep) for step in result.trace)
         # the conversation turns and the model rounds are on the trace
-        messages = [step.object for step in result.trace if isinstance(step.object, ChatMessage)]
+        messages = [step.object for step in result.trace if isinstance(step.object, TokeoAiChatMessage)]
         assert any(message.get('role') == 'user' for message in messages)
         assert any(message.get('role') == 'tool' for message in messages)
         # the one tool call: many invocation steps, but a single object
@@ -253,7 +253,7 @@ def test_{{ app_label }}_ai_truncate_transformer_cuts_long_results():
         assert invocation.result.value.as_str == 'x' * 10 + '... [truncated 40 chars]'
         assert 'truncated 40 chars' in (invocation.reason or '')
         # on_close cuts the run's final answer text
-        result = ChatResult(text='y' * 50)
+        result = TokeoAiChatResult(text='y' * 50)
         transformer.on_close(None, result)
         assert result.text == 'y' * 10 + '... [truncated 40 chars]'
 

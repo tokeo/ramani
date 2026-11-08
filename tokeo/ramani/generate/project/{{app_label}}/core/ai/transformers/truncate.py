@@ -7,10 +7,11 @@ was cut; it denies nothing and never changes a ```decision```.
 
 This is a worked example, derived from the core ```TokeoAiTruncateTransformer```
 type. It acts at two stages: ```on_return``` cuts a completed tool call's
-```result.value.as_str``` (a big file read, a large retrieval), and ```on_close```
-cuts the run's final ```ChatResult.text```. Each stage reads its own options via
-```_config(stage)```, so the config can set a different ```max_chars```/```marker```
-per stage (an ```on_return```/```on_close``` options block) or one shared default.
+```result.value.as_str``` (a big file read, a large retrieval), and
+```on_close``` cuts the run's final ```TokeoAiChatResult.text```. Each stage
+reads its own options via ```_config(stage)```, so the config can set a
+different ```max_chars```/```marker``` per stage (an ```on_return```/```on_close```
+options block) or one shared default.
 
 This module is self-contained: it holds only the transformer class. The
 project names it by its class path (module:Class) under ```ai.transformers``` in
@@ -122,7 +123,7 @@ class {{ app_class_name }}AiTruncateTransformer(TokeoAiTruncateTransformer):
         ### Args
 
         - **ctx** (TokeoAiContext): The running state
-        - **result** (ChatResult): The final answer whose ```text``` is cut
+        - **result** (TokeoAiChatResult): The final answer whose ```text``` is cut
             when longer than ```max_chars```
 
         """

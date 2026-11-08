@@ -176,7 +176,7 @@ sequenceDiagram
     rect rgb(219, 234, 254)
         Note right of U: the pipeline governs, the tools compute
         loop one tool call per round
-            P-->>H: ToolCall, round 1 is current()
+            P-->>H: TokeoAiToolCall, round 1 is current()
             H->>G: validate, then policy, then audit
             alt allowed
                 G->>T: exec
@@ -195,7 +195,7 @@ sequenceDiagram
     rect rgb(220, 252, 231)
         Note right of U: the answer is the last tool's result
         P-->>H: text "[akili] weekday: Wednesday" plus raw.plan
-        H-->>U: ChatResult with text, raw, and trace (3 entries)
+        H-->>U: TokeoAiChatResult with text, raw, and trace (3 entries)
     end
 ```
 

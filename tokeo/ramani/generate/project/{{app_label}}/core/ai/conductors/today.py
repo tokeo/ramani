@@ -59,11 +59,12 @@ class {{ app_class_name }}AiTodayConductor(TokeoAiConductor):
         ### Args
 
         - **ctx** (TokeoAiContext): The running state
-        - **result** (ChatResult): The model answer
+        - **result** (TokeoAiChatResult): The model answer
 
         ### Returns
 
-        - **ChatResult|None**: A new answer with the added call, or ```None```
+        - **TokeoAiChatResult|None**: A new answer with the added call, or
+            ```None```
 
         """
         mark = f'{self.config_name}:today'

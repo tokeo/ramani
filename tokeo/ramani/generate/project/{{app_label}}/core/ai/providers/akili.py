@@ -26,7 +26,7 @@ extensions; the handler imports and instantiates it on demand.
 
 import re
 
-from tokeo.core.ai import TokeoAiError, TokeoAiProvider, ChatResult, ToolCall, Usage
+from tokeo.core.ai import TokeoAiError, TokeoAiProvider, TokeoAiChatResult, TokeoAiToolCall, TokeoAiUsage
 
 _ISO_DATE = re.compile(r'\b\d{4}-\d{2}-\d{2}\b')
 _INTEGER = re.compile(r'(?<![\d-])-?\d+(?![\d-])')
@@ -62,7 +62,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
 
         ### Returns
 
-        - **ChatResult**: The deterministic response (text or tool calls)
+        - **TokeoAiChatResult**: The deterministic response (text or tool calls)
 
         ### Raises
 
@@ -83,7 +83,7 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
             # a @k argument takes the date (or number) from the feedback of
             # step k, so a chained step works with what came before it
             arguments = {key: self._resolve_value(value, feedback) for key, value in arguments.items()}
-            call = ToolCall(id=f'call_{done + 1}', name=name, arguments=arguments)
+            call = TokeoAiToolCall(id=f'call_{done + 1}', name=name, arguments=arguments)
             return self._build_result('', prompt, tool_calls=[call], finish_reason='tool_calls', plan=plan)
         if plan:
             return self._build_result(f'[akili] {plan[-1][0]}: {feedback[-1]}', prompt, plan=plan)
@@ -154,12 +154,12 @@ class TokeoAiAkiliProvider(TokeoAiProvider):
     def _build_result(self, text, prompt, tool_calls=None, finish_reason='stop', plan=None):
         # the raw payload carries the plan, so what the model decided stays
         # inspectable next to what it answered
-        usage = Usage(
+        usage = TokeoAiUsage(
             prompt_tokens=len((prompt or '').split()),
             completion_tokens=len((text or '').split()),
             total_tokens=len((prompt or '').split()) + len((text or '').split()),
         )
-        return ChatResult(
+        return TokeoAiChatResult(
             text=text,
             tool_calls=tool_calls or [],
             usage=usage,
