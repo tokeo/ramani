@@ -269,7 +269,7 @@ def main():
     # build the dataset, then split off a fixed held-out slice that the loop
     # never sees, the only honest place to read accuracy from
     examples = build_dataset(int(os.environ.get('AKILI_DATA', '60000')), minus=minus)
-    held = examples[:600]
+    held_out_examples = examples[:600]
     train = examples[600:]
     data = tensorize(train, CONFIG['context'])
     model = AkiliNet(CONFIG)
@@ -344,7 +344,7 @@ def main():
     # to evaluate and export; earlier chunks just save and return
     if last < steps:
         return
-    accuracy = evaluate(model, held)
+    accuracy = evaluate(model, held_out_examples)
     print(f'held-out exact-plan accuracy: {accuracy:.3f}')
     save(model, accuracy, minus)
 

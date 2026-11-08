@@ -131,10 +131,10 @@ def _load_lexicon():
     for tool in lexicon['patterns']['single']:
         if tool not in DOMAIN:
             raise ValueError(f'AKILI-LEX.yaml: unknown tool {tool!r} in patterns/single')
-    for group, needed in _REQUIRED.items():
+    for group, needed_placeholders in _REQUIRED.items():
         for language, phrases in lexicon['patterns'][group].items():
             for phrase in phrases:
-                for placeholder in needed:
+                for placeholder in needed_placeholders:
                     if placeholder not in phrase:
                         raise ValueError(f'AKILI-LEX.yaml: {group}/{language} pattern {phrase!r} misses {placeholder}')
     return lexicon
@@ -348,9 +348,9 @@ def _render_shift(rng, lang_en, minus=True):
     # ({c}) pattern half of the time: the bucket shares above stay
     # untouched, only the inside of the minus slice drills the chain harder
     if sign and '{c}' not in phrase and rng.random() < 0.5:
-        composed = [one for one in _LEXICON['patterns'][group][_lang(lang_en)] if '{c}' in one]
-        if composed:
-            phrase = rng.choice(composed)
+        composed_phrases = [one for one in _LEXICON['patterns'][group][_lang(lang_en)] if '{c}' in one]
+        if composed_phrases:
+            phrase = rng.choice(composed_phrases)
     count = _count(rng, unit)
     request = phrase.replace('{n}', str(count)).replace('{u}', rng.choice(unit['one'] if count == 1 else unit['many']))
     plan = []
@@ -463,15 +463,15 @@ def build_dataset(count, seed=7, minus=True):
 
     """
     rng = random.Random(seed)
-    seen = set()
+    seen_requests = set()
     examples = []
     while len(examples) < count:
         request, dsl = sample(rng, minus)
         # a small typo share teaches robustness against sloppy fingers
         if rng.random() < 0.06:
             request = _typo(rng, request)
-        if request not in seen:
-            seen.add(request)
+        if request not in seen_requests:
+            seen_requests.add(request)
             examples.append((request, dsl))
     return examples
 

@@ -111,10 +111,10 @@ class KnowledgeIndex:
         - **list[str]**: The absolute paths; empty when the directory is missing
 
         """
-        found = []
+        found_paths = []
         for root, _, names in os.walk(self.base_dir):
-            found += [os.path.join(root, name) for name in names if name.endswith(KNOWLEDGE_FILE_SUFFIXES)]
-        return sorted(found)
+            found_paths += [os.path.join(root, name) for name in names if name.endswith(KNOWLEDGE_FILE_SUFFIXES)]
+        return sorted(found_paths)
 
     def build(self, files):
         """

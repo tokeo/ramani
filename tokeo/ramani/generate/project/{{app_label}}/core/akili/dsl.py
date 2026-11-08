@@ -187,7 +187,7 @@ class AkiliConstrainer:
             is a complete plan and may end
 
         """
-        return _allowed(self._text, self._active)
+        return _get_allowed_chars(self._text, self._active)
 
 
 def _starts(prefix, options):
@@ -196,18 +196,18 @@ def _starts(prefix, options):
     # that continue some option, and whether the prefix already equals a
     # whole option (so the caller may also offer a terminator)
     chars = set()
-    complete = False
+    is_complete = False
     for option in options:
         if option == prefix:
             # the prefix is already a full option (e.g. a finished tool name)
-            complete = True
+            is_complete = True
         elif option.startswith(prefix):
             # the next character that would extend toward this option
             chars.add(option[len(prefix) :][0])  # noqa E203
-    return chars, complete
+    return chars, is_complete
 
 
-def _allowed(text, active):
+def _get_allowed_chars(text, active):
     # the heart of the grammar: walk the partial line and decide the legal
     # continuations. the DSL is regular enough for a hand-written automaton,
     # which is easier to read (and to trust) than a parser generator.
@@ -234,8 +234,8 @@ def _allowed(text, active):
     # case 4: still inside a tool name (no '(' yet); offer the characters
     # that continue some active tool name, and '(' once the name is complete
     if '(' not in step:
-        chars, complete = _starts(step, active)
-        if complete:
+        chars, is_complete = _starts(step, active)
+        if is_complete:
             chars.add('(')
         return chars
     # case 5: the step is closed with ')'; decide whether to chain or end
@@ -261,8 +261,8 @@ def _allowed(text, active):
     # case 7: still spelling the slot name; offer its remaining characters,
     # and '=' once the slot name is complete
     if not eq:
-        chars, complete = _starts(key, [slot])
-        if complete:
+        chars, is_complete = _starts(key, [slot])
+        if is_complete:
             chars.add('=')
         return chars
     # the value's terminator depends on whether more slots follow: a comma if

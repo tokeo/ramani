@@ -32,7 +32,7 @@ _ISO_DATE = re.compile(r'\b\d{4}-\d{2}-\d{2}\b')
 _INTEGER = re.compile(r'(?<![\d-])-?\d+(?![\d-])')
 
 
-class {{ app_class_name }}AiAkiliProvider(TokeoAiProvider):
+class AkiliProvider(TokeoAiProvider):
     """
     The project's own trained micro language model.
 
@@ -77,13 +77,13 @@ class {{ app_class_name }}AiAkiliProvider(TokeoAiProvider):
         if feedback and feedback[-1].startswith('error:'):
             return self._build_result(f'[akili] failed: {feedback[-1][len("error:"):].strip()}', prompt)
         plan = self._get_plan(prompt, tools or [])
-        done = len(feedback)
-        if done < len(plan):
-            name, arguments = plan[done]
+        done_cnt = len(feedback)
+        if done_cnt < len(plan):
+            name, arguments = plan[done_cnt]
             # a @k argument takes the date (or number) from the feedback of
             # step k, so a chained step works with what came before it
             arguments = {key: self._resolve_value(value, feedback) for key, value in arguments.items()}
-            call = TokeoAiToolCall(id=f'call_{done + 1}', name=name, arguments=arguments)
+            call = TokeoAiToolCall(id=f'call_{done_cnt + 1}', name=name, arguments=arguments)
             return self._build_result('', prompt, tool_calls=[call], finish_reason='tool_calls', plan=plan)
         if plan:
             return self._build_result(f'[akili] {plan[-1][0]}: {feedback[-1]}', prompt, plan=plan)
@@ -108,12 +108,12 @@ class {{ app_class_name }}AiAkiliProvider(TokeoAiProvider):
         active = {((spec or {}).get('function') or {}).get('name') for spec in tools}
         steps = []
         for name, arguments in parse(self._engine.plan(prompt, active=active)):
-            typed = {}
+            typed_arguments = {}
             for key, value in arguments.items():
                 # plan values are text; bare integers become numbers so the
                 # validate guard sees schema-true arguments
-                typed[key] = int(value) if value.lstrip('-').isdigit() else value
-            steps.append((name, typed))
+                typed_arguments[key] = int(value) if value.lstrip('-').isdigit() else value
+            steps.append((name, typed_arguments))
         return steps
 
     def _resolve_value(self, value, feedback):

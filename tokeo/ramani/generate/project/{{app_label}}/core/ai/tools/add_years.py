@@ -71,6 +71,6 @@ class {{ app_class_name }}AiAddYearsTool(TokeoAiTool):
         # clamp the day for the target year (feb 29 + 1y -> feb 28)
         day = min(base.day, calendar.monthrange(year, base.month)[1])
         # replace works on both: a date stays a date, a datetime keeps its time
-        shifted = d.replace(year=year, day=day)
-        as_str = to_utc_timestring(shifted) if isinstance(d, datetime_type) else to_utc_datestring(shifted)
-        return create_tool_result(shifted, as_str=as_str)
+        shifted_date = d.replace(year=year, day=day)
+        as_str = to_utc_timestring(shifted_date) if isinstance(d, datetime_type) else to_utc_datestring(shifted_date)
+        return create_tool_result(shifted_date, as_str=as_str)

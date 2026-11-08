@@ -375,7 +375,7 @@ ai:
     ###   python -m {{ app_label }}.core.akili.train
     ###   {{ app_label }} ai ask "wochentag von heute plus 14 tage" --profile akili
     akili:
-      type: {{ app_label }}.core.ai.providers.akili:{{ app_class_name }}AiAkiliProvider
+      type: {{ app_label }}.core.ai.providers.akili:AkiliProvider
       purpose: calendar
       ### shares the guarded agent but denies the tools it does not need
       agent: guarded

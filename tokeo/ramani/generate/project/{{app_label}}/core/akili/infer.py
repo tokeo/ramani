@@ -151,32 +151,32 @@ class AkiliModel:
         out = []
         for _ in range(PLAN_BUDGET):
             # ask the grammar what may come next at this point of the plan
-            allowed = constrainer.get_allowed_chars()
+            allowed_chars = constrainer.get_allowed_chars()
             # stop if the plan is complete (only EOS legal) or context is full
-            if allowed == {'<eos>'} or len(tokens) >= context - 1:
+            if allowed_chars == {'<eos>'} or len(tokens) >= context - 1:
                 break
             # rank all byte ids by score, highest first (greedy)
             order = numpy.argsort(-logits)
-            chosen = None
+            chosen_token = None
             for token in order:
                 # the highest-ranked EOS, if ending is legal, stops the plan
-                if token == tokenizer.EOS and '<eos>' in allowed:
-                    chosen = None
+                if token == tokenizer.EOS and '<eos>' in allowed_chars:
+                    chosen_token = None
                     break
                 # otherwise take the highest-ranked byte the grammar permits;
                 # this is where "smart" (the scores) meets "safe" (the fence)
-                if token < 256 and chr(token) in allowed:
-                    chosen = int(token)
+                if token < 256 and chr(token) in allowed_chars:
+                    chosen_token = int(token)
                     break
             # no legal byte and no legal EOS: nothing more can be produced
-            if chosen is None:
+            if chosen_token is None:
                 break
             # commit the byte, tell the grammar, then advance the model one
             # position against the cache to get the next logits
-            tokens.append(chosen)
-            out.append(chosen)
-            constrainer.feed(chr(chosen))
-            logits = self._step(chosen, len(tokens) - 1, cache)
+            tokens.append(chosen_token)
+            out.append(chosen_token)
+            constrainer.feed(chr(chosen_token))
+            logits = self._step(chosen_token, len(tokens) - 1, cache)
         # the decoded bytes are already only the plan (SEP was not appended
         # to ```out```); decode them back to the DSL line
         return tokenizer.decode(out) or ''
@@ -247,18 +247,18 @@ class AkiliModel:
         out = numpy.empty_like(query)
         for head in range(heads):
             # this head's slice of the q/k/v vectors
-            sliced = slice(head * size, (head + 1) * size)
+            head_slice = slice(head * size, (head + 1) * size)
             # scaled dot-product scores: query . key / sqrt(head_size); the
             # scaling keeps the softmax from saturating as size grows
-            scores = (query[:, sliced] @ key[:, sliced].T) / numpy.sqrt(size)
+            scores = (query[:, head_slice] @ key[:, head_slice].T) / numpy.sqrt(size)
             if step:
                 # one query over all cached keys: a single softmax row, no
                 # causal loop needed (the cache only holds left context)
                 line = numpy.exp(scores[0] - scores[0].max())
-                out[:, sliced] = (line / line.sum()) @ value[:, sliced]
+                out[:, head_slice] = (line / line.sum()) @ value[:, head_slice]
             else:
                 # prefill: the causal, per-row attention over the prompt
-                out[:, sliced] = _attend(scores.astype(numpy.float32), value[:, sliced].astype(numpy.float32))
+                out[:, head_slice] = _attend(scores.astype(numpy.float32), value[:, head_slice].astype(numpy.float32))
         # recombine the heads through the output projection
         return out @ weights[prefix + 'attn.out_proj.weight'].T + weights[prefix + 'attn.out_proj.bias']
 
