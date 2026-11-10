@@ -210,6 +210,7 @@ ai:
         timeout: 20
         # command: podman      # rootless instead of docker
         # reuse: true          # one container for the process, not per call
+        # start_timeout: 60    # seconds the start of the reused container may take
         # max_disk_mb: 64      # size of the tmpfs /tmp
         # max_output_mb: 1     # stdout and stderr kept, larger values fail
 
