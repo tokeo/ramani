@@ -56,6 +56,10 @@ class {{ app_class_name }}(App):
         config_defaults = dict(
             # toggle the debug of the app (not of the framework)
             debug=False,
+            # directory of the crash files of the services, null writes none
+            crash_dir=None,
+            # signal that dumps the stacks of all threads, null dumps none
+            thread_dump_signal=None,
         )
 
         # call sys.exit() on close
