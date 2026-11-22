@@ -127,7 +127,7 @@ include-package-data = true
 "{{ app_label }}.templates" = ["**/*", "**/.*"]
 
 [tool.setuptools.exclude-package-data]
-"{{ app_label }}.templates" = ["**/__pycache__/*", "**/*.pyc"]
+"*" = ["**/__pycache__/*", "**/*.pyc"]
 
 [tool.setuptools.dynamic]
 version = {attr = "{{ app_label }}.core.version.get_version"}

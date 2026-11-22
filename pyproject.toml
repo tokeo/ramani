@@ -37,7 +37,7 @@ include-package-data = true
 "tokeo.ramani" = ["generate/**/*", "generate/**/.*/*", "generate/**/.*", "generate/**/.*/.*"]
 
 [tool.setuptools.exclude-package-data]
-"tokeo.ramani" = ["**/__pycache__/*", "**/*.pyc"]
+"*" = ["**/__pycache__/*", "**/*.pyc"]
 
 [tool.setuptools.dynamic]
 version = {attr = "tokeo.ramani.get_version"}

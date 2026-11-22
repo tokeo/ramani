@@ -3,3 +3,4 @@ include README.md CHANGELOG.md
 recursive-include config *.yaml
 recursive-exclude config *.local.yaml
 recursive-include public *
+prune tests
