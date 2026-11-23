@@ -88,6 +88,17 @@ make proto
 {{ app_label }} emit count-words --url https://github.com
 ```
 
+The workers connect by `dramatiq.rabbitmq.url` of the config, the path of the
+url names the vhost, e.g. `amqp://localhost:5672/test`. A vhost for each
+environment keeps the queues of development, tests and production apart.
+
+> **Several apps on one RabbitMQ server:** the queues have fixed names like
+> `default`, and apps of this template share actor names like `count_words`.
+> Two apps in the same vhost take each other's messages: a worker without the
+> actor moves the message to the dead letter queue, a worker with an actor of
+> the same name runs it with its own code. Plan a vhost for each app and
+> environment with the infrastructure, or give the queues unique names.
+
 {% endif %}
 {% if feature_grpc == "Y" %}
 ### Expose Services via gRPC
