@@ -11,7 +11,11 @@ dramatiq:
   ### connection options of rabbitmq
   rabbitmq:
     ### connection url to rabbitmq server
-    url: !vault:plain amqp://guest:guest@localhost:5672/
+    url: amqp://localhost:5672/
+    ### connection username or identity for rabbitmq server
+    auth_identity: guest
+    ### connection password for rabbitmq server
+    auth_password: !vault:plain guest
 
 
 
