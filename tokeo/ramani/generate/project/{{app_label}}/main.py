@@ -53,14 +53,16 @@ class {{ app_class_name }}(App):
         main_dir = os.path.dirname(fs.abspath(__file__))
 
         # Defaults of the config section
-        config_defaults = dict(
-            # toggle the debug of the app (not of the framework)
-            debug=False,
-            # directory of the crash files of the services, null writes none
-            crash_dir=None,
-            # signal that dumps the stacks of all threads, null dumps none
-            thread_dump_signal=None,
-        )
+        config_defaults = {
+            '{{ app_label }}': dict(
+                # toggle the debug of the app (not of the framework)
+                debug=False,
+                # directory of the crash files of the services, null writes none
+                crash_dir=None,
+                # signal that dumps the stacks of all threads, null dumps none
+                thread_dump_signal=None,
+            ),
+        }
 
         # call sys.exit() on close
         exit_on_close = True
