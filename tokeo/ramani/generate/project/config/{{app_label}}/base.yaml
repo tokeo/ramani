@@ -50,6 +50,8 @@
 {{ app_label }}:
   ### Toggle application level debug (does not toggle framework debugging)
   # debug: false
+  ### Where machine based local only config files are
+  # local_config_dir: /etc/{{ app_label }}/config/
   ### Where external (third-party) plugins are loaded from
   # plugin_dir: /var/lib/{{ app_label }}/plugins/
   ### Where all plugin configurations are loaded from
