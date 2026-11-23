@@ -52,7 +52,7 @@ class {{ app_class_name }}(App):
         # this app main path
         main_dir = os.path.dirname(fs.abspath(__file__))
 
-        # Defaults of the config section
+        # the defaults of the config section
         config_defaults = {
             '{{ app_label }}': dict(
                 # toggle the debug of the app (not of the framework)
